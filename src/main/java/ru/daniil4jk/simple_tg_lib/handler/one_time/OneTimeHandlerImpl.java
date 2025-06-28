@@ -1,7 +1,6 @@
 package ru.daniil4jk.simple_tg_lib.handler.one_time;
 
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
@@ -51,11 +50,25 @@ public class OneTimeHandlerImpl implements OneTimeHandler {
         return removeOnException;
     }
 
-    @RequiredArgsConstructor
     private static class CanProgressByType implements Predicate<Update> {
-        private static UpdateEntriesDetector updateEntriesDetector = new UpdateEntriesDetector();
+        private static final UpdateEntriesDetector DEFAULT_UPDATE_ENTRIES_DETECTOR = new UpdateEntriesDetector();
 
+        public static CanProgressByType of(Class<? extends BotApiObject>... supportedClasses) {
+            return new CanProgressByType(DEFAULT_UPDATE_ENTRIES_DETECTOR, supportedClasses);
+        }
+
+        private final UpdateEntriesDetector updateEntriesDetector;
         private final Class<? extends BotApiObject>[] supportedClasses;
+
+        public CanProgressByType(UpdateEntriesDetector updateEntriesDetector,
+                                 Class<? extends BotApiObject>... supportedClasses) {
+            this.updateEntriesDetector = updateEntriesDetector;
+
+            if (supportedClasses.length == 0) {
+                throw new IllegalArgumentException("supportedClasses can`t be empty!");
+            }
+            this.supportedClasses = supportedClasses;
+        }
 
         @Override
         public boolean test(Update update) {
