@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.handler.permanent;
+package ru.daniil4jk.strongram.handler;
 
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -9,16 +9,17 @@ import ru.daniil4jk.strongram.command.CommandRegistry;
 import ru.daniil4jk.strongram.context.BotContext;
 import ru.daniil4jk.strongram.parser.ParserService;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
-public class CommandPermanentHandler extends AbstractPermanentHandler {
+public class CommandUpdateHandler extends AbstractUpdateHandler {
     private final ParserService<TelegramUUID> telegramUUIDParser;
     private final boolean allowCommandsWithUsername;
     private final Supplier<String> botUsernameSupplier;
 
-    public CommandPermanentHandler(boolean allowCommandsWithUsername, Supplier<String> botUsernameSupplier) {
+    public CommandUpdateHandler(boolean allowCommandsWithUsername, Supplier<String> botUsernameSupplier) {
         this.allowCommandsWithUsername = allowCommandsWithUsername;
         this. botUsernameSupplier =  botUsernameSupplier;
     }

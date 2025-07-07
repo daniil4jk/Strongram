@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.*;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import ru.daniil4jk.strongram.context.BotContext;
-import ru.daniil4jk.strongram.handler.permanent.KeyboardCallbackPermanentHandler;
+import ru.daniil4jk.strongram.handler.KeyboardCallbackUpdateHandler;
 
 import java.util.function.Consumer;
 
@@ -26,7 +26,7 @@ public class KeyboardButtonWithCallback extends KeyboardButton implements Button
     private boolean removeOnException;
 
     {
-        BotContext.getByClass(KeyboardCallbackPermanentHandler.class).addButton(this);
+        BotContext.getByClass(KeyboardCallbackUpdateHandler.class).addButton(this);
     }
 
     public KeyboardButtonWithCallback(@NonNull String text) {

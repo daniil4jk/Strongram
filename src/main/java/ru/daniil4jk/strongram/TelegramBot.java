@@ -9,9 +9,6 @@ import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsume
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-import ru.daniil4jk.strongram.context.ContextRegistry;
-import ru.daniil4jk.strongram.context.ContextRegistryImpl;
-import ru.daniil4jk.strongram.parser.ParserService;
 
 import java.util.List;
 import java.util.function.Function;

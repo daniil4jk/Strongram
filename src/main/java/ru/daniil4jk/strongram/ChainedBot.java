@@ -1,12 +1,11 @@
 package ru.daniil4jk.strongram;
 
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.context.BotContext;
 import ru.daniil4jk.strongram.context.BotContextImpl;
-import ru.daniil4jk.strongram.handler.permanent.PermanentHandler;
+import ru.daniil4jk.strongram.handler.UpdateHandler;
 
 public interface ChainedBot {
-    default PermanentHandler getRootHandlerInChain(@NotNull PermanentHandler.ChainBuilder basicChain) {
+    default UpdateHandler getRootHandlerInChain(@NotNull UpdateHandler.ChainBuilder basicChain) {
         return basicChain.build();
     }
 

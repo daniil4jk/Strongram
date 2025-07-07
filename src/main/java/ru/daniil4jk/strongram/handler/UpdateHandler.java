@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.handler.permanent;
+package ru.daniil4jk.strongram.handler;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +10,8 @@ import ru.daniil4jk.strongram.context.BotContext;
  * They form a Chain of Responsibility through which all
  * Updates that are not processed by user-specific handlers pass.
  */
-public interface PermanentHandler {
-    void setNext(PermanentHandler handler);
+public interface UpdateHandler {
+    void setNext(UpdateHandler handler);
     BotApiMethod<?> process(Update update, BotContext context);
 
     @NotNull
@@ -21,19 +21,19 @@ public interface PermanentHandler {
     }
 
     class ChainBuilder {
-        private PermanentHandler first;
-        private PermanentHandler last;
+        private UpdateHandler first;
+        private UpdateHandler last;
         private boolean init = false;
 
         private ChainBuilder() {}
 
-        private void init (PermanentHandler handler) {
+        private void init (UpdateHandler handler) {
             first = handler;
             last = handler;
             init = true;
         }
 
-        public ChainBuilder beforeAll(PermanentHandler handler) {
+        public ChainBuilder beforeAll(UpdateHandler handler) {
             if (!init) {
                 init(handler);
                 return this;
@@ -44,7 +44,7 @@ public interface PermanentHandler {
             return this;
         }
 
-        public ChainBuilder afterAll(PermanentHandler handler) {
+        public ChainBuilder afterAll(UpdateHandler handler) {
             if (!init) {
                 init(handler);
                 return this;
@@ -55,7 +55,7 @@ public interface PermanentHandler {
             return this;
         }
 
-        public PermanentHandler build() {
+        public UpdateHandler build() {
             return first;
         }
     }

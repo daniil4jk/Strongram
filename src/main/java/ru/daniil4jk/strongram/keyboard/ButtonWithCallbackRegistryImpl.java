@@ -9,7 +9,11 @@ public class ButtonWithCallbackRegistryImpl implements ButtonWithCallbackRegistr
     @Override
     public boolean add(ButtonWithCallback button) {
         try {
-            map.computeIfPresent(button.getCallbackId(), (cd, b) -> {
+            map.compute(button.getCallbackId(), (cd, b) -> {
+                if (b == null) {
+                    return button;
+                }
+
                 if (b.equals(button)) {
                     throw new IllegalStateException("element %s already added"
                             .formatted(b));
@@ -18,9 +22,8 @@ public class ButtonWithCallbackRegistryImpl implements ButtonWithCallbackRegistr
                             .formatted(cd, b));
                 }
             });
-            map.put(button.getCallbackId(), button);
             return true;
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             return false;
         }
     }
@@ -50,7 +53,7 @@ public class ButtonWithCallbackRegistryImpl implements ButtonWithCallbackRegistr
                 return null;
             });
             return true;
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             return false;
         }
     }

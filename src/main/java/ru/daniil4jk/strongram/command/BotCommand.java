@@ -10,7 +10,5 @@ public interface BotCommand {
 
     String getDescription();
 
-
-
     BotApiMethod<?> process(TelegramUUID telegramUUID, BotContext context, String[] arguments);
 }

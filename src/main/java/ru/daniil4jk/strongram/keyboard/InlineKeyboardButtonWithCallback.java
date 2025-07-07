@@ -11,7 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.SwitchInlineQueryChosenChat;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import ru.daniil4jk.strongram.context.BotContext;
-import ru.daniil4jk.strongram.handler.permanent.KeyboardCallbackPermanentHandler;
 
 import java.util.UUID;
 import java.util.function.Consumer;

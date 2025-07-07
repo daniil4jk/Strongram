@@ -4,10 +4,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.webhook.DefaultTelegramWebhookBot;
 import org.telegram.telegrambots.webhook.TelegramWebhookBot;
-
-import java.util.function.Function;
 
 public class WebhookBotWrapper implements TelegramWebhookBot {
     private final String botPath;

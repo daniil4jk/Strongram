@@ -4,12 +4,13 @@ import okhttp3.OkHttpClient;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-import ru.daniil4jk.strongram.context.*;
-import ru.daniil4jk.strongram.handler.permanent.PermanentHandler;
+import ru.daniil4jk.strongram.context.BotContext;
+import ru.daniil4jk.strongram.context.BotContextImpl;
+import ru.daniil4jk.strongram.handler.UpdateHandler;
 
 public abstract class TelegramChainedBot extends TelegramBot implements ChainedBot {
-    private final PermanentHandler chain; {
-        var builder = PermanentHandler.chainBuilder();
+    private final UpdateHandler chain; {
+        var builder = UpdateHandler.chainBuilder();
         extractBaseComponents(builder);
         chain = getRootHandlerInChain(builder);
         if (chain == null) {
@@ -35,7 +36,7 @@ public abstract class TelegramChainedBot extends TelegramBot implements ChainedB
         return chain.process(update, botContext);
     }
 
-    protected abstract void extractBaseComponents(PermanentHandler.ChainBuilder builder);
+    protected abstract void extractBaseComponents(UpdateHandler.ChainBuilder builder);
 
     @Override
     public void modifyBotContext(BotContextImpl.BotContextImplBuilder builder) {

@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.handler.permanent;
+package ru.daniil4jk.strongram.handler;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +8,8 @@ import ru.daniil4jk.strongram.context.BotContext;
 
 @Setter
 @Getter
-public abstract class AbstractPermanentHandler implements PermanentHandler {
-    private PermanentHandler next;
+public abstract class AbstractUpdateHandler implements UpdateHandler {
+    private UpdateHandler next;
 
     protected BotApiMethod<?> processNext(Update update, BotContext context) {
         if (next == null) {

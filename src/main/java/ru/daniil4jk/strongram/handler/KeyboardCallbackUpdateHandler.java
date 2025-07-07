@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.handler.permanent;
+package ru.daniil4jk.strongram.handler;
 
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -8,7 +8,7 @@ import ru.daniil4jk.strongram.keyboard.ButtonWithCallback;
 import ru.daniil4jk.strongram.keyboard.ButtonWithCallbackRegistry;
 import ru.daniil4jk.strongram.parser.ParserService;
 
-public class KeyboardCallbackPermanentHandler extends AbstractPermanentHandler {
+public class KeyboardCallbackUpdateHandler extends AbstractUpdateHandler {
     private final ParserService<String> textParser;
 
 
