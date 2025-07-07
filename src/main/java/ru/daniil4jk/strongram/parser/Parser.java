@@ -1,4 +1,4 @@
-package ru.daniil4jk.simple_tg_lib.parser;
+package ru.daniil4jk.strongram.parser;
 
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 
