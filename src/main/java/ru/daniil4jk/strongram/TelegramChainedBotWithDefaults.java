@@ -30,7 +30,7 @@ public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
     }
 
     @Override
-    protected void extractBaseComponents(@NotNull UpdateHandler.ChainBuilder builder) {
+    public void updateChain(@NotNull UpdateHandler.ChainBuilder builder) {
         builder
                 .afterAll(new DialogUpdateHandler())
                 .afterAll(new CommandUpdateHandler(true, () -> getCredentials().getBotName()))

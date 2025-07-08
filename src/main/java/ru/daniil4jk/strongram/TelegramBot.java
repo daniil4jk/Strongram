@@ -15,7 +15,8 @@ import java.util.function.Function;
 
 @Getter
 @Slf4j
-public abstract class TelegramBot implements Bot, LongPollingUpdateConsumer, Function<Update, BotApiMethod<?>> {
+public abstract class TelegramBot implements Bot, TelegramClientProvider,
+        LongPollingUpdateConsumer, Function<Update, BotApiMethod<?>> {
     private final BotCredentials credentials;
     private final TelegramClient client;
 

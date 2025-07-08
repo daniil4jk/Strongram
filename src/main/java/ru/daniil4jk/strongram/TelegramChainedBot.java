@@ -11,8 +11,8 @@ import ru.daniil4jk.strongram.handler.UpdateHandler;
 public abstract class TelegramChainedBot extends TelegramBot implements ChainedBot {
     private final UpdateHandler chain; {
         var builder = UpdateHandler.chainBuilder();
-        extractBaseComponents(builder);
-        chain = getRootHandlerInChain(builder);
+        updateChain(builder);
+        chain = builder.build();
         if (chain == null) {
             throw new IllegalStateException("Chain can`t be null! You can return basicChain.build() in defaults");
         }
@@ -35,8 +35,6 @@ public abstract class TelegramChainedBot extends TelegramBot implements ChainedB
     public BotApiMethod<?> process(Update update) {
         return chain.process(update, botContext);
     }
-
-    protected abstract void extractBaseComponents(UpdateHandler.ChainBuilder builder);
 
     @Override
     public void modifyBotContext(BotContextImpl.BotContextImplBuilder builder) {
