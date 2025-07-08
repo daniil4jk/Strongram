@@ -6,14 +6,23 @@ import ru.daniil4jk.strongram.TelegramUUID;
 import ru.daniil4jk.strongram.context.BotContext;
 import ru.daniil4jk.strongram.dialog.DialogRegistry;
 import ru.daniil4jk.strongram.parser.ParserService;
+import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
+import ru.daniil4jk.strongram.parser.uuid.TelegramUUIDParserService;
 
 public class DialogUpdateHandler extends AbstractUpdateHandler {
-    private final ParserService<TelegramUUID> telegramUUIDParser;
+    private final ParserService<TelegramUUID> UUIDParser =
+            TelegramUUIDParserService.getInstance();
 
     @Override
     public BotApiMethod<?> process(Update update, BotContext context) {
         DialogRegistry registry = context.getByClass(DialogRegistry.class);
-        TelegramUUID uuid = telegramUUIDParser.parse(update);
+
+        TelegramUUID uuid;
+        try {
+            uuid = UUIDParser.parse(update);
+        } catch (TelegramObjectParseException e) {
+            return processNext(update, context);
+        }
 
         for (var dialog : registry.getAllByUUID(uuid)) {
             synchronized (dialog) {

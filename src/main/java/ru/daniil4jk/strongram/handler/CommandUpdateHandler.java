@@ -8,6 +8,8 @@ import ru.daniil4jk.strongram.command.BotCommandImpl;
 import ru.daniil4jk.strongram.command.CommandRegistry;
 import ru.daniil4jk.strongram.context.BotContext;
 import ru.daniil4jk.strongram.parser.ParserService;
+import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
+import ru.daniil4jk.strongram.parser.uuid.TelegramUUIDParserService;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -15,7 +17,8 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 public class CommandUpdateHandler extends AbstractUpdateHandler {
-    private final ParserService<TelegramUUID> telegramUUIDParser;
+    private final ParserService<TelegramUUID> UUIDParser =
+            TelegramUUIDParserService.getInstance();
     private final boolean allowCommandsWithUsername;
     private final Supplier<String> botUsernameSupplier;
 
@@ -28,12 +31,20 @@ public class CommandUpdateHandler extends AbstractUpdateHandler {
     public BotApiMethod<?> process(@NotNull Update update, BotContext context) {
         if (update.hasMessage() && update.getMessage().getText()
                 .startsWith(BotCommandImpl.COMMAND_INIT_CHARACTER)) {
+
+            TelegramUUID uuid;
             try {
-                return processCommand(telegramUUIDParser.parse(update),
-                        update.getMessage().getText(), context);
+                uuid = UUIDParser.parse(update);
+            } catch (TelegramObjectParseException e) {
+                return processNext(update, context);
+            }
+
+            try {
+                return processCommand(uuid, update.getMessage().getText(), context);
             } catch (CommandNotFoundException e) {
                 return processNext(update, context);
             }
+
         } else {
             return processNext(update, context);
         }

@@ -11,15 +11,28 @@ import java.util.function.Predicate;
 @Builder
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor
-@RequiredArgsConstructor
 public class DialogStageImpl implements DialogStage {
     @Getter
     @NonNull
-    private String triggerState;
-    private Predicate<Update> canProcess;
-    private DialogStageUpdateHandler updateHandler;
-    private Function<Exception, BotApiMethod<?>> exceptionHandler;
+    private final String triggerState;
+    @Builder.Default
+    private final Predicate<Update> canProcess = u -> true;
+    @NonNull
+    private final DialogStageUpdateHandler updateHandler;
+    @Builder.Default
+    private final Function<Exception, BotApiMethod<?>> exceptionHandler = e -> null;
+
+    public DialogStageImpl(@NonNull String triggerState, Predicate<Update> canProcess, @NonNull DialogStageUpdateHandler updateHandler, Function<Exception, BotApiMethod<?>> exceptionHandler) {
+        this.triggerState = triggerState;
+        this.canProcess = canProcess;
+        this.updateHandler = updateHandler;
+        this.exceptionHandler = exceptionHandler;
+    }
+
+    public DialogStageImpl(@NonNull String triggerState, @NonNull DialogStageUpdateHandler updateHandler) {
+        this.triggerState = triggerState;
+        this.updateHandler = updateHandler;
+    }
 
     @Override
     public boolean canProcess(Update update) {
