@@ -1,15 +1,22 @@
 package ru.daniil4jk.strongram.keyboard;
 
+import ru.daniil4jk.strongram.TelegramUUID;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ButtonWithCallbackRegistryImpl implements ButtonWithCallbackRegistry {
-    private final Map<String, ButtonWithCallback> map = new HashMap<>();
+    private final Map<TelegramUUID, Map<String, ButtonWithCallback>> map = new HashMap<>();
+
+    private Map<String, ButtonWithCallback> getMapByUser(TelegramUUID uuid) {
+        return map.computeIfAbsent(uuid, id -> new HashMap<>());
+    }
 
     @Override
-    public boolean add(ButtonWithCallback button) {
+    public boolean add(TelegramUUID uuid, ButtonWithCallback button) {
+        button.prepareToAddingInRegistry();
         try {
-            map.compute(button.getCallbackId(), (cd, b) -> {
+            getMapByUser(uuid).compute(button.getCallbackId(), (cd, b) -> {
                 if (b == null) {
                     return button;
                 }
@@ -29,23 +36,24 @@ public class ButtonWithCallbackRegistryImpl implements ButtonWithCallbackRegistr
     }
 
     @Override
-    public boolean contains(String callbackData) {
-        return map.containsKey(callbackData);
+    public boolean contains(TelegramUUID uuid, String callbackData) {
+        return getMapByUser(uuid).containsKey(callbackData);
     }
 
     @Override
-    public ButtonWithCallback get(String callbackData) {
-        return map.get(callbackData);
+    public ButtonWithCallback get(TelegramUUID uuid, String callbackData) {
+        return getMapByUser(uuid).get(callbackData);
     }
 
     @Override
-    public boolean remove(ButtonWithCallback button) {
+    public boolean remove(TelegramUUID uuid, ButtonWithCallback button) {
         try {
-            map.computeIfAbsent(button.getCallbackId(), cd -> {
-                throw new IllegalStateException("with key %s not associated element"
-                        .formatted(cd));
-            });
-            map.computeIfPresent(button.getCallbackId(), (cd, b) -> {
+            getMapByUser(uuid).compute(button.getCallbackId(),
+                    (cd, b) -> {
+                if (b == null) {
+                    throw new IllegalStateException("with key %s not associated element"
+                            .formatted(cd));
+                }
                 if (!b.equals(button)) {
                     throw new IllegalStateException("with key %s associated element %s, but not %s"
                             .formatted(cd, b, button));

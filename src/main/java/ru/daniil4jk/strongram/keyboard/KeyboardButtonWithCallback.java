@@ -2,12 +2,9 @@ package ru.daniil4jk.strongram.keyboard;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.*;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
-import ru.daniil4jk.strongram.context.BotContext;
-import ru.daniil4jk.strongram.handler.KeyboardCallbackUpdateHandler;
 
 import java.util.function.Consumer;
 
@@ -15,7 +12,6 @@ import java.util.function.Consumer;
 @Getter
 @Setter
 @ToString
-@SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class KeyboardButtonWithCallback extends KeyboardButton implements ButtonWithCallback {
     @JsonIgnore
@@ -24,19 +20,17 @@ public class KeyboardButtonWithCallback extends KeyboardButton implements Button
     private Consumer<Exception> onException;
     @JsonIgnore
     private boolean removeOnException;
-
-    {
-        BotContext.getByClass(KeyboardCallbackUpdateHandler.class).addButton(this);
-    }
+    @JsonIgnore
+    private volatile boolean added = false;
 
     public KeyboardButtonWithCallback(@NonNull String text) {
         this(text, () -> {});
     }
 
     public KeyboardButtonWithCallback(@NonNull String text, Runnable callback) {
-        this(text, callback, e -> {
-            log.error(e.getLocalizedMessage(), e);
-            }, true);
+        this(text, callback,
+                e -> log.error(e.getLocalizedMessage(), e),
+                true);
     }
 
     public KeyboardButtonWithCallback(@NonNull String text, Runnable callback,
@@ -47,6 +41,7 @@ public class KeyboardButtonWithCallback extends KeyboardButton implements Button
         this.removeOnException = removeOnException;
     }
 
+    @Builder
     public KeyboardButtonWithCallback(@NonNull String text, Boolean requestContact,
                                       Boolean requestLocation, KeyboardButtonPollType requestPoll,
                                       WebAppInfo webApp, KeyboardButtonRequestUser requestUser,
@@ -62,13 +57,27 @@ public class KeyboardButtonWithCallback extends KeyboardButton implements Button
     }
 
     @Override
-    public void callback() {
-        callback.run();
+    public void prepareToAddingInRegistry() {
+        added = true;
     }
 
     @Override
     public String getCallbackId() {
         return getText();
+    }
+
+    @Override
+    public void setText(@NonNull String text) {
+        if (added) {
+            throw new IllegalCallerException("Changing text after adding button " +
+                    "to registry will make the callback unreachable");
+        }
+        super.setText(text);
+    }
+
+    @Override
+    public void callback() {
+        callback.run();
     }
 
     @Override
