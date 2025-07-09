@@ -2,6 +2,7 @@ package ru.daniil4jk.strongram.keyboard;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.*;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
@@ -10,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 @Getter
 @Setter
 @ToString
+@SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class KeyboardButtonWithCallback extends KeyboardButton implements ButtonWithCallback {
     @JsonIgnore
@@ -26,7 +28,6 @@ public class KeyboardButtonWithCallback extends KeyboardButton implements Button
         this.callbackAction = callbackAction;
     }
 
-    @Builder
     public KeyboardButtonWithCallback(@NonNull String text, Boolean requestContact,
                                       Boolean requestLocation, KeyboardButtonPollType requestPoll,
                                       WebAppInfo webApp, KeyboardButtonRequestUser requestUser,
@@ -36,6 +37,10 @@ public class KeyboardButtonWithCallback extends KeyboardButton implements Button
         super(text, requestContact, requestLocation, requestPoll,
                 webApp, requestUser, requestChat, requestUsers);
         this.callbackAction = callbackAction;
+    }
+
+    public static KeyboardButtonWithCallbackBuilder<?, ?> builder() {
+        return new KeyboardButtonWithCallbackBuilderImpl();
     }
 
     @Override
@@ -55,5 +60,16 @@ public class KeyboardButtonWithCallback extends KeyboardButton implements Button
                     "to registry will make the callbackAction unreachable");
         }
         super.setText(text);
+    }
+
+    public static abstract class KeyboardButtonWithCallbackBuilder
+            <C extends KeyboardButtonWithCallback,
+                    B extends KeyboardButtonWithCallbackBuilder<C, B>>
+            extends KeyboardButtonBuilder<C, B> {
+
+        @JsonIgnore
+        private B added(boolean added) {
+            return self();
+        }
     }
 }

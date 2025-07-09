@@ -31,7 +31,9 @@ public class DialogStageImpl implements DialogStage {
 
     public DialogStageImpl(@NonNull String triggerState, @NonNull DialogStageUpdateHandler updateHandler) {
         this.triggerState = triggerState;
+        this.canProcess = u -> true;
         this.updateHandler = updateHandler;
+        this.exceptionHandler = e -> null;
     }
 
     @Override

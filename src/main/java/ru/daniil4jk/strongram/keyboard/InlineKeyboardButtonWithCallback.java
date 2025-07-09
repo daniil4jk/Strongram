@@ -2,6 +2,8 @@ package ru.daniil4jk.strongram.keyboard;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import lombok.experimental.Tolerate;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.LoginUrl;
 import org.telegram.telegrambots.meta.api.objects.games.CallbackGame;
@@ -16,11 +18,13 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class InlineKeyboardButtonWithCallback extends InlineKeyboardButton implements ButtonWithCallback {
     @JsonIgnore
     private ButtonCallbackAction callback;
     @JsonIgnore
+    @Builder.Default
     private volatile boolean added = false;
 
     public InlineKeyboardButtonWithCallback(@NonNull String text) {
@@ -43,7 +47,6 @@ public class InlineKeyboardButtonWithCallback extends InlineKeyboardButton imple
         this.callback = callback;
     }
 
-    @Builder
     public InlineKeyboardButtonWithCallback(@NonNull String text, String url,
                                             String callbackData, CallbackGame callbackGame,
                                             String switchInlineQuery, String switchInlineQueryCurrentChat,
@@ -54,6 +57,10 @@ public class InlineKeyboardButtonWithCallback extends InlineKeyboardButton imple
                 switchInlineQueryCurrentChat, pay, loginUrl, webApp,
                 switchInlineQueryChosenChat, copyText);
         this.callback = callback;
+    }
+
+    public static InlineKeyboardButtonWithCallbackBuilder<?, ?> builder() {
+        return new InlineKeyboardButtonWithCallbackBuilderImpl();
     }
 
     @Override
@@ -81,5 +88,16 @@ public class InlineKeyboardButtonWithCallback extends InlineKeyboardButton imple
                     "the button to the registry. Changing it will make the callbackAction unreachable");
         }
         super.setCallbackData(callbackData);
+    }
+
+    public static abstract class InlineKeyboardButtonWithCallbackBuilder
+            <C extends InlineKeyboardButtonWithCallback,
+                    B extends InlineKeyboardButtonWithCallbackBuilder<C, B>>
+            extends InlineKeyboardButtonBuilder<C, B> {
+
+        @JsonIgnore
+        private B added(boolean added) {
+            return self();
+        }
     }
 }
