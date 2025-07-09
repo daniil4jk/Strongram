@@ -11,7 +11,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.SwitchIn
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
 @Slf4j
 @Getter
@@ -20,52 +19,28 @@ import java.util.function.Consumer;
 @EqualsAndHashCode(callSuper = false)
 public class InlineKeyboardButtonWithCallback extends InlineKeyboardButton implements ButtonWithCallback {
     @JsonIgnore
-    private final Runnable callback;
-    @JsonIgnore
-    private final Consumer<Exception> onException;
-    @JsonIgnore
-    private final boolean removeOnException;
+    private ButtonCallbackAction callback;
     @JsonIgnore
     private volatile boolean added = false;
 
     public InlineKeyboardButtonWithCallback(@NonNull String text) {
-        this(text, () -> {});
+        this(text, (ButtonCallbackAction) null);
     }
 
-    public InlineKeyboardButtonWithCallback(@NonNull String text, Runnable callback) {
-        this(text, callback,
-                e -> log.error(e.getLocalizedMessage(), e),
-                true);
-    }
-
-    public InlineKeyboardButtonWithCallback(@NonNull String text,
-                                            Runnable callback, Consumer<Exception> onException,
-                                            boolean removeOnException) {
+    public InlineKeyboardButtonWithCallback(@NonNull String text, ButtonCallbackAction callback) {
         super(text);
         this.callback = callback;
-        this.onException = onException;
-        this.removeOnException = removeOnException;
     }
 
     public InlineKeyboardButtonWithCallback(@NonNull String text, @NonNull String callbackData) {
-        this(text, callbackData, () -> {});
+        this(text, callbackData, null);
     }
 
     public InlineKeyboardButtonWithCallback(@NonNull String text, @NonNull String callbackData,
-                                            Runnable callback) {
-        this(text, callbackData, callback,
-                e -> log.error(e.getLocalizedMessage(), e),
-                true);
-    }
-
-    public InlineKeyboardButtonWithCallback(@NonNull String text, @NonNull String callbackData,
-                                            Runnable callback, Consumer<Exception> onException,
-                                            boolean removeOnException) {
+                                            ButtonCallbackAction callback) {
         super(text);
         setCallbackData(callbackData);
         this.callback = callback;
-        this.onException = onException;
-        this.removeOnException = removeOnException;
     }
 
     @Builder
@@ -74,14 +49,11 @@ public class InlineKeyboardButtonWithCallback extends InlineKeyboardButton imple
                                             String switchInlineQuery, String switchInlineQueryCurrentChat,
                                             Boolean pay, LoginUrl loginUrl, WebAppInfo webApp,
                                             SwitchInlineQueryChosenChat switchInlineQueryChosenChat,
-                                            CopyTextButton copyText, Runnable callback,
-                                            Consumer<Exception> onException, boolean removeOnException) {
+                                            CopyTextButton copyText, ButtonCallbackAction callback) {
         super(text, url, callbackData, callbackGame, switchInlineQuery,
                 switchInlineQueryCurrentChat, pay, loginUrl, webApp,
                 switchInlineQueryChosenChat, copyText);
         this.callback = callback;
-        this.onException = onException;
-        this.removeOnException = removeOnException;
     }
 
     @Override
@@ -98,25 +70,15 @@ public class InlineKeyboardButtonWithCallback extends InlineKeyboardButton imple
     }
 
     @Override
-    public void callback() {
-        callback.run();
-    }
-
-    @Override
-    public void onException(Exception e) {
-        onException.accept(e);
-    }
-
-    @Override
-    public boolean isRemoveOnException() {
-        return removeOnException;
+    public ButtonCallbackAction getCallbackAction() {
+        return null;
     }
 
     @Override
     public void setCallbackData(String callbackData) {
         if (added) {
             throw new IllegalCallerException("callbackData was automatically set before adding " +
-                    "the button to the registry. Changing it will make the callback unreachable");
+                    "the button to the registry. Changing it will make the callbackAction unreachable");
         }
         super.setCallbackData(callbackData);
     }

@@ -12,7 +12,8 @@ public class PollTelegramUUIDParser extends TelegramUUIDParser<Poll> {
     }
 
     @Override
-    public TelegramUUID parse(Poll t) {
-        throw new TelegramObjectParseException("poll doesn`t contains any info about user");
+    public TelegramUUID parse(Poll t) throws TelegramObjectParseException {
+        throw new TelegramObjectParseException("%s has`nt TelegramUUID payload"
+                .formatted(t.getClass().getName()));
     }
 }

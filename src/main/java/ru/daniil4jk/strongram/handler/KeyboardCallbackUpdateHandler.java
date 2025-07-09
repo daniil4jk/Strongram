@@ -4,12 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.context.BotContext;
-import ru.daniil4jk.strongram.keyboard.ButtonWithCallback;
+import ru.daniil4jk.strongram.keyboard.ButtonCallbackAction;
 import ru.daniil4jk.strongram.keyboard.ButtonWithCallbackRegistry;
 import ru.daniil4jk.strongram.parser.ParserService;
+import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
+import ru.daniil4jk.strongram.parser.payload.PayloadParserService;
+
+import java.io.Serializable;
 
 public class KeyboardCallbackUpdateHandler extends AbstractUpdateHandler {
-    private final ParserService<String> textParser;
+    private final ParserService<String> textParser = PayloadParserService.getInstance();
 
 
     @Override
@@ -18,23 +22,40 @@ public class KeyboardCallbackUpdateHandler extends AbstractUpdateHandler {
             return processNext(update, context);
         }
 
-        String callbackData = textParser.parse(update);
-        var registry = context.getByClass(ButtonWithCallbackRegistry.class);
-        if (!registry.contains(callbackData)) {
+        String callbackId;
+        try {
+            callbackId = textParser.parse(update);
+        } catch (TelegramObjectParseException e) {
             return processNext(update, context);
         }
 
-        ButtonWithCallback button = registry.get(callbackData);
-        try {
-            button.callback();
-            registry.remove(button);
-        } catch (Exception e) {
-            button.onException(e);
-            if (button.isRemoveOnException()) {
-                registry.remove(button);
-            }
-        }
+        var registry = context.getByClass(ButtonWithCallbackRegistry.class);
 
-        return null;
+        if (!registry.contains(callbackId)) {
+            return processNext(update, context);
+        }
+        return processAction(registry, callbackId);
+    }
+
+    private BotApiMethod<?> processAction(ButtonWithCallbackRegistry registry,
+                                          String callbackId) {
+        ButtonCallbackAction action = registry.get(callbackId);
+
+        try {
+            var result = action.run();
+            removeIfDisposable(registry, callbackId, action);
+            return result;
+        } catch (Exception e) {
+            var result = action.onException(e);
+            removeIfDisposable(registry, callbackId, action);
+            return result;
+        }
+    }
+
+    private void removeIfDisposable(ButtonWithCallbackRegistry registry,
+                                    String callbackId, ButtonCallbackAction action) {
+        if (action.isDisposable()) {
+            registry.remove(callbackId, action);
+        }
     }
 }

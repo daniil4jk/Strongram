@@ -11,7 +11,7 @@ public abstract class UpdateParser<O> implements Parser<Update, O> {
     }
 
     @Override
-    public O parse(Update update) {
+    public O parse(Update update) throws TelegramObjectParseException {
         if (update.hasMessage()) return parseInternal(update.getMessage());
         if (update.hasInlineQuery()) return parseInternal(update.getInlineQuery());
         if (update.hasChosenInlineQuery()) return parseInternal(update.getChosenInlineQuery());

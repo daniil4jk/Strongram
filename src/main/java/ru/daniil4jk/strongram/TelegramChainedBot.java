@@ -31,6 +31,10 @@ public abstract class TelegramChainedBot extends TelegramBot implements ChainedB
         super(httpClient, credentials);
     }
 
+    public TelegramChainedBot(TelegramClient telegramClient, BotCredentials credentials) {
+        super(telegramClient, credentials);
+    }
+
     @Override
     public BotApiMethod<?> process(Update update) {
         return chain.process(update, botContext);

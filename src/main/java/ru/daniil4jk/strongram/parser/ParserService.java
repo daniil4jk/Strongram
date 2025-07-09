@@ -24,7 +24,7 @@ public abstract class ParserService<O> {
     }
 
     @SuppressWarnings("unchecked")
-    public <I extends BotApiObject> O parse(I i) {
+    public <I extends BotApiObject> O parse(I i) throws TelegramObjectParseException {
         return ((Parser<I, O>) Optional.ofNullable(parserMap.get(i.getClass()))
                 .orElseThrow(() ->
                         new TelegramObjectParseException("Not enough parser for types I: %s, O: %s"

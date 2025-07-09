@@ -2,6 +2,7 @@ package ru.daniil4jk.strongram.parser.uuid.parsers;
 
 import org.telegram.telegrambots.meta.api.objects.payments.PreCheckoutQuery;
 import ru.daniil4jk.strongram.TelegramUUID;
+import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class PreCheckoutQueryTelegramUUIDParser extends TelegramUUIDParser<PreCheckoutQuery> {
     @Override
@@ -10,7 +11,7 @@ public class PreCheckoutQueryTelegramUUIDParser extends TelegramUUIDParser<PreCh
     }
 
     @Override
-    public TelegramUUID parse(PreCheckoutQuery t) {
+    public TelegramUUID parse(PreCheckoutQuery t) throws TelegramObjectParseException {
         return new TelegramUUID(null, t.getFrom());
     }
 }

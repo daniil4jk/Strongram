@@ -2,6 +2,7 @@ package ru.daniil4jk.strongram.parser.uuid.parsers;
 
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMemberUpdated;
 import ru.daniil4jk.strongram.TelegramUUID;
+import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class ChatMemberUpdatedTelegramUUIDParser extends TelegramUUIDParser<ChatMemberUpdated> {
     @Override
@@ -10,7 +11,7 @@ public class ChatMemberUpdatedTelegramUUIDParser extends TelegramUUIDParser<Chat
     }
 
     @Override
-    public TelegramUUID parse(ChatMemberUpdated t) {
+    public TelegramUUID parse(ChatMemberUpdated t) throws TelegramObjectParseException {
         return new TelegramUUID(t.getChat(), t.getFrom());
     }
 }

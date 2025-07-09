@@ -1,29 +1,31 @@
 package ru.daniil4jk.strongram.keyboard;
 
-import ru.daniil4jk.strongram.TelegramUUID;
-
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ButtonWithCallbackRegistryImpl implements ButtonWithCallbackRegistry {
-    private final Map<TelegramUUID, Map<String, ButtonWithCallback>> map = new HashMap<>();
-
-    private Map<String, ButtonWithCallback> getMapByUser(TelegramUUID uuid) {
-        return map.computeIfAbsent(uuid, id -> new HashMap<>());
-    }
+    private final Map<String, ButtonCallbackAction> map = new ConcurrentHashMap<>();
+    private final ButtonAutoRemover remover = new ButtonAutoRemover(map::remove);
 
     @Override
-    public boolean add(TelegramUUID uuid, ButtonWithCallback button) {
+    public boolean add(ButtonWithCallback button, boolean temporarily) {
+        Objects.requireNonNull(button.getCallbackId(), "callbackId can`t be null");
+        Objects.requireNonNull(button.getCallbackAction(), "buttonCallbackAction can`t be null");
+
         button.prepareToAddingInRegistry();
+
         try {
-            getMapByUser(uuid).compute(button.getCallbackId(), (cd, b) -> {
+            map.compute(button.getCallbackId(), (cd, b) -> {
                 if (b == null) {
-                    return button;
+                    if (temporarily) {
+                        remover.add(button.getCallbackId());
+                    }
+                    return button.getCallbackAction();
                 }
 
-                if (b.equals(button)) {
-                    throw new IllegalStateException("element %s already added"
-                            .formatted(b));
+                if (b.equals(button.getCallbackAction())) {
+                    return b;
                 } else {
                     throw new IllegalStateException("with key %s already associated element %s"
                             .formatted(cd, b));
@@ -36,27 +38,33 @@ public class ButtonWithCallbackRegistryImpl implements ButtonWithCallbackRegistr
     }
 
     @Override
-    public boolean contains(TelegramUUID uuid, String callbackData) {
-        return getMapByUser(uuid).containsKey(callbackData);
+    public boolean contains(String callbackData) {
+        return map.containsKey(callbackData);
     }
 
     @Override
-    public ButtonWithCallback get(TelegramUUID uuid, String callbackData) {
-        return getMapByUser(uuid).get(callbackData);
+    public ButtonCallbackAction get(String callbackData) {
+        return map.get(callbackData);
     }
 
     @Override
-    public boolean remove(TelegramUUID uuid, ButtonWithCallback button) {
+    public boolean remove(ButtonWithCallback button) {
+        return remove(button.getCallbackId(), button.getCallbackAction());
+    }
+
+    @Override
+    public boolean remove(String callbackId, ButtonCallbackAction action) {
+        Objects.requireNonNull(callbackId, "callbackId can`t be null");
+        Objects.requireNonNull(callbackId, "buttonCallbackAction can`t be null");
         try {
-            getMapByUser(uuid).compute(button.getCallbackId(),
-                    (cd, b) -> {
+            map.compute(callbackId, (cd, b) -> {
                 if (b == null) {
                     throw new IllegalStateException("with key %s not associated element"
                             .formatted(cd));
                 }
-                if (!b.equals(button)) {
+                if (!b.equals(action)) {
                     throw new IllegalStateException("with key %s associated element %s, but not %s"
-                            .formatted(cd, b, button));
+                            .formatted(cd, b, action));
                 }
                 return null;
             });
