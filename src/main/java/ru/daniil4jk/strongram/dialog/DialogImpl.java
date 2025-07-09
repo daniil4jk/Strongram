@@ -38,14 +38,10 @@ public class DialogImpl implements Dialog {
                     .formatted(currentStage));
         }
 
-        DialogContext contextOnStart = context.clone();
-
         try {
             return currentStage.process(update, botContext, context);
         } catch (Exception e) {
-            BotApiMethod<?> failMessage = currentStage.onException(e);
-            context = contextOnStart;
-            return failMessage;
+            return currentStage.onException(e);
         }
     }
 
