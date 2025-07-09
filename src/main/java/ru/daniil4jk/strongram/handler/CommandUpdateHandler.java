@@ -1,5 +1,6 @@
 package ru.daniil4jk.strongram.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -16,6 +17,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class CommandUpdateHandler extends AbstractUpdateHandler {
     private final ParserService<TelegramUUID> UUIDParser =
             TelegramUUIDParserService.getInstance();
@@ -59,6 +61,9 @@ public class CommandUpdateHandler extends AbstractUpdateHandler {
         String commandIdentifier = removeUsernameFromCommandIfNeeded(commandSplit[0]);
 
         if (registry.contains(commandIdentifier)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Update text {} fits commandIdentifier {}", text, commandIdentifier);
+            }
             String[] parameters = Arrays.copyOfRange(commandSplit, 1, commandSplit.length);
             return registry.get(commandIdentifier).process(uuid, context, parameters);
         } else {

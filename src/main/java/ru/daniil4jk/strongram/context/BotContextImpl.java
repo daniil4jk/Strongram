@@ -18,9 +18,11 @@ public class BotContextImpl implements BotContext {
                           @Nullable Map<String, Object> stringMap) {
         if (classMap != null) {
             for (var entry : classMap.entrySet()) {
+                if (entry.getValue() == null) continue;
+
                 if (!entry.getKey().isInstance(entry.getValue())) {
-                    throw new IllegalArgumentException("object by class %s is`nt instanceof it"
-                            .formatted(entry.getKey()));
+                    throw new IllegalArgumentException("%s is`nt instanceof %s"
+                            .formatted(entry.getValue().getClass(), entry.getKey()));
                 }
             }
             this.classMap = Collections.unmodifiableMap(classMap);

@@ -1,5 +1,6 @@
 package ru.daniil4jk.strongram;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -8,6 +9,7 @@ import ru.daniil4jk.strongram.context.BotContext;
 import ru.daniil4jk.strongram.context.BotContextImpl;
 import ru.daniil4jk.strongram.handler.UpdateHandler;
 
+@Slf4j
 public abstract class TelegramChainedBot extends TelegramBot implements ChainedBot {
     private final UpdateHandler chain; {
         var builder = UpdateHandler.chainBuilder();
@@ -37,6 +39,9 @@ public abstract class TelegramChainedBot extends TelegramBot implements ChainedB
 
     @Override
     public BotApiMethod<?> process(Update update) {
+        if (log.isDebugEnabled()) {
+            log.debug("update processing by chain");
+        }
         return chain.process(update, botContext);
     }
 

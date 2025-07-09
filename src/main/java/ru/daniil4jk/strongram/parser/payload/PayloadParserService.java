@@ -11,6 +11,6 @@ public class PayloadParserService extends ParserService<String> {
 
     @Override
     protected Class<String> getReturnsClass() {
-        return null;
+        return String.class;
     }
 }
