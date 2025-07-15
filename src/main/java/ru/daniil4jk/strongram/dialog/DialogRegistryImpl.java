@@ -3,6 +3,7 @@ package ru.daniil4jk.strongram.dialog;
 import ru.daniil4jk.strongram.TelegramUUID;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +21,7 @@ public class DialogRegistryImpl implements DialogRegistry {
 
     @Override
     public List<Dialog> getAllByUUID(TelegramUUID uuid) {
-        return map.get(uuid);
+        return map.get(uuid) != null ? map.get(uuid) : Collections.emptyList();
     }
 
     @Override

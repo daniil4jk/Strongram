@@ -1,5 +1,6 @@
 package ru.daniil4jk.strongram;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -19,6 +20,7 @@ public abstract class TelegramChainedBot extends TelegramBot implements ChainedB
             throw new IllegalStateException("Chain can`t be null! You can return basicChain.build() in defaults");
         }
     }
+    @Getter
     private final BotContext botContext; {
         var builder = BotContextImpl.builder();
         modifyBotContext(builder);

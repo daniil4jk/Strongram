@@ -18,9 +18,10 @@ import ru.daniil4jk.strongram.keyboard.ButtonWithCallbackRegistryImpl;
 
 @Getter
 public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
-    private final DialogRegistry dialogRegistry = new DialogRegistryImpl();
-    private final CommandRegistry commandRegistry = new CommandRegistryImpl();
-    private final ButtonWithCallbackRegistry buttonWithCallbackRegistry = new ButtonWithCallbackRegistryImpl();
+    private final DialogRegistry dialogRegistry = getBotContext().getByClass(DialogRegistry.class);
+    private final CommandRegistry commandRegistry = getBotContext().getByClass(CommandRegistry.class);
+    private final ButtonWithCallbackRegistry buttonWithCallbackRegistry =
+            getBotContext().getByClass(ButtonWithCallbackRegistry.class);
 
     public TelegramChainedBotWithDefaults(BotCredentials credentials) {
         super(credentials);
@@ -46,8 +47,8 @@ public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
     @Override
     public void modifyBotContext(BotContextImpl.BotContextImplBuilder builder) {
         super.modifyBotContext(builder);
-        builder.objectByClass(DialogRegistry.class, dialogRegistry)
-                .objectByClass(CommandRegistry.class, commandRegistry)
-                .objectByClass(ButtonWithCallbackRegistry.class, buttonWithCallbackRegistry);
+        builder.objectByClass(DialogRegistry.class, new DialogRegistryImpl())
+                .objectByClass(CommandRegistry.class, new CommandRegistryImpl())
+                .objectByClass(ButtonWithCallbackRegistry.class, new ButtonWithCallbackRegistryImpl());
     }
 }
