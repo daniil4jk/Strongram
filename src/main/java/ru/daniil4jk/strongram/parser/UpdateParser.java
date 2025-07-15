@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public abstract class UpdateParser<O> implements Parser<Update, O> {
 
     @Override
-    public Class<Update> getParsingClass() {
+    public Class<Update> getInputClass() {
         return Update.class;
     }
 

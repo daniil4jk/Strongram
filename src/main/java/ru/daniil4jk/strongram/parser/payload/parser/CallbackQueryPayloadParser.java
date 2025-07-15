@@ -5,7 +5,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class CallbackQueryPayloadParser extends PayloadParser<CallbackQuery> {
     @Override
-    public Class<CallbackQuery> getParsingClass() {
+    public Class<CallbackQuery> getInputClass() {
         return CallbackQuery.class;
     }
 

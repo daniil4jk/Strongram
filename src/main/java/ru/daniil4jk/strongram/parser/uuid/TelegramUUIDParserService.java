@@ -11,7 +11,7 @@ public class TelegramUUIDParserService extends ParserService<TelegramUUID> {
     private TelegramUUIDParserService() {}
 
     @Override
-    protected Class<TelegramUUID> getReturnsClass() {
+    protected Class<TelegramUUID> getOutputClass() {
         return TelegramUUID.class;
     }
 }

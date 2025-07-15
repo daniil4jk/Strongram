@@ -7,7 +7,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class BusinessConnectionTelegramUUIDParser extends TelegramUUIDParser<BusinessConnection> {
     @Override
-    public Class<BusinessConnection> getParsingClass() {
+    public Class<BusinessConnection> getInputClass() {
         return BusinessConnection.class;
     }
 

@@ -11,16 +11,21 @@ public abstract class ParserService<O> {
     //Map<Class<I>, Parser<I, O>>. Type I in class == type I in parser.
     private final Map<Class<?>, Parser<?, O>> parserMap = new HashMap<>();
 
-    public ParserService() {}
-
     public <I extends BotApiObject> ParserService(Collection<Parser<I, O>> parsers) {
+        this();
         for (Parser<I, O> parser : parsers) {
-            parserMap.put(parser.getParsingClass(), parser);
+            parserMap.put(parser.getInputClass(), parser);
+        }
+    }
+
+    public ParserService() {
+        for (var parser : SPIParserRegistry.getInstance().getByOutputClass(getOutputClass())) {
+            parserMap.put(parser.getInputClass(), parser);
         }
     }
 
     public <I extends BotApiObject> void addParser(Parser<I, O> parser) {
-        parserMap.put(parser.getParsingClass(), parser);
+        parserMap.put(parser.getInputClass(), parser);
     }
 
     @SuppressWarnings("unchecked")
@@ -28,9 +33,9 @@ public abstract class ParserService<O> {
         return ((Parser<I, O>) Optional.ofNullable(parserMap.get(i.getClass()))
                 .orElseThrow(() ->
                         new TelegramObjectParseException("Not enough parser for types I: %s, O: %s"
-                                .formatted(getReturnsClass().getName(), i.getClass().getName()))))
+                                .formatted(getOutputClass().getName(), i.getClass().getName()))))
                 .parse(i);
     }
 
-    protected abstract Class<O> getReturnsClass();
+    protected abstract Class<O> getOutputClass();
 }

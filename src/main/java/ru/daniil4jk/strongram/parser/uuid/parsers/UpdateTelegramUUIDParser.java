@@ -6,8 +6,9 @@ import ru.daniil4jk.strongram.parser.UpdateParser;
 import ru.daniil4jk.strongram.parser.uuid.TelegramUUIDParserService;
 
 public class UpdateTelegramUUIDParser extends UpdateParser<TelegramUUID> {
-    {
-        TelegramUUIDParserService.getInstance().addParser(this);
+    @Override
+    public Class<TelegramUUID> getOutputClass() {
+        return TelegramUUID.class;
     }
 
     @Override

@@ -5,8 +5,9 @@ import ru.daniil4jk.strongram.parser.UpdateParser;
 import ru.daniil4jk.strongram.parser.payload.PayloadParserService;
 
 public class UpdatePayloadParser extends UpdateParser<String> {
-    {
-        PayloadParserService.getInstance().addParser(this);
+    @Override
+    public Class<String> getOutputClass() {
+        return String.class;
     }
 
     @Override

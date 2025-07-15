@@ -5,7 +5,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class PaidMediaPurchasedPayloadParser extends PayloadParser<PaidMediaPurchased> {
     @Override
-    public Class<PaidMediaPurchased> getParsingClass() {
+    public Class<PaidMediaPurchased> getInputClass() {
         return PaidMediaPurchased.class;
     }
 

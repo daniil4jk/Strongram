@@ -5,7 +5,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class BusinessConnectionPayloadParser extends PayloadParser<BusinessConnection> {
     @Override
-    public Class<BusinessConnection> getParsingClass() {
+    public Class<BusinessConnection> getInputClass() {
         return BusinessConnection.class;
     }
 

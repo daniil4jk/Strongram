@@ -5,7 +5,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class ChatMemberUpdatedPayloadParser extends PayloadParser<ChatMemberUpdated> {
     @Override
-    public Class<ChatMemberUpdated> getParsingClass() {
+    public Class<ChatMemberUpdated> getInputClass() {
         return ChatMemberUpdated.class;
     }
 

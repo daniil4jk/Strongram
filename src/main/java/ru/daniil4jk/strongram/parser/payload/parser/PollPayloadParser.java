@@ -5,7 +5,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class PollPayloadParser extends PayloadParser<Poll> {
     @Override
-    public Class<Poll> getParsingClass() {
+    public Class<Poll> getInputClass() {
         return Poll.class;
     }
 

@@ -10,8 +10,6 @@ import ru.daniil4jk.strongram.parser.ParserService;
 import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 import ru.daniil4jk.strongram.parser.payload.PayloadParserService;
 
-import java.io.Serializable;
-
 public class KeyboardCallbackUpdateHandler extends AbstractUpdateHandler {
     private final ParserService<String> textParser = PayloadParserService.getInstance();
 

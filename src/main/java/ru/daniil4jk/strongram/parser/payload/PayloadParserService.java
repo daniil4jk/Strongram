@@ -10,7 +10,7 @@ public class PayloadParserService extends ParserService<String> {
     private PayloadParserService() {}
 
     @Override
-    protected Class<String> getReturnsClass() {
+    protected Class<String> getOutputClass() {
         return String.class;
     }
 }

@@ -6,7 +6,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class BusinessMessagesDeletedTelegramUUIDParser extends TelegramUUIDParser<BusinessMessagesDeleted> {
     @Override
-    public Class<BusinessMessagesDeleted> getParsingClass() {
+    public Class<BusinessMessagesDeleted> getInputClass() {
         return BusinessMessagesDeleted.class;
     }
 

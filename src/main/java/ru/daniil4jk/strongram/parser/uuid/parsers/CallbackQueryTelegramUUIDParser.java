@@ -6,7 +6,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class CallbackQueryTelegramUUIDParser extends TelegramUUIDParser<CallbackQuery> {
     @Override
-    public Class<CallbackQuery> getParsingClass() {
+    public Class<CallbackQuery> getInputClass() {
         return CallbackQuery.class;
     }
 

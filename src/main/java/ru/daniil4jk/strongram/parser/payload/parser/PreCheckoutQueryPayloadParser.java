@@ -5,7 +5,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class PreCheckoutQueryPayloadParser extends PayloadParser<PreCheckoutQuery> {
     @Override
-    public Class<PreCheckoutQuery> getParsingClass() {
+    public Class<PreCheckoutQuery> getInputClass() {
         return PreCheckoutQuery.class;
     }
 

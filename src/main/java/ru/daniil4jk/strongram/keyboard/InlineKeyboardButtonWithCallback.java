@@ -3,7 +3,6 @@ package ru.daniil4jk.strongram.keyboard;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import lombok.experimental.Tolerate;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.LoginUrl;
 import org.telegram.telegrambots.meta.api.objects.games.CallbackGame;

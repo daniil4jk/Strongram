@@ -6,7 +6,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class MessageTelegramUUIDParser extends TelegramUUIDParser<Message> {
     @Override
-    public Class<Message> getParsingClass() {
+    public Class<Message> getInputClass() {
         return Message.class;
     }
 

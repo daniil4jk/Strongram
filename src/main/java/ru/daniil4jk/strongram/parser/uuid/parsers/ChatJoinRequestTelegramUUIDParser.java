@@ -6,7 +6,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class ChatJoinRequestTelegramUUIDParser extends TelegramUUIDParser<ChatJoinRequest> {
     @Override
-    public Class<ChatJoinRequest> getParsingClass() {
+    public Class<ChatJoinRequest> getInputClass() {
         return ChatJoinRequest.class;
     }
 

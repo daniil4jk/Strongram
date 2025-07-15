@@ -7,7 +7,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 public class PollAnswerTelegramUUIDParser extends TelegramUUIDParser<PollAnswer> {
 
     @Override
-    public Class<PollAnswer> getParsingClass() {
+    public Class<PollAnswer> getInputClass() {
         return PollAnswer.class;
     }
 

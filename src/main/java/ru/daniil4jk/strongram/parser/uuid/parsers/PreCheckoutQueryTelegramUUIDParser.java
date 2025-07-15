@@ -6,7 +6,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class PreCheckoutQueryTelegramUUIDParser extends TelegramUUIDParser<PreCheckoutQuery> {
     @Override
-    public Class<PreCheckoutQuery> getParsingClass() {
+    public Class<PreCheckoutQuery> getInputClass() {
         return PreCheckoutQuery.class;
     }
 

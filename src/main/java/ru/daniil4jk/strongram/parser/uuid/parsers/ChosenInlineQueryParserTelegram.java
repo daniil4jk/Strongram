@@ -6,7 +6,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class ChosenInlineQueryParserTelegram extends TelegramUUIDParser<ChosenInlineQuery> {
     @Override
-    public Class<ChosenInlineQuery> getParsingClass() {
+    public Class<ChosenInlineQuery> getInputClass() {
         return ChosenInlineQuery.class;
     }
 

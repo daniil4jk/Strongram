@@ -6,7 +6,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class PaidMediaPurchasedTelegramUUIDParser extends TelegramUUIDParser<PaidMediaPurchased> {
     @Override
-    public Class<PaidMediaPurchased> getParsingClass() {
+    public Class<PaidMediaPurchased> getInputClass() {
         return PaidMediaPurchased.class;
     }
 

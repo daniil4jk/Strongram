@@ -5,7 +5,7 @@ import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 
 public class ChosenInlineQueryPayloadParser extends PayloadParser<ChosenInlineQuery> {
     @Override
-    public Class<ChosenInlineQuery> getParsingClass() {
+    public Class<ChosenInlineQuery> getInputClass() {
         return ChosenInlineQuery.class;
     }
 
