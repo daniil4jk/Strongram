@@ -1,2 +1,2 @@
 # Strongram
-The java telegram library, which simplify the development of bots to couple of files
+The java telegram library, that structures the writing of bots, allowing you to easily code complex cases
