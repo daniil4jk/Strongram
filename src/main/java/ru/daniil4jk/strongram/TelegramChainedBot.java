@@ -14,12 +14,13 @@ import ru.daniil4jk.strongram.handler.UpdateHandler;
 public abstract class TelegramChainedBot extends TelegramBot implements ChainedBot {
     private final UpdateHandler chain; {
         var builder = UpdateHandler.chainBuilder();
-        updateChain(builder);
+        modifyChain(builder);
         chain = builder.build();
-        if (chain == null) {
-            throw new IllegalStateException("Chain can`t be null! You can return basicChain.build() in defaults");
+        if (chain == null && log.isDebugEnabled()) {
+            log.warn("chain is empty! You can add some links to chain overriding modifyChain()");
         }
     }
+
     @Getter
     private final BotContext botContext; {
         var builder = BotContextImpl.builder();
@@ -42,7 +43,7 @@ public abstract class TelegramChainedBot extends TelegramBot implements ChainedB
     @Override
     public BotApiMethod<?> process(Update update) {
         if (log.isDebugEnabled()) {
-            log.debug("update processing by chain");
+            log.debug("Update {} pushed to chain", update.getUpdateId());
         }
         return chain.process(update, botContext);
     }

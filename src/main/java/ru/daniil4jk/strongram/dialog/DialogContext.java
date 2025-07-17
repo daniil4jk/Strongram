@@ -6,7 +6,6 @@ public interface DialogContext extends Cloneable {
     boolean addObject(String objectName, Object object);
     <T> T getObjectCasted(String objectName, Class<T> clazz);
     boolean remove(String objectName);
-    <T> T removeAndGet(String objectName, Class<T> clazz);
     void setDialogCompleted();
     boolean isDialogCompleted();
     DialogContext clone();

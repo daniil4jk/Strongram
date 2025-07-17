@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
+import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -16,7 +17,7 @@ import java.util.function.Function;
 @Getter
 @Slf4j
 public abstract class TelegramBot implements Bot, TelegramClientProvider,
-        LongPollingUpdateConsumer, Function<Update, BotApiMethod<?>> {
+        LongPollingSingleThreadUpdateConsumer, Function<Update, BotApiMethod<?>> {
     private final BotCredentials credentials;
     private final TelegramClient client;
 
@@ -46,16 +47,14 @@ public abstract class TelegramBot implements Bot, TelegramClientProvider,
     }
 
     @Override
-    public void consume(@NotNull List<Update> list) {
-        for (Update update : list) {
-            try {
-                var method = process(update);
-                if (method != null) {
-                    client.execute(method);
-                }
-            } catch (Exception e) {
-                log.error(e.getLocalizedMessage(), e);
+    public void consume(Update update) {
+        try {
+            var method = process(update);
+            if (method != null) {
+                client.execute(method);
             }
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage(), e);
         }
     }
 

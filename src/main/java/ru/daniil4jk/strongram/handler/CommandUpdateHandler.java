@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.TelegramUUID;
-import ru.daniil4jk.strongram.command.BotCommandImpl;
+import ru.daniil4jk.strongram.command.AbstractBotCommand;
 import ru.daniil4jk.strongram.command.CommandRegistry;
 import ru.daniil4jk.strongram.context.BotContext;
 import ru.daniil4jk.strongram.parser.ParserService;
@@ -30,9 +30,9 @@ public class CommandUpdateHandler extends AbstractUpdateHandler {
     }
 
     @Override
-    public BotApiMethod<?> process(@NotNull Update update, BotContext context) {
+    public BotApiMethod<?> execute(@NotNull Update update, BotContext context) {
         if (update.hasMessage() && update.getMessage().getText()
-                .startsWith(BotCommandImpl.COMMAND_INIT_CHARACTER)) {
+                .startsWith(AbstractBotCommand.COMMAND_INIT_CHARACTER)) {
 
             TelegramUUID uuid;
             try {
@@ -56,7 +56,7 @@ public class CommandUpdateHandler extends AbstractUpdateHandler {
         var registry = context.getByClass(CommandRegistry.class);
 
         String commandMessage = text.substring(1);
-        String[] commandSplit = commandMessage.split(BotCommandImpl.COMMAND_PARAMETER_SEPARATOR_REGEXP);
+        String[] commandSplit = commandMessage.split(AbstractBotCommand.COMMAND_PARAMETER_SEPARATOR_REGEXP);
 
         String commandIdentifier = removeUsernameFromCommandIfNeeded(commandSplit[0]);
 

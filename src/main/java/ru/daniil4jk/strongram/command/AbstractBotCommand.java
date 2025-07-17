@@ -1,23 +1,14 @@
 package ru.daniil4jk.strongram.command;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-public abstract class BotCommandImpl implements BotCommand {
+public abstract class AbstractBotCommand implements BotCommand {
     public static final String COMMAND_INIT_CHARACTER = "/";
     public static final String COMMAND_PARAMETER_SEPARATOR_REGEXP = "\\s+";
     private static final int COMMAND_MAX_LENGTH = 32;
 
-    @NotNull
-    @Contract(" -> new")
-    public static BotCommandDefaultImpl.BotCommandDefaultImplBuilder builder() {
-        return new BotCommandDefaultImpl.BotCommandDefaultImplBuilder();
-    }
-
     private final String commandIdentifier;
     private final String description;
 
-    protected BotCommandImpl(String commandIdentifier, String description) {
+    protected AbstractBotCommand(String commandIdentifier, String description) {
         if (commandIdentifier == null || commandIdentifier.isEmpty()) {
             throw new IllegalArgumentException("commandIdentifier for command cannot be null or empty");
         }

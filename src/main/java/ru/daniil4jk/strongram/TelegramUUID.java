@@ -1,5 +1,6 @@
 package ru.daniil4jk.strongram;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
@@ -19,6 +20,11 @@ public record TelegramUUID(Chat chat, User user) {
             }
         }
         return -1;
+    }
+
+    @NotNull
+    public String getChatIdAsString() {
+        return String.valueOf(getChatId());
     }
 
     private void throwException(String who, Exception e) {

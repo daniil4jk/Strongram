@@ -89,15 +89,10 @@ public class DialogContextImpl implements DialogContext {
     }
 
     @Override
-    public <T> T removeAndGet(String objectName, Class<T> clazz) {
-        T objectCasted = getObjectCasted(objectName, clazz);
-        remove(objectName);
-        return objectCasted;
-    }
-
-    @Override
     public void setDialogCompleted() {
-        this.dialogCompleted.set(true);
+        if (!this.dialogCompleted.compareAndSet(false, true)) {
+            throw new IllegalStateException("Dialog already mark as completed");
+        }
     }
 
     @Override

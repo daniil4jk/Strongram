@@ -15,31 +15,33 @@ import java.util.Map;
 @ToString
 @EqualsAndHashCode
 public class DialogImpl implements Dialog {
-    private final Map<String, DialogStage> stages;
+    private final Map<String, DialogPart> parts;
     private DialogContext context;
 
     @Builder
-    public DialogImpl(@NonNull Map<String, DialogStage> stages, String initState) {
-        this.stages = Collections.unmodifiableMap(stages);
+    public DialogImpl(@NonNull Map<String, DialogPart> parts, String initState) {
+        this.parts = Collections.unmodifiableMap(parts);
         this.context = new DialogContextImpl(initState);
     }
 
     @Override
     public boolean canProcess(Update update) {
-        return getCurrentStage().canProcess(update);
+        return getCurrentPart() != null && getCurrentPart().filter(update);
     }
 
     @Override
     public BotApiMethod<?> process(Update update, BotContext botContext) {
-        DialogStage currentStage = getCurrentStage();
+        DialogPart currentStage = getCurrentPart();
 
-        if (!currentStage.canProcess(update)) {
+        if (!currentStage.filter(update)) {
             throw new IllegalCallerException("dialog on stage %s can`t process this update"
                     .formatted(currentStage));
         }
 
         try {
             return currentStage.process(update, botContext, context);
+        } catch (CannotProcessCaseException e) {
+            throw e;
         } catch (Exception e) {
             return currentStage.onException(e);
         }
@@ -50,23 +52,23 @@ public class DialogImpl implements Dialog {
         return context.isDialogCompleted();
     }
 
-    private DialogStage getCurrentStage() {
-        return stages.get(context.getState());
+    private DialogPart getCurrentPart() {
+        return parts.get(context.getState());
     }
 
     public static class DialogImplBuilder {
-        private volatile Map<String, DialogStage> stages;
+        private volatile Map<String, DialogPart> parts;
 
-        public DialogImplBuilder stage(DialogStage stage) {
-            if (stages == null) {
+        public DialogImplBuilder stage(DialogPart part) {
+            if (parts == null) {
                 synchronized (this) {
-                    if (stages == null) {
-                        stages = new HashMap<>();
+                    if (parts == null) {
+                        parts = new HashMap<>();
                     }
                 }
             }
 
-            stages.put(stage.getTriggerState(), stage);
+            parts.put(part.getOnState(), part);
             return this;
         }
     }

@@ -5,7 +5,7 @@ import ru.daniil4jk.strongram.context.BotContextImpl;
 import ru.daniil4jk.strongram.handler.UpdateHandler;
 
 public interface ChainedBot {
-    default void updateChain(@NotNull UpdateHandler.ChainBuilder builder) {
+    default void modifyChain(UpdateHandler.ChainBuilder builder) {
         //do nothing
     }
 

@@ -6,6 +6,6 @@ import ru.daniil4jk.strongram.context.BotContext;
 
 public interface Dialog {
     boolean canProcess(Update update);
-    BotApiMethod<?> process(Update update, BotContext botContext);
+    BotApiMethod<?> process(Update update, BotContext botContext) throws CannotProcessCaseException;
     boolean isCompleted();
 }

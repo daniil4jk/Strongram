@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.daniil4jk.strongram.dialog.CannotProcessCaseException;
 import ru.daniil4jk.strongram.context.BotContext;
 
 /**
@@ -12,7 +13,7 @@ import ru.daniil4jk.strongram.context.BotContext;
  */
 public interface UpdateHandler {
     void setNext(UpdateHandler handler);
-    BotApiMethod<?> process(Update update, BotContext context);
+    BotApiMethod<?> process(Update update, BotContext context) throws CannotProcessCaseException;
 
     @NotNull
     @Contract(value = " -> new", pure = true)

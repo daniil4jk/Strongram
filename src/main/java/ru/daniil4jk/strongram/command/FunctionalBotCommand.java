@@ -9,12 +9,12 @@ import ru.daniil4jk.strongram.context.BotContext;
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class BotCommandDefaultImpl extends BotCommandImpl{
-    private final BotCommandProcessFunction action;
+public class FunctionalBotCommand extends AbstractBotCommand {
+    private final BotCommandProcessor action;
 
     @Builder
-    protected BotCommandDefaultImpl(String commandIdentifier, String description,
-                                    BotCommandProcessFunction action) {
+    protected FunctionalBotCommand(String commandIdentifier, String description,
+                                   BotCommandProcessor action) {
         super(commandIdentifier, description);
         this.action = action;
     }
@@ -25,7 +25,7 @@ public class BotCommandDefaultImpl extends BotCommandImpl{
     }
 
     @FunctionalInterface
-    public interface BotCommandProcessFunction {
+    public interface BotCommandProcessor {
         BotApiMethod<?> process(TelegramUUID telegramUUID, BotContext context, String[] arguments);
     }
 }
