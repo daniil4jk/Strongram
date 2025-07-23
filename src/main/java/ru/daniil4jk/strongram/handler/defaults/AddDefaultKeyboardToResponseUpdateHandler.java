@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.handler;
+package ru.daniil4jk.strongram.handler.defaults;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import ru.daniil4jk.strongram.context.BotContext;
+import ru.daniil4jk.strongram.handler.AbstractUpdateHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

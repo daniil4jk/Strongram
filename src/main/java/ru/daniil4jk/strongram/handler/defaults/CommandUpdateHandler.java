@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.handler;
+package ru.daniil4jk.strongram.handler.defaults;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +8,7 @@ import ru.daniil4jk.strongram.TelegramUUID;
 import ru.daniil4jk.strongram.command.AbstractBotCommand;
 import ru.daniil4jk.strongram.command.CommandRegistry;
 import ru.daniil4jk.strongram.context.BotContext;
+import ru.daniil4jk.strongram.handler.AbstractUpdateHandler;
 import ru.daniil4jk.strongram.parser.ParserService;
 import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 import ru.daniil4jk.strongram.parser.uuid.TelegramUUIDParserService;

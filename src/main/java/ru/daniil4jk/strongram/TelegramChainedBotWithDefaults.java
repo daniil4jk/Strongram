@@ -8,15 +8,15 @@ import ru.daniil4jk.strongram.command.CommandRegistryImpl;
 import ru.daniil4jk.strongram.context.BotContextImpl;
 import ru.daniil4jk.strongram.dialog.DialogRegistry;
 import ru.daniil4jk.strongram.dialog.DialogRegistryImpl;
-import ru.daniil4jk.strongram.handler.*;
-import ru.daniil4jk.strongram.keyboard.ButtonWithCallbackRegistry;
-import ru.daniil4jk.strongram.keyboard.ButtonWithCallbackRegistryImpl;
+import ru.daniil4jk.strongram.handler.UpdateHandler;
+import ru.daniil4jk.strongram.handler.defaults.AddDefaultKeyboardToResponseUpdateHandler;
+import ru.daniil4jk.strongram.handler.defaults.CommandUpdateHandler;
+import ru.daniil4jk.strongram.handler.defaults.DialogUpdateHandler;
 
 @Getter
 public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
     private DialogRegistry dialogRegistry;
     private CommandRegistry commandRegistry;
-    private ButtonWithCallbackRegistry buttonWithCallbackRegistry;
     private AddDefaultKeyboardToResponseUpdateHandler addKeyboardHandler;
 
     public TelegramChainedBotWithDefaults(BotCredentials credentials) {
@@ -40,8 +40,7 @@ public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
         builder.beforeAll(addKeyboardHandler)
                 .afterAll(new DialogUpdateHandler())
                 .afterAll(new CommandUpdateHandler(true,
-                        () -> getCredentials().getBotName()))
-                .afterAll(new KeyboardCallbackUpdateHandler());
+                        () -> getCredentials().getBotName()));
     }
 
     @Override
@@ -50,10 +49,8 @@ public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
 
         dialogRegistry = new DialogRegistryImpl();
         commandRegistry = new CommandRegistryImpl();
-        buttonWithCallbackRegistry = new ButtonWithCallbackRegistryImpl();
 
         builder.objectByClass(DialogRegistry.class, dialogRegistry)
-                .objectByClass(CommandRegistry.class, commandRegistry)
-                .objectByClass(ButtonWithCallbackRegistry.class, buttonWithCallbackRegistry);
+                .objectByClass(CommandRegistry.class, commandRegistry);
     }
 }

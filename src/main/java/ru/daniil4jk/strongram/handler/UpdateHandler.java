@@ -4,8 +4,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.daniil4jk.strongram.dialog.CannotProcessCaseException;
 import ru.daniil4jk.strongram.context.BotContext;
+import ru.daniil4jk.strongram.dialog.CannotProcessCaseException;
 
 /**
  * They form a Chain of Responsibility through which all
@@ -26,9 +26,10 @@ public interface UpdateHandler {
         private UpdateHandler last;
         private boolean init = false;
 
-        private ChainBuilder() {}
+        private ChainBuilder() {
+        }
 
-        private void init (UpdateHandler handler) {
+        private void init(UpdateHandler handler) {
             first = handler;
             last = handler;
             init = true;

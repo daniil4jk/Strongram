@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
 public record TelegramUUID(Chat chat, User user) {
-    public long getChatId() {
+    public Long getChatId() {
         if (chat != null) {
             try {
                 return chat.getId();
@@ -19,12 +19,7 @@ public record TelegramUUID(Chat chat, User user) {
                 throwException("user", e);
             }
         }
-        return -1;
-    }
-
-    @NotNull
-    public String getChatIdAsString() {
-        return String.valueOf(getChatId());
+        return (long) -1;
     }
 
     private void throwException(String who, Exception e) {

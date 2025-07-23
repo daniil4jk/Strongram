@@ -1,11 +1,12 @@
-package ru.daniil4jk.strongram.handler;
+package ru.daniil4jk.strongram.handler.defaults;
 
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.daniil4jk.strongram.dialog.CannotProcessCaseException;
 import ru.daniil4jk.strongram.TelegramUUID;
 import ru.daniil4jk.strongram.context.BotContext;
+import ru.daniil4jk.strongram.dialog.CannotProcessCaseException;
 import ru.daniil4jk.strongram.dialog.DialogRegistry;
+import ru.daniil4jk.strongram.handler.AbstractUpdateHandler;
 import ru.daniil4jk.strongram.parser.ParserService;
 import ru.daniil4jk.strongram.parser.TelegramObjectParseException;
 import ru.daniil4jk.strongram.parser.uuid.TelegramUUIDParserService;

@@ -1,6 +1,5 @@
 package ru.daniil4jk.strongram;
 
-import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.context.BotContextImpl;
 import ru.daniil4jk.strongram.handler.UpdateHandler;
 
