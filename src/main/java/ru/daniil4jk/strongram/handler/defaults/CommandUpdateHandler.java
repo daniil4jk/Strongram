@@ -27,7 +27,7 @@ public class CommandUpdateHandler extends AbstractUpdateHandler {
 
     public CommandUpdateHandler(boolean allowCommandsWithUsername, Supplier<String> botUsernameSupplier) {
         this.allowCommandsWithUsername = allowCommandsWithUsername;
-        this. botUsernameSupplier =  botUsernameSupplier;
+        this.botUsernameSupplier = botUsernameSupplier;
     }
 
     @Override
@@ -72,8 +72,6 @@ public class CommandUpdateHandler extends AbstractUpdateHandler {
         }
     }
 
-    private static class CommandNotFoundException extends RuntimeException {}
-
     private String removeUsernameFromCommandIfNeeded(String command) {
         if (allowCommandsWithUsername) {
             String botUsername = Objects.requireNonNull(botUsernameSupplier.get(),
@@ -81,5 +79,8 @@ public class CommandUpdateHandler extends AbstractUpdateHandler {
             return command.replaceAll("(?i)@" + Pattern.quote(botUsername), "").trim();
         }
         return command;
+    }
+
+    private static class CommandNotFoundException extends RuntimeException {
     }
 }

@@ -1,7 +1,6 @@
 package ru.daniil4jk.strongram.handler.conditional;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.function.TriConsumer;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +11,6 @@ import ru.daniil4jk.strongram.handler.AbstractUpdateHandler;
 import ru.daniil4jk.strongram.parser.ParserService;
 import ru.daniil4jk.strongram.parser.payload.PayloadParserService;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -36,6 +34,12 @@ public class ConditionalUpdateHandler extends AbstractUpdateHandler {
         this.filter = patternToFilter(pattern);
     }
 
+    public static BiPredicate<Update, BotContext> patternToFilter(Pattern pattern) {
+        return (upd, ctx) -> pattern.matcher(
+                payloadParser.parse(upd)
+        ).matches();
+    }
+
     @Override
     public BotApiMethod<?> process(Update update, BotContext context) {
         if (filter.test(update, context)) {
@@ -43,12 +47,6 @@ public class ConditionalUpdateHandler extends AbstractUpdateHandler {
         } else {
             return processNext(update, context);
         }
-    }
-
-    public static BiPredicate<Update, BotContext> patternToFilter(Pattern pattern) {
-        return (upd, ctx) -> pattern.matcher(
-                payloadParser.parse(upd)
-        ).matches();
     }
 
     @Getter

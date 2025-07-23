@@ -9,12 +9,14 @@ import java.util.stream.Collectors;
 
 public class SPIParserRegistry {
     private static final SPIParserRegistry me = new SPIParserRegistry();
+    private static final ServiceLoader<Parser> loader = ServiceLoader.load(Parser.class);
+
+    private SPIParserRegistry() {
+    }
+
     public static SPIParserRegistry getInstance() {
         return me;
     }
-    private SPIParserRegistry() {}
-
-    private static final ServiceLoader<Parser> loader = ServiceLoader.load(Parser.class);
 
     @SuppressWarnings("unchecked")
     public <O> Collection<? extends Parser<?, O>> getByOutputClass(Class<O> outputClass) {

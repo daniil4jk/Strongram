@@ -8,7 +8,8 @@ public class TelegramUUIDParserService extends ParserService<TelegramUUID> {
     @Getter
     private static final TelegramUUIDParserService instance = new TelegramUUIDParserService();
 
-    private TelegramUUIDParserService() {}
+    private TelegramUUIDParserService() {
+    }
 
     @Override
     protected Class<TelegramUUID> getOutputClass() {

@@ -1,7 +1,6 @@
 package ru.daniil4jk.strongram.handler.conditional.keyboard;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.function.TriConsumer;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +17,6 @@ import ru.daniil4jk.strongram.parser.ParserService;
 import ru.daniil4jk.strongram.parser.payload.PayloadParserService;
 import ru.daniil4jk.strongram.parser.uuid.TelegramUUIDParserService;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -60,7 +58,8 @@ public abstract class KeyboardUpdateHandler<Keyboard extends ReplyKeyboard, Butt
         return action.apply(uuid, payload);
     }
 
-    public interface ButtonAction extends BiFunction<TelegramUUID, String, BotApiMethod<?>> {}
+    public interface ButtonAction extends BiFunction<TelegramUUID, String, BotApiMethod<?>> {
+    }
 
     @Getter
     @Setter
@@ -71,11 +70,11 @@ public abstract class KeyboardUpdateHandler<Keyboard extends ReplyKeyboard, Butt
 
         private static final ReplyKeyboard PLUG = ReplyKeyboardMarkup.builder().build();
         private static final KeyboardUpdateHandler<?, ?> DEFAULT_HANDLER = new KeyboardUpdateHandler<>(PLUG) {
-                    @Override
-                    protected void addActions(ButtonActionRegistry<Object> registry, ReplyKeyboard keyboard) {
+            @Override
+            protected void addActions(ButtonActionRegistry<Object> registry, ReplyKeyboard keyboard) {
 
-                    }
-                };
+            }
+        };
 
         private final BiConsumer<Update, BotContext> beforeExecute;
         private final BiConsumer<Update, BotContext> beforeProcessNext;

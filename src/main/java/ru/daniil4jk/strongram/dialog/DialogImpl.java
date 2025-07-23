@@ -16,7 +16,7 @@ import java.util.Map;
 @EqualsAndHashCode
 public class DialogImpl implements Dialog {
     private final Map<String, DialogPart> parts;
-    private DialogContext context;
+    private final DialogContext context;
 
     @Builder
     public DialogImpl(@NonNull Map<String, DialogPart> parts, String initState) {

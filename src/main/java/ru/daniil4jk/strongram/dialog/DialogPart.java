@@ -6,6 +6,8 @@ import ru.daniil4jk.strongram.context.BotContext;
 
 public interface DialogPart extends HasTriggerState {
     boolean filter(Update update);
+
     BotApiMethod<?> process(Update update, BotContext botContext, DialogContext dialogContext);
+
     BotApiMethod<?> onException(Exception e);
 }

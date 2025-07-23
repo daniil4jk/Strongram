@@ -9,8 +9,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import java.util.regex.Pattern;
 
 public interface KeyboardPatternGenerator {
-    Pattern getPattern();
-
     @NotNull
     @Contract("null -> fail")
     static KeyboardPatternGenerator getByKeyboard(ReplyKeyboard keyboard) {
@@ -22,4 +20,6 @@ public interface KeyboardPatternGenerator {
         }
         throw new IllegalArgumentException("Unsupported keyboard type: " + keyboard.getClass().getName());
     }
+
+    Pattern getPattern();
 }

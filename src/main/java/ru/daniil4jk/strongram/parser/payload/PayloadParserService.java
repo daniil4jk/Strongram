@@ -7,7 +7,8 @@ public class PayloadParserService extends ParserService<String> {
     @Getter
     private static final PayloadParserService instance = new PayloadParserService();
 
-    private PayloadParserService() {}
+    private PayloadParserService() {
+    }
 
     @Override
     protected Class<String> getOutputClass() {

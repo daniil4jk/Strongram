@@ -17,7 +17,7 @@ public class ReplyKeyboardSpecificButtonRegistry extends
         return getKeyboard().getKeyboard()
                 .stream()
                 .flatMap(Collection::stream)
-                .filter(button ->payload.contains(button.getText()))
+                .filter(button -> payload.contains(button.getText()))
                 .findFirst().orElseThrow();
     }
 }

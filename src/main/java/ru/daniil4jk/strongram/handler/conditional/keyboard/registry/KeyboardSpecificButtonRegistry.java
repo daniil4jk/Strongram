@@ -7,8 +7,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 public interface KeyboardSpecificButtonRegistry<KeyboardButton> {
-    KeyboardButton getButtonByPayload(String payload);
-
     @NotNull
     @Contract("null -> fail")
     @SuppressWarnings("unchecked")
@@ -21,4 +19,6 @@ public interface KeyboardSpecificButtonRegistry<KeyboardButton> {
         }
         throw new IllegalArgumentException("Unsupported keyboard type: " + keyboard.getClass().getName());
     }
+
+    KeyboardButton getButtonByPayload(String payload);
 }

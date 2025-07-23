@@ -5,13 +5,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class ReplyKeyboardPatternGenerator extends AbstractKeyboardPatternGenerator {
     public ReplyKeyboardPatternGenerator(@NotNull ReplyKeyboardMarkup keyboard) {
         super(keyboard.getKeyboard().stream()
                 .flatMap(Collection::stream)
-                .map(KeyboardButton::getText)
-                .collect(Collectors.toList()));
+                .map(KeyboardButton::getText));
     }
 }

@@ -1,7 +1,6 @@
 package ru.daniil4jk.strongram.handler;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.function.TriConsumer;
 import org.apache.commons.lang3.function.TriFunction;
@@ -9,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.context.BotContext;
-import ru.daniil4jk.strongram.handler.conditional.keyboard.KeyboardUpdateHandler;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -23,7 +21,8 @@ import java.util.function.BiFunction;
 public class AbstractUpdateHandler implements UpdateHandler {
     private UpdateHandler next;
 
-    public AbstractUpdateHandler() {}
+    public AbstractUpdateHandler() {
+    }
 
     @Override
     public BotApiMethod<?> process(Update update, BotContext context) {
@@ -48,7 +47,7 @@ public class AbstractUpdateHandler implements UpdateHandler {
 
     protected BotApiMethod<?> execute(Update update, BotContext context) {
         return processNext(update, context);
-    };
+    }
 
     protected void beforeProcessNext(Update update, BotContext context) {
 

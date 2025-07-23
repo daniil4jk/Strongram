@@ -11,15 +11,15 @@ import java.util.concurrent.atomic.AtomicReference;
 @ToString
 @EqualsAndHashCode
 public class DialogContextImpl implements DialogContext {
-    private volatile Map<String, Object> objectMap;
     private final AtomicReference<String> state = new AtomicReference<>();
     private final AtomicBoolean dialogCompleted = new AtomicBoolean(false);
+    private volatile Map<String, Object> objectMap;
 
     public DialogContextImpl(String initState) {
         state.set(initState);
     }
 
-    private DialogContextImpl(Map<String, Object> objectMap,  String state, boolean dialogCompleted) {
+    private DialogContextImpl(Map<String, Object> objectMap, String state, boolean dialogCompleted) {
         this.objectMap = objectMap;
         this.state.set(state);
         this.dialogCompleted.set(dialogCompleted);
@@ -36,13 +36,13 @@ public class DialogContextImpl implements DialogContext {
     }
 
     @Override
-    public void setState(String state) {
-        this.state.set(state);
+    public String getState() {
+        return this.state.get();
     }
 
     @Override
-    public String getState() {
-        return this.state.get();
+    public void setState(String state) {
+        this.state.set(state);
     }
 
     @Override

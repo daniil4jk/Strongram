@@ -12,14 +12,15 @@ import ru.daniil4jk.strongram.dialog.CannotProcessCaseException;
  * Updates that are not processed by user-specific handlers pass.
  */
 public interface UpdateHandler {
-    void setNext(UpdateHandler handler);
-    BotApiMethod<?> process(Update update, BotContext context) throws CannotProcessCaseException;
-
     @NotNull
     @Contract(value = " -> new", pure = true)
     static ChainBuilder chainBuilder() {
         return new ChainBuilder();
     }
+
+    void setNext(UpdateHandler handler);
+
+    BotApiMethod<?> process(Update update, BotContext context) throws CannotProcessCaseException;
 
     class ChainBuilder {
         private UpdateHandler first;
