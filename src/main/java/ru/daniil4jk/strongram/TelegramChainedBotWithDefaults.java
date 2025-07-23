@@ -15,9 +15,9 @@ import ru.daniil4jk.strongram.handler.defaults.DialogUpdateHandler;
 
 @Getter
 public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
-    private DialogRegistry dialogRegistry;
-    private CommandRegistry commandRegistry;
-    private AddDefaultKeyboardToResponseUpdateHandler addKeyboardHandler;
+    private final DialogRegistry dialogRegistry = new DialogRegistryImpl();
+    private final CommandRegistry commandRegistry = new CommandRegistryImpl();
+    private final AddDefaultKeyboardToResponseUpdateHandler addKeyboardHandler = new AddDefaultKeyboardToResponseUpdateHandler();
 
     public TelegramChainedBotWithDefaults(BotCredentials credentials) {
         super(credentials);
@@ -35,8 +35,6 @@ public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
     public void modifyChain(UpdateHandler.ChainBuilder builder) {
         super.modifyChain(builder);
 
-        addKeyboardHandler = new AddDefaultKeyboardToResponseUpdateHandler();
-
         builder.beforeAll(addKeyboardHandler)
                 .afterAll(new DialogUpdateHandler())
                 .afterAll(new CommandUpdateHandler(true,
@@ -46,9 +44,6 @@ public class TelegramChainedBotWithDefaults extends TelegramChainedBot {
     @Override
     public void modifyBotContext(BotContextImpl.BotContextImplBuilder builder) {
         super.modifyBotContext(builder);
-
-        dialogRegistry = new DialogRegistryImpl();
-        commandRegistry = new CommandRegistryImpl();
 
         builder.objectByClass(DialogRegistry.class, dialogRegistry)
                 .objectByClass(CommandRegistry.class, commandRegistry);
