@@ -3,5 +3,18 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-bot-example/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-longpolling-spring/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-longpolling-spring/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-longpolling/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-longpolling/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-spring/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-spring/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-webhook-spring/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-webhook-spring/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-webhook/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/strongram-webhook/src/main/resources" charset="UTF-8" />
   </component>
 </project>
