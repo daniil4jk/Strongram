@@ -1,8 +1,9 @@
-package ru.daniil4jk.strongram.spring.longpolling;
+package ru.daniil4jk.strongram.spring.webhook;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LongPollingBot {
+public @interface BotPath {
+    String path();
 }

@@ -2,6 +2,7 @@ package ru.daniil4jk.strongram.spring.longpolling;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
@@ -19,9 +20,6 @@ import java.util.function.Function;
 
 @Slf4j
 public class SpringLongPollingBotConverterConfiguration {
-    private static final Class<? extends Annotation> longPollingBotAnnotation = LongPollingBot.class;
-    @Autowired
-    private ApplicationContext context;
     @Lazy
     @Autowired
     private ExecutorService executor;
@@ -34,24 +32,15 @@ public class SpringLongPollingBotConverterConfiguration {
     }
 
     @Bean
-    public List<SpringLongPollingBot> convertLongPollingBots() {
+    public List<SpringLongPollingBot> convertLongPollingBots(@NotNull List<Bot> bots) {
         List<SpringLongPollingBot> springBots = new ArrayList<>();
-        addBotsToList(this::convertBotToSpringLongPollingBot, springBots);
+        for (Bot bot : bots) {
+            springBots.add(convertBotToSpringLongPollingBot(bot));
+        }
         return springBots;
     }
 
-    private <T> void addBotsToList(Function<Bot, T> convert, List<T> list) {
-        for (var entry : context.getBeansWithAnnotation(longPollingBotAnnotation).entrySet()) {
-            if (entry.getValue() instanceof Bot bot) {
-                list.add(convert.apply(bot));
-            } else {
-                log.warn("Object with context name \"{}\" annotated as {}. Remove this annotation from object",
-                        entry.getKey(), longPollingBotAnnotation.getName());
-            }
-        }
-    }
-
-    private SpringLongPollingBot convertBotToSpringLongPollingBot(Bot bot) {
+    private @NotNull SpringLongPollingBot convertBotToSpringLongPollingBot(@NotNull Bot bot) {
         boolean multithreadingRequired = bot.getClass().isAnnotationPresent(MultithreadingBot.class);
         if (multithreadingRequired) {
             return SpringLongPollingBotAdapter.create(bot, executor);

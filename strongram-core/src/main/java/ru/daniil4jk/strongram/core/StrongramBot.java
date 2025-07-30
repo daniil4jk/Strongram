@@ -1,11 +1,15 @@
 package ru.daniil4jk.strongram.core;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @Getter
 @Slf4j
+@ToString
+@EqualsAndHashCode
 public abstract class StrongramBot implements Bot, TelegramClientProvider {
     private final BotCredentials credentials;
     private TelegramClient client;

@@ -1,5 +1,7 @@
 package ru.daniil4jk.strongram.core;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -9,6 +11,8 @@ import ru.daniil4jk.strongram.core.context.BotContextImpl;
 import ru.daniil4jk.strongram.core.handler.UpdateHandler;
 
 @Slf4j
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public abstract class StrongramChainedBot extends StrongramBot implements ChainedBot {
     private volatile UpdateHandler chain;
     private volatile BotContext botContext;

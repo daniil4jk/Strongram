@@ -14,9 +14,10 @@ import ru.daniil4jk.strongram.core.handler.defaults.DialogUpdateHandler;
 
 @Getter
 public class StrongramChainedBotWithDefaults extends StrongramChainedBot {
+    private final AddDefaultKeyboardToResponseUpdateHandler defaultKeyboardAdder = new AddDefaultKeyboardToResponseUpdateHandler();
+
     private final DialogRegistry dialogRegistry = new DialogRegistryImpl();
     private final CommandRegistry commandRegistry = new CommandRegistryImpl();
-    private final AddDefaultKeyboardToResponseUpdateHandler addKeyboardHandler = new AddDefaultKeyboardToResponseUpdateHandler();
 
     public StrongramChainedBotWithDefaults(TelegramClient telegramClient, BotCredentials credentials) {
         super(telegramClient, credentials);
@@ -26,7 +27,7 @@ public class StrongramChainedBotWithDefaults extends StrongramChainedBot {
     public void modifyChain(UpdateHandler.ChainBuilder builder) {
         super.modifyChain(builder);
 
-        builder.beforeAll(addKeyboardHandler)
+        builder.beforeAll(defaultKeyboardAdder)
                 .afterAll(new DialogUpdateHandler())
                 .afterAll(new CommandUpdateHandler(true,
                         () -> getCredentials().getBotName()));
