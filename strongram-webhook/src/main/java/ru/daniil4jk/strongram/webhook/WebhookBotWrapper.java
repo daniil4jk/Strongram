@@ -1,7 +1,7 @@
 package ru.daniil4jk.strongram.webhook;
 
 import lombok.extern.slf4j.Slf4j;
-import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
+import org.telegram.telegrambots.client.jetty.JettyTelegramClient;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
@@ -15,7 +15,7 @@ import ru.daniil4jk.strongram.core.TelegramClientProvider;
 import java.net.URL;
 
 @Slf4j
-public class WebhookBotWrapper implements TelegramWebhookBot, TelegramClientProvider {
+public class WebhookBotWrapper implements TelegramWebhookBot {
     private final URL botUrl;
     private final Bot bot;
     private volatile TelegramClient client;
@@ -24,14 +24,20 @@ public class WebhookBotWrapper implements TelegramWebhookBot, TelegramClientProv
         this.botUrl = botUrl;
         this.bot = bot;
         if (bot instanceof TelegramClientProvider provider) {
-            client = provider.getClient();
+            var client = provider.getClient();
+            if (client == null) {
+                this.client = client = new JettyTelegramClient(bot.getCredentials().getBotToken());
+                if (provider.canSetClient()) {
+                    provider.setClientOnce(client);
+                }
+            }
         }
     }
 
     @Override
     public void runDeleteWebhook() {
         try {
-            getClient().execute(DeleteWebhook.builder()
+            client.execute(DeleteWebhook.builder()
                     .dropPendingUpdates(false)
                     .build());
         } catch (TelegramApiException e) {
@@ -42,7 +48,7 @@ public class WebhookBotWrapper implements TelegramWebhookBot, TelegramClientProv
     @Override
     public void runSetWebhook() {
         try {
-            getClient().execute(SetWebhook.builder()
+            client.execute(SetWebhook.builder()
                     .url(botUrl.toString())
                     .build());
         } catch (TelegramApiException e) {
@@ -63,17 +69,5 @@ public class WebhookBotWrapper implements TelegramWebhookBot, TelegramClientProv
     @Override
     public String getBotPath() {
         return botUrl.getPath();
-    }
-
-    @Override
-    public TelegramClient getClient() {
-        if (client == null) {
-            synchronized (this) {
-                if (client == null) {
-                    client = new OkHttpTelegramClient(bot.getCredentials().getBotToken());
-                }
-            }
-        }
-        return client;
     }
 }

@@ -24,6 +24,7 @@
         <telegrambots.version>9.0.0</telegrambots.version>
         <lombok.version>1.18.38</lombok.version>
         <log4j.version>2.25.0</log4j.version>
+        <int-annotations.version>9.0.4</int-annotations.version>
     </properties>
 
     <dependencyManagement>
@@ -40,12 +41,27 @@
             </dependency>
             <dependency>
                 <groupId>org.telegram</groupId>
+                <artifactId>telegrambots-springboot-longpolling-starter</artifactId>
+                <version>${telegrambots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.telegram</groupId>
                 <artifactId>telegrambots-webhook</artifactId>
                 <version>${telegrambots.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.telegram</groupId>
+                <artifactId>telegrambots-springboot-webhook-starter</artifactId>
+                <version>${telegrambots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.telegram</groupId>
                 <artifactId>telegrambots-client</artifactId>
+                <version>${telegrambots.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.telegram</groupId>
+                <artifactId>telegrambots-client-jetty-adapter</artifactId>
                 <version>${telegrambots.version}</version>
             </dependency>
 
@@ -60,6 +76,12 @@
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
                 <version>${log4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.intellij</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${int-annotations.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

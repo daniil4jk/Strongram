@@ -29,6 +29,11 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-webhook</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-client-jetty-adapter</artifactId>
+            <version>9.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -1,7 +1,6 @@
 package ru.daniil4jk.strongram.longpolling;
 
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
-import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Collections;
@@ -11,38 +10,39 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class MultithreadingLongPollingBotWrapper implements LongPollingUpdateConsumer {
-    private final Consumer<Update> bot;
+    private final Consumer<Update> consumer;
     private final ExecutorService executor;
 
-    public MultithreadingLongPollingBotWrapper(Consumer<Update> bot) {
-        this(bot, Executors.newCachedThreadPool());
+    public MultithreadingLongPollingBotWrapper(Consumer<Update> consumer) {
+        this(consumer, Executors.newCachedThreadPool());
     }
 
-    public MultithreadingLongPollingBotWrapper(LongPollingUpdateConsumer bot) {
-        this(bot, Executors.newCachedThreadPool());
+    public MultithreadingLongPollingBotWrapper(LongPollingUpdateConsumer consumer) {
+        this(consumer, Executors.newCachedThreadPool());
     }
 
-    public MultithreadingLongPollingBotWrapper(Consumer<Update> bot, ExecutorService executor) {
-        this.bot = bot;
+    public MultithreadingLongPollingBotWrapper(Consumer<Update> consumer, ExecutorService executor) {
+        this.consumer = consumer;
         this.executor = executor;
     }
 
-    public MultithreadingLongPollingBotWrapper(LongPollingUpdateConsumer bot, ExecutorService executor) {
+    @SuppressWarnings("unchecked")
+    public MultithreadingLongPollingBotWrapper(LongPollingUpdateConsumer lpconsumer, ExecutorService executor) {
         Consumer<Update> consumer;
         try {
-            consumer = (Consumer<Update>) bot;
+            consumer = (Consumer<Update>) lpconsumer;
         } catch (Exception e) {
-            consumer = update -> bot.consume(Collections.singletonList(update));
+            consumer = update -> lpconsumer.consume(Collections.singletonList(update));
         }
 
-        this.bot = consumer;
+        this.consumer = consumer;
         this.executor = executor;
     }
 
     @Override
     public void consume(List<Update> updates) {
         updates.forEach(update -> {
-            executor.execute(() -> bot.accept(update));
+            executor.execute(() -> consumer.accept(update));
         });
     }
 }

@@ -1,7 +1,6 @@
 package ru.daniil4jk.strongram.core;
 
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -13,14 +12,6 @@ import ru.daniil4jk.strongram.core.handler.UpdateHandler;
 public abstract class StrongramChainedBot extends StrongramBot implements ChainedBot {
     private volatile UpdateHandler chain;
     private volatile BotContext botContext;
-
-    public StrongramChainedBot(BotCredentials credentials) {
-        super(credentials);
-    }
-
-    public StrongramChainedBot(OkHttpClient httpClient, BotCredentials credentials) {
-        super(httpClient, credentials);
-    }
 
     public StrongramChainedBot(TelegramClient telegramClient, BotCredentials credentials) {
         super(telegramClient, credentials);

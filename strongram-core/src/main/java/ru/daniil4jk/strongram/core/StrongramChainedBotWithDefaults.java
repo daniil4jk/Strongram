@@ -1,7 +1,6 @@
 package ru.daniil4jk.strongram.core;
 
 import lombok.Getter;
-import okhttp3.OkHttpClient;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.command.CommandRegistry;
 import ru.daniil4jk.strongram.core.command.CommandRegistryImpl;
@@ -18,14 +17,6 @@ public class StrongramChainedBotWithDefaults extends StrongramChainedBot {
     private final DialogRegistry dialogRegistry = new DialogRegistryImpl();
     private final CommandRegistry commandRegistry = new CommandRegistryImpl();
     private final AddDefaultKeyboardToResponseUpdateHandler addKeyboardHandler = new AddDefaultKeyboardToResponseUpdateHandler();
-
-    public StrongramChainedBotWithDefaults(BotCredentials credentials) {
-        super(credentials);
-    }
-
-    public StrongramChainedBotWithDefaults(OkHttpClient httpClient, BotCredentials credentials) {
-        super(httpClient, credentials);
-    }
 
     public StrongramChainedBotWithDefaults(TelegramClient telegramClient, BotCredentials credentials) {
         super(telegramClient, credentials);

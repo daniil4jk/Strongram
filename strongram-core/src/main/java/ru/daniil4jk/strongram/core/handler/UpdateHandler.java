@@ -1,5 +1,4 @@
 package ru.daniil4jk.strongram.core.handler;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
