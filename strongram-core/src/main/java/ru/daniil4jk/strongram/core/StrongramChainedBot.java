@@ -17,6 +17,10 @@ public abstract class StrongramChainedBot extends StrongramBot implements Chaine
     private volatile UpdateHandler chain;
     private volatile BotContext botContext;
 
+    public StrongramChainedBot(BotCredentials credentials) {
+        super(credentials);
+    }
+
     public StrongramChainedBot(TelegramClient telegramClient, BotCredentials credentials) {
         super(telegramClient, credentials);
     }

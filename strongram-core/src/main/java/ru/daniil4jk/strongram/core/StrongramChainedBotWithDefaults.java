@@ -19,6 +19,10 @@ public class StrongramChainedBotWithDefaults extends StrongramChainedBot {
     private final DialogRegistry dialogRegistry = new DialogRegistryImpl();
     private final CommandRegistry commandRegistry = new CommandRegistryImpl();
 
+    public StrongramChainedBotWithDefaults(BotCredentials credentials) {
+        super(credentials);
+    }
+
     public StrongramChainedBotWithDefaults(TelegramClient telegramClient, BotCredentials credentials) {
         super(telegramClient, credentials);
     }
