@@ -2,14 +2,18 @@ package ru.daniil4jk.strongram.longpolling;
 
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
+import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.Bot;
 import ru.daniil4jk.strongram.core.TelegramClientProvider;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 @Slf4j
-public class LongPollingBotWrapper implements LongPollingSingleThreadUpdateConsumer, TelegramClientProvider {
+public class LongPollingBotWrapper implements LongPollingUpdateConsumer, Consumer<Update>, TelegramClientProvider {
     private final Bot bot;
     private volatile TelegramClient client;
 
@@ -21,7 +25,7 @@ public class LongPollingBotWrapper implements LongPollingSingleThreadUpdateConsu
     }
 
     @Override
-    public void consume(Update update) {
+    public void accept(Update update) {
         try {
             var method = bot.process(update);
             if (method != null) {
@@ -42,5 +46,10 @@ public class LongPollingBotWrapper implements LongPollingSingleThreadUpdateConsu
             }
         }
         return client;
+    }
+
+    @Override
+    public void consume(List<Update> updates) {
+        updates.forEach(this);
     }
 }
