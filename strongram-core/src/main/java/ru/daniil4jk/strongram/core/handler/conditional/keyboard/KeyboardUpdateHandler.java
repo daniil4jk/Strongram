@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import ru.daniil4jk.strongram.core.TelegramUUID;
+import ru.daniil4jk.strongram.core.dto.TelegramUUID;
 import ru.daniil4jk.strongram.core.context.BotContext;
 import ru.daniil4jk.strongram.core.handler.conditional.ConditionalUpdateHandler;
 import ru.daniil4jk.strongram.core.handler.conditional.keyboard.pattern.KeyboardRegexPatternGenerator;
@@ -21,12 +21,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public abstract class KeyboardUpdateHandler<Keyboard extends ReplyKeyboard, Button> extends ConditionalUpdateHandler {
+    //todo Сделать не conditional, а используя HashMap в Registry вместо Pattern. Это быстрее
     private static final ParserService<String> payloadParser = PayloadParserService.getInstance();
     private static final ParserService<TelegramUUID> uuidParser = TelegramUUIDParserService.getInstance();
 
@@ -51,14 +53,14 @@ public abstract class KeyboardUpdateHandler<Keyboard extends ReplyKeyboard, Butt
         String payload = payloadParser.parse(update);
         TelegramUUID uuid = uuidParser.parse(update);
 
-        BiFunction<TelegramUUID, String, BotApiMethod<?>> action = actionRegistry.getAction(
+        ButtonAction action = actionRegistry.getAction(
                 buttonRegistry.getButtonByPayload(payload)
         );
 
-        return action.apply(uuid, payload);
+        return action.apply(uuid);
     }
 
-    public interface ButtonAction extends BiFunction<TelegramUUID, String, BotApiMethod<?>> {
+    public interface ButtonAction extends Function<TelegramUUID, BotApiMethod<?>> {
     }
 
     @Getter

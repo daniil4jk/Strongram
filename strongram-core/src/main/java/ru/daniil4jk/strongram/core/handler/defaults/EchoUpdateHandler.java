@@ -3,7 +3,7 @@ package ru.daniil4jk.strongram.core.handler.defaults;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.daniil4jk.strongram.core.TelegramUUID;
+import ru.daniil4jk.strongram.core.dto.TelegramUUID;
 import ru.daniil4jk.strongram.core.context.BotContext;
 import ru.daniil4jk.strongram.core.handler.AbstractUpdateHandler;
 import ru.daniil4jk.strongram.core.parser.ParserService;

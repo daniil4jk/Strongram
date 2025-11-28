@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core;
+package ru.daniil4jk.strongram.core.dto;
 
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
@@ -18,10 +18,10 @@ public record TelegramUUID(Chat chat, User user) {
                 throwException("user", e);
             }
         }
-        return (long) -1;
+        return (long) -1; //unreachable
     }
 
-    private void throwException(String who, Exception e) {
+    private static void throwException(String who, Exception e) {
         throw new IllegalStateException("Can`t get id, because %s has`nt id".formatted(who), e);
     }
 }

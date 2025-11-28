@@ -1,6 +1,6 @@
 package ru.daniil4jk.strongram.core.dialog;
 
-import ru.daniil4jk.strongram.core.TelegramUUID;
+import ru.daniil4jk.strongram.core.dto.TelegramUUID;
 
 import java.util.ArrayList;
 import java.util.Collections;

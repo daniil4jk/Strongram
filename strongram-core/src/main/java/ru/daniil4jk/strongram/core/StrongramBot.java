@@ -24,22 +24,22 @@ public abstract class StrongramBot implements Bot, TelegramClientProvider {
     }
 
     @Override
-    public boolean canSetClient() {
+    public BotCredentials getCredentials() {
+        return credentials;
+    }
+
+    @Override
+    public boolean clientRequired() {
         return client == null;
     }
 
     @Override
-    public void setClientOnce(TelegramClient client) {
+    public void setClient(TelegramClient client) {
         if (this.client != null) {
             throw new IllegalCallerException("Client already sat");
         }
         synchronized (this) {
             this.client = client;
         }
-    }
-
-    @Override
-    public BotCredentials getCredentials() {
-        return credentials;
     }
 }

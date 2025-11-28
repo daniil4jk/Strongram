@@ -1,14 +1,79 @@
 package ru.daniil4jk.strongram.core;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
+import ru.daniil4jk.strongram.core.context.BotContext;
 import ru.daniil4jk.strongram.core.context.BotContextImpl;
 import ru.daniil4jk.strongram.core.handler.UpdateHandler;
 
-public interface ChainedBot {
-    default void modifyChain(UpdateHandler.ChainBuilder builder) {
-        //do nothing
+@Slf4j
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public abstract class ChainedBot extends StrongramBot implements Chained {
+    private volatile UpdateHandler chain;
+    private volatile BotContext botContext;
+
+    public ChainedBot(BotCredentials credentials) {
+        super(credentials);
     }
 
-    default void modifyBotContext(BotContextImpl.BotContextImplBuilder builder) {
-        //do nothing
+    public ChainedBot(TelegramClient telegramClient, BotCredentials credentials) {
+        super(telegramClient, credentials);
+    }
+
+    public UpdateHandler getChain() {
+        if (chain == null) {
+            synchronized (this) {
+                if (chain == null) {
+                    return this.chain = createChain();
+                }
+            }
+        }
+        return chain;
+    }
+
+    private UpdateHandler createChain() {
+        var builder = UpdateHandler.chainBuilder();
+        modifyChain(builder);
+        UpdateHandler root = builder.build();
+        if (root == null) {
+            log.warn("chain is empty! You can add some links to chain overriding modifyChain()");
+        }
+        return root;
+    }
+
+    public BotContext getBotContext() {
+        if (botContext == null) {
+            synchronized (this) {
+                if (botContext == null) {
+                    return this.botContext = createContext();
+                }
+            }
+        }
+        return botContext;
+    }
+
+    private BotContext createContext() {
+        var builder = BotContextImpl.builder();
+        modifyBotContext(builder);
+        return builder.build();
+    }
+
+    @Override
+    public BotApiMethod<?> process(Update update) {
+        if (log.isDebugEnabled()) {
+            log.debug("Update {} pushed to chain", update.getUpdateId());
+        }
+        return getChain().process(update, getBotContext());
+    }
+
+    @Override
+    public void modifyBotContext(BotContextImpl.BotContextImplBuilder builder) {
+        Chained.super.modifyBotContext(builder);
+        builder.objectByClass(TelegramClient.class, getClient());
     }
 }

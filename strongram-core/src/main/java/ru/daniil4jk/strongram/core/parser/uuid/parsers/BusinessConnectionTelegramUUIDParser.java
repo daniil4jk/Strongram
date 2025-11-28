@@ -2,7 +2,7 @@ package ru.daniil4jk.strongram.core.parser.uuid.parsers;
 
 import org.telegram.telegrambots.meta.api.objects.business.BusinessConnection;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
-import ru.daniil4jk.strongram.core.TelegramUUID;
+import ru.daniil4jk.strongram.core.dto.TelegramUUID;
 import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
 
 public class BusinessConnectionTelegramUUIDParser extends TelegramUUIDParser<BusinessConnection> {

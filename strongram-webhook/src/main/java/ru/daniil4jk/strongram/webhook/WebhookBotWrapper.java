@@ -1,5 +1,6 @@
 package ru.daniil4jk.strongram.webhook;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.client.jetty.JettyTelegramClient;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -12,47 +13,63 @@ import org.telegram.telegrambots.webhook.TelegramWebhookBot;
 import ru.daniil4jk.strongram.core.Bot;
 import ru.daniil4jk.strongram.core.TelegramClientProvider;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 @Slf4j
 public class WebhookBotWrapper implements TelegramWebhookBot {
-    private final URL botUrl;
+    private final SetWebhook setWebhook;
     private final Bot bot;
-    private volatile TelegramClient client;
+    private final TelegramClient client;
+    @Getter
+    private final String botPath;
 
     public WebhookBotWrapper(URL botUrl, Bot bot) {
-        this.botUrl = botUrl;
+        this(new SetWebhook(botUrl.toString()), bot);
+    }
+
+    public WebhookBotWrapper(SetWebhook setWebhook, Bot bot) {
+        this.setWebhook = setWebhook;
+        try {
+            botPath = new URL(setWebhook.getUrl()).getPath();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Cannot get path from url from setWebhook", e);
+        }
+
         this.bot = bot;
         if (bot instanceof TelegramClientProvider provider) {
             var client = provider.getClient();
             if (client == null) {
-                this.client = client = new JettyTelegramClient(bot.getCredentials().getBotToken());
-                if (provider.canSetClient()) {
-                    provider.setClientOnce(client);
+                client = createClient(bot.getCredentials().getBotToken());
+                if (provider.clientRequired()) {
+                    provider.setClient(client);
                 }
             }
+            this.client = client;
+        } else {
+            this.client = createClient(bot.getCredentials().getBotToken());
+        }
+    }
+
+    private TelegramClient createClient(String token) {
+        return new JettyTelegramClient(token);
+    }
+
+    @Override
+    public void runSetWebhook() {
+        try {
+            client.execute(setWebhook);
+        } catch (TelegramApiException e) {
+            log.error("Can`t setWebhook to bot on the path {}", getBotPath(), e);
         }
     }
 
     @Override
     public void runDeleteWebhook() {
         try {
-            client.execute(DeleteWebhook.builder()
-                    .dropPendingUpdates(false)
-                    .build());
+            client.execute(new DeleteWebhook());
         } catch (TelegramApiException e) {
             log.warn("Can`t deleteWebhook to bot on the path {}", getBotPath(), e);
-        }
-    }
-
-    @Override
-    public void runSetWebhook() {
-        try {
-            client.execute(SetWebhook.builder()
-                    .url(botUrl.toString())
-                    .build());
-        } catch (TelegramApiException e) {
-            log.error("Can`t setWebhook to bot on the path {}", getBotPath(), e);
         }
     }
 
@@ -64,10 +81,5 @@ public class WebhookBotWrapper implements TelegramWebhookBot {
             log.error(e.getLocalizedMessage(), e);
         }
         return null;
-    }
-
-    @Override
-    public String getBotPath() {
-        return botUrl.getPath();
     }
 }

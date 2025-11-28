@@ -1,7 +1,7 @@
 package ru.daniil4jk.strongram.core.parser.uuid.parsers;
 
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
-import ru.daniil4jk.strongram.core.TelegramUUID;
+import ru.daniil4jk.strongram.core.dto.TelegramUUID;
 import ru.daniil4jk.strongram.core.parser.UpdateParser;
 import ru.daniil4jk.strongram.core.parser.uuid.TelegramUUIDParserService;
 

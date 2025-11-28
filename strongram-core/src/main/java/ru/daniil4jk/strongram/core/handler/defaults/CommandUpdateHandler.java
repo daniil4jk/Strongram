@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.daniil4jk.strongram.core.TelegramUUID;
+import ru.daniil4jk.strongram.core.dto.TelegramUUID;
 import ru.daniil4jk.strongram.core.command.AbstractBotCommand;
 import ru.daniil4jk.strongram.core.command.CommandRegistry;
 import ru.daniil4jk.strongram.core.context.BotContext;

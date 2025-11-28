@@ -11,10 +11,8 @@
 
     <modules>
         <module>strongram-core</module>
-        <module>strongram-longpolling-spring</module>
         <module>strongram-longpolling</module>
         <module>strongram-webhook</module>
-        <module>strongram-webhook-spring</module>
     </modules>
 
     <properties>
