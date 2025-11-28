@@ -4,6 +4,9 @@ import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public abstract class UpdateParser<O> implements Parser<Update, O> {
+    private static final String PROCESS_EDITED_ENV_NAME = "PROCESS_EDITED_MESSAGE_VARIANTS";
+    private static final boolean PROCESS_EDITED_MESSAGE_VARIANTS =
+                    System.getenv(PROCESS_EDITED_ENV_NAME).equalsIgnoreCase("true");
 
     @Override
     public Class<Update> getInputClass() {
@@ -28,10 +31,12 @@ public abstract class UpdateParser<O> implements Parser<Update, O> {
         if (update.hasBusinessMessage()) return parseInternal(update.getBusinessMessage());
         if (update.hasPaidMediaPurchased()) return parseInternal(update.getPaidMediaPurchased());
 
-        if (update.hasEditedChannelPost()) return parseInternal(update.getEditedChannelPost());
-        if (update.hasEditedMessage()) return parseInternal(update.getEditedMessage());
-        if (update.hasEditedBusinessMessage()) return parseInternal(update.getEditedBuinessMessage());
-        if (update.hasDeletedBusinessMessage()) return parseInternal(update.getDeletedBusinessMessages());
+        if (PROCESS_EDITED_MESSAGE_VARIANTS) {
+            if (update.hasEditedChannelPost()) return parseInternal(update.getEditedChannelPost());
+            if (update.hasEditedMessage()) return parseInternal(update.getEditedMessage());
+            if (update.hasEditedBusinessMessage()) return parseInternal(update.getEditedBuinessMessage());
+            if (update.hasDeletedBusinessMessage()) return parseInternal(update.getDeletedBusinessMessages());
+        }
 
         throw new TelegramObjectParseException("empty update");
     }

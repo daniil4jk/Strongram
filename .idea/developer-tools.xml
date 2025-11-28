@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DeveloperToolsToolWindowSettingsV1" lastSelectedContentNodeId="base64-encoder-decoder" pluginVersion="7.1.0">
+  <component name="DeveloperToolsToolWindowSettingsV1" lastSelectedContentNodeId="text-case-transformer" pluginVersion="7.1.0">
     <developerToolsConfigurations>
+      <developerToolConfiguration developerToolId="text-filter" id="e1188397-abd3-477f-8b7f-0294c8306611" name="Workbench">
+        <properties>
+          <property key="filteringMode" type="CONFIGURATION" value="TextFilterTransformer-FilteringMode|NOT_CONTAINING" />
+          <property key="sourceText" type="INPUT" value="kotlin.String|Integer updateId;&#10;    Message message;&#10;    InlineQuery inlineQuery;&#10;    ChosenInlineQuery chosenInlineQuery;&#10;    CallbackQuery callbackQuery;&#10;    Message editedMessage;&#10;    Message channelPost;&#10;    Message editedChannelPost;&#10;    ShippingQuery shippingQuery;&#10;    PreCheckoutQuery preCheckoutQuery;&#10;    Poll poll;&#10;    PollAnswer pollAnswer;&#10;    ChatMemberUpdated myChatMember;&#10;    ChatMemberUpdated chatMember;&#10;    ChatJoinRequest chatJoinRequest;&#10;    MessageReactionUpdated messageReaction;&#10;    MessageReactionCountUpdated messageReactionCount;&#10;    ChatBoostUpdated chatBoost;&#10;    ChatBoostRemoved removedChatBoost;&#10;    BusinessConnection businessConnection;&#10;    Message businessMessage;&#10;    Message editedBuinessMessage;&#10;    BusinessMessagesDeleted deletedBusinessMessages;&#10;    PaidMediaPurchased paidMediaPurchased;" />
+          <property key="tokenSelectionMode" type="CONFIGURATION" value="TextFilterTransformer-TokenMode|WORD" />
+          <property key="filteringNotContainingModeText" type="INPUT" value="kotlin.String|message" />
+          <property key="filteringRegexModeText" type="INPUT" value="kotlin.String|^\[\].*$" />
+        </properties>
+      </developerToolConfiguration>
+      <developerToolConfiguration developerToolId="text-case-transformer" id="ca29cd1d-e88d-4e5a-aec9-3e30378a44e7" name="Workbench">
+        <properties>
+          <property key="sourceText" type="INPUT" value="kotlin.String|process_EditedEnvName" />
+          <property key="outputTextCase" type="CONFIGURATION" value="TextCaseTransformer-TextCase|UPPER_CASE" />
+        </properties>
+      </developerToolConfiguration>
       <developerToolConfiguration developerToolId="base64-encoder-decoder" id="1c39f4b3-d461-4c64-8a42-d19148146df2" name="Workbench">
         <properties>
           <property key="sourceText" type="INPUT" value="kotlin.String|listWithMessages" />
@@ -9,5 +24,6 @@
         </properties>
       </developerToolConfiguration>
     </developerToolsConfigurations>
+    <expandedGroupNodeIds />
   </component>
 </project>

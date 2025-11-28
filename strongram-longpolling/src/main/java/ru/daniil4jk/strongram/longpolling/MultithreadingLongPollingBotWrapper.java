@@ -1,48 +1,29 @@
 package ru.daniil4jk.strongram.longpolling;
 
-import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
+import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.daniil4jk.strongram.core.bot.Bot;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
-public class MultithreadingLongPollingBotWrapper implements LongPollingUpdateConsumer {
-    private final Consumer<Update> consumer;
+public class MultithreadingLongPollingBotWrapper extends LongPollingBotWrapper {
     private final ExecutorService executor;
 
-    public MultithreadingLongPollingBotWrapper(Consumer<Update> consumer) {
-        this(consumer, Executors.newCachedThreadPool());
+    public MultithreadingLongPollingBotWrapper(Bot bot) {
+        this(bot, Executors.newCachedThreadPool());
     }
 
-    public MultithreadingLongPollingBotWrapper(LongPollingUpdateConsumer consumer) {
-        this(consumer, Executors.newCachedThreadPool());
-    }
-
-    public MultithreadingLongPollingBotWrapper(Consumer<Update> consumer, ExecutorService executor) {
-        this.consumer = consumer;
-        this.executor = executor;
-    }
-
-    @SuppressWarnings("unchecked")
-    public MultithreadingLongPollingBotWrapper(LongPollingUpdateConsumer lpconsumer, ExecutorService executor) {
-        Consumer<Update> consumer;
-        try {
-            consumer = (Consumer<Update>) lpconsumer;
-        } catch (Exception e) {
-            consumer = update -> lpconsumer.consume(Collections.singletonList(update));
-        }
-
-        this.consumer = consumer;
+    public MultithreadingLongPollingBotWrapper(Bot bot, ExecutorService executor) {
+        super(bot);
         this.executor = executor;
     }
 
     @Override
-    public void consume(List<Update> updates) {
-        updates.forEach(update -> {
-            executor.execute(() -> consumer.accept(update));
-        });
+    public void consume(@NotNull List<Update> updates) {
+        executor.execute(
+                () -> updates.forEach(this::consumeSingle)
+        );
     }
 }

@@ -1,6 +1,7 @@
 package ru.daniil4jk.strongram.core.parser;
 
 import org.telegram.telegrambots.meta.api.interfaces.BotApiObject;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -23,6 +24,14 @@ public class SPIParserRegistry {
         return loader.stream()
                 .filter(p -> Objects.equals(p.get().getOutputClass(), outputClass))
                 .map(parserProvider -> (Parser<? extends BotApiObject, O>) parserProvider.get())
+                .collect(Collectors.toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    public <I extends BotApiObject> Collection<? extends Parser<I, ?>> getByInputClass(Class<I> inputClass) {
+        return loader.stream()
+                .filter(p -> Objects.equals(p.get().getInputClass(), inputClass))
+                .map(parserProvider -> (Parser<I, ? extends BotApiMethod<?>>) parserProvider.get())
                 .collect(Collectors.toList());
     }
 }
