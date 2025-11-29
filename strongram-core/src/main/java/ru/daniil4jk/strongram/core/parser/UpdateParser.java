@@ -6,6 +6,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public abstract class UpdateParser<O> implements Parser<Update, O> {
     private static final String PROCESS_EDITED_ENV_NAME = "PROCESS_EDITED_MESSAGE_VARIANTS";
     private static final boolean PROCESS_EDITED_MESSAGE_VARIANTS =
+                    System.getenv(PROCESS_EDITED_ENV_NAME) != null &&
+                    !System.getenv(PROCESS_EDITED_ENV_NAME).isEmpty() &&
                     System.getenv(PROCESS_EDITED_ENV_NAME).equalsIgnoreCase("true");
 
     @Override

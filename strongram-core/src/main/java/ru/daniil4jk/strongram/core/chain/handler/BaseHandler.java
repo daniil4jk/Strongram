@@ -22,11 +22,13 @@ public abstract class BaseHandler implements Handler {
         return Filters.acceptAll();
     }
 
-    protected void process(Context original) {
-        processNext(original);
+    protected void process(Context ctx) {
+        processNext(ctx);
     }
 
-    protected final void processNext(Context update) {
-        next.accept(update);
+    protected final void processNext(Context ctx) {
+        if (next != null) {
+            next.accept(ctx);
+        }
     }
 }

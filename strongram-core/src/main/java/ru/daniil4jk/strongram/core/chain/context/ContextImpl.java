@@ -1,14 +1,15 @@
 package ru.daniil4jk.strongram.core.chain.context;
 
-import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.bot.BotCredentials;
+import ru.daniil4jk.strongram.core.chain.caster.Caster;
 import ru.daniil4jk.strongram.core.dto.TelegramUUID;
-import ru.daniil4jk.strongram.core.parser.to.text.TextromAnyParserService;
+import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
 import ru.daniil4jk.strongram.core.parser.to.uuid.TelegramUUIDFromAnyParserService;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
@@ -22,17 +23,20 @@ public class ContextImpl implements Context {
 
     private final Bot bot;
     private final Update update;
-    private final Lazy<String> requestAsText;
     private final Lazy<TelegramUUID> uuid;
 
     public ContextImpl(Bot bot, Update update) {
         this.bot = bot;
         this.update = update;
-        requestAsText = new Lazy<>(
-                () -> TextromAnyParserService.getInstance().parse(update)
-        );
+
         uuid = new Lazy<>(
-                () -> TelegramUUIDFromAnyParserService.getInstance().parse(update)
+                () -> {
+                    try {
+                        return TelegramUUIDFromAnyParserService.getInstance().parse(update);
+                    } catch (TelegramObjectParseException e) {
+                        return null;
+                    }
+                }
         );
     }
 
@@ -68,8 +72,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public String getRequestAsText() {
-        return requestAsText.initOrGet();
+    public <T> T getRequestAs(@NotNull Caster<T> caster) {
+        return caster.apply(update);
     }
 
     @Override

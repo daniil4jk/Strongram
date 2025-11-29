@@ -4,8 +4,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
+import ru.daniil4jk.strongram.core.chain.caster.Casters;
 import ru.daniil4jk.strongram.core.chain.context.Context;
-import ru.daniil4jk.strongram.core.parser.to.text.TextromAnyParserService;
 
 public class Filters {
     private Filters() {
@@ -21,7 +21,18 @@ public class Filters {
         return ctx -> upd(ctx).hasMessage();
     }
 
-    public static @NotNull Filter hasText() {
+    public static @NotNull Filter hasContent() {
+        return ctx -> {
+            try {
+                str(ctx);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        };
+    }
+
+    public static @NotNull Filter hasMessageText() {
         return hasMessage().and(ctx -> msg(ctx).hasText());
     }
 
@@ -89,7 +100,6 @@ public class Filters {
         return hasMessage().and(ctx -> msg(ctx).hasPassportData());
     }
 
-    // Фильтры для дополнительных функций сообщений
     public static @NotNull Filter hasCaption() {
         return hasMessage().and(ctx -> msg(ctx).hasCaption());
     }
@@ -313,28 +323,28 @@ public class Filters {
         return ctx -> ctx.getUserId().chat().getId().equals(id);
     }
 
-    public static @NotNull Filter textStartWith(String text) {
-        return ctx -> str(ctx).startsWith(text);
+    public static @NotNull Filter contentStartWith(String text) {
+        return hasContent().and(ctx -> str(ctx).startsWith(text));
     }
 
-    public static @NotNull Filter textEndsWith(String text) {
-        return ctx -> str(ctx).endsWith(text);
+    public static @NotNull Filter contentEndsWith(String text) {
+        return hasContent().and(ctx -> str(ctx).endsWith(text));
     }
 
-    public static @NotNull Filter textContains(String text) {
-        return ctx -> str(ctx).contains(text);
+    public static @NotNull Filter contentContains(String text) {
+        return hasContent().and(ctx -> str(ctx).contains(text));
     }
 
-    public static @NotNull Filter textContainsIgnoreCase(String text) {
-        return ctx -> str(ctx).toLowerCase().contains(text.toLowerCase());
+    public static @NotNull Filter contentContainsIgnoreCase(String text) {
+        return hasContent().and(ctx -> str(ctx).toLowerCase().contains(text.toLowerCase()));
     }
 
-    public static @NotNull Filter textEquals(String text) {
-        return ctx -> str(ctx).equals(text);
+    public static @NotNull Filter contentEquals(String text) {
+        return hasContent().and(ctx -> str(ctx).equals(text));
     }
 
-    public static @NotNull Filter textEqualsIgnoreCase(String text) {
-        return ctx -> str(ctx).equalsIgnoreCase(text);
+    public static @NotNull Filter contentEqualsIgnoreCase(String text) {
+        return hasContent().and(ctx -> str(ctx).equalsIgnoreCase(text));
     }
 
     private static Update upd(@NotNull Context ctx) {
@@ -345,7 +355,8 @@ public class Filters {
         return ctx.getRequest().getMessage();
     }
 
+    //todo check has string or not boolean
     private static String str(Context ctx) {
-        return TextromAnyParserService.getInstance().parse(upd(ctx));
+        return ctx.getRequestAs(Casters.asContent());
     }
 }
