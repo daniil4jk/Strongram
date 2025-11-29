@@ -25,7 +25,7 @@ public abstract class ChainedBot extends BaseBot {
     public final List<BotApiMethod<?>> apply(Update update) {
         var ctx = new ContextImpl(this, update);
         chain.initOrGet().accept(ctx);
-        return ctx.getResponsesList();
+        return ctx.getResponses();
     }
 
     private Handler createChain() {

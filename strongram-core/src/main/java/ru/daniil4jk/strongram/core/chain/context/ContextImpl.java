@@ -7,10 +7,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.bot.BotCredentials;
-import ru.daniil4jk.strongram.core.chain.caster.Caster;
+import ru.daniil4jk.strongram.core.chain.caster.Transformer;
 import ru.daniil4jk.strongram.core.dto.TelegramUUID;
 import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
-import ru.daniil4jk.strongram.core.parser.to.uuid.TelegramUUIDFromAnyParserService;
+import ru.daniil4jk.strongram.core.parser.uuid.TelegramUUIDParserService;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ContextImpl implements Context {
         uuid = new Lazy<>(
                 () -> {
                     try {
-                        return TelegramUUIDFromAnyParserService.getInstance().parse(update);
+                        return TelegramUUIDParserService.getInstance().parse(update);
                     } catch (TelegramObjectParseException e) {
                         return null;
                     }
@@ -41,7 +41,7 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public List<BotApiMethod<?>> getResponsesList() {
+    public List<BotApiMethod<?>> getResponses() {
         if (!responses.isInitialized()) return Collections.emptyList();
         return responses.get();
     }
@@ -72,12 +72,12 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public <T> T getRequestAs(@NotNull Caster<T> caster) {
-        return caster.apply(update);
+    public <T> T getRequest(@NotNull Transformer<T> transformer) {
+        return transformer.apply(update);
     }
 
     @Override
-    public RequestState getRequestState() {
+    public RequestState getState() {
         return state;
     }
 
