@@ -17,6 +17,11 @@ public class Filters {
     }
 
     @Contract(pure = true)
+    public static @NotNull Filter rejectAll() {
+        return update -> false;
+    }
+
+    @Contract(pure = true)
     public static @NotNull Filter hasMessage() {
         return ctx -> upd(ctx).hasMessage();
     }
@@ -323,27 +328,27 @@ public class Filters {
         return ctx -> ctx.getUserId().chat().getId().equals(id);
     }
 
-    public static @NotNull Filter contentStartWith(String text) {
+    public static @NotNull Filter textStartWith(String text) {
         return hasText().and(ctx -> str(ctx).startsWith(text));
     }
 
-    public static @NotNull Filter contentEndsWith(String text) {
+    public static @NotNull Filter textEndsWith(String text) {
         return hasText().and(ctx -> str(ctx).endsWith(text));
     }
 
-    public static @NotNull Filter contentContains(String text) {
+    public static @NotNull Filter textContains(String text) {
         return hasText().and(ctx -> str(ctx).contains(text));
     }
 
-    public static @NotNull Filter contentContainsIgnoreCase(String text) {
+    public static @NotNull Filter textContainsIgnoreCase(String text) {
         return hasText().and(ctx -> str(ctx).toLowerCase().contains(text.toLowerCase()));
     }
 
-    public static @NotNull Filter contentEquals(String text) {
+    public static @NotNull Filter textEquals(String text) {
         return hasText().and(ctx -> str(ctx).equals(text));
     }
 
-    public static @NotNull Filter contentEqualsIgnoreCase(String text) {
+    public static @NotNull Filter textEqualsIgnoreCase(String text) {
         return hasText().and(ctx -> str(ctx).equalsIgnoreCase(text));
     }
 

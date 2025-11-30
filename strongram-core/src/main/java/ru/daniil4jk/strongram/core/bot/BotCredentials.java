@@ -12,10 +12,10 @@ import lombok.ToString;
 public final class BotCredentials {
     @ToString.Exclude
     private final String token;
-    private String name;
+    private String username;
 
-    public BotCredentials(String token, String name) {
+    public BotCredentials(String token, String username) {
         this.token = token;
-        this.name = name;
+        this.username = username;
     }
 }

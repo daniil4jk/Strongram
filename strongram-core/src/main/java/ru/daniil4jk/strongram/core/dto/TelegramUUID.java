@@ -22,6 +22,6 @@ public record TelegramUUID(Chat chat, User user) {
     }
 
     private static void throwException(String who, Exception e) {
-        throw new IllegalStateException("Can`t get id, because %s has`nt id".formatted(who), e);
+        throw new IllegalStateException("Can`t asList id, because %s has`nt id".formatted(who), e);
     }
 }

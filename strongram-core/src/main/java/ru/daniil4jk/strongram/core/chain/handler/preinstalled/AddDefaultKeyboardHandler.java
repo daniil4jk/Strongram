@@ -3,17 +3,17 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import ru.daniil4jk.strongram.core.chain.context.Context;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 
-import java.lang.invoke.*;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
 import java.util.*;
 
 @Slf4j
 @NoArgsConstructor
-public class AddDefaultKeyboardHandler extends BaseHandler {
+public final class AddDefaultKeyboardHandler extends BaseHandler {
     public static final Class<ReplyKeyboard> REPLY_KEYBOARD_CLASS = ReplyKeyboard.class;
     public static final String DEFAULT_KEYBOARD_CONTEXT_FIELD_NAME = "defaultReplyKeyboard";
 
@@ -79,7 +79,7 @@ public class AddDefaultKeyboardHandler extends BaseHandler {
     private MethodHandle findGetMethod(Class<?> key) {
         return Arrays.stream(key.getMethods())
                 .filter(method -> REPLY_KEYBOARD_CLASS.isAssignableFrom(method.getReturnType()))
-                .filter(method -> method.getName().contains("get"))
+                .filter(method -> method.getName().contains("asList"))
                 .map(Optional::of)
                 .map(optional -> {
                     try {

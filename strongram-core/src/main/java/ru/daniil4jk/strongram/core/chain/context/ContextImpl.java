@@ -12,6 +12,7 @@ import ru.daniil4jk.strongram.core.dto.TelegramUUID;
 import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
 import ru.daniil4jk.strongram.core.parser.uuid.TelegramUUIDParserService;
 import ru.daniil4jk.strongram.core.util.Lazy;
+import ru.daniil4jk.strongram.core.util.MessageArray;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,12 +54,14 @@ public class ContextImpl implements Context {
 
     @Override
     public void respond(String text) {
-        responses.initOrGet().add(
-                SendMessage.builder()
-                        .chatId(getUserId().getChatId())
-                        .text(text)
-                        .build()
-        );
+        new MessageArray(text)
+                .asList()
+                .forEach(messageText ->
+                        respond(SendMessage.builder()
+                                .chatId(getUserId().getChatId())
+                                .text(messageText)
+                                .build())
+                );
     }
 
     @Override
