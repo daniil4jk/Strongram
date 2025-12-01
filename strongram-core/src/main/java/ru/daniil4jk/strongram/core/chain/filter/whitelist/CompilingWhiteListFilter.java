@@ -1,19 +1,21 @@
-package ru.daniil4jk.strongram.core.chain.filter;
+package ru.daniil4jk.strongram.core.chain.filter.whitelist;
 
-import lombok.RequiredArgsConstructor;
 import ru.daniil4jk.strongram.core.chain.context.Context;
+import ru.daniil4jk.strongram.core.chain.filter.Filter;
+import ru.daniil4jk.strongram.core.chain.filter.Filters;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-@RequiredArgsConstructor
-public class WhiteListFilter<T> implements Filter {
-    private final Function<T, Filter> addPolicy;
-
+public class CompilingWhiteListFilter<T> extends WhiteListFilter<T> {
     private final Set<T> accepted = new HashSet<>();
     private final AtomicReference<Filter> inherit = new AtomicReference<>(Filters.rejectAll());
+
+    public CompilingWhiteListFilter(Function<T, Filter> addPolicy) {
+        super(addPolicy);
+    }
 
     public void add(T s) {
         accepted.add(s);

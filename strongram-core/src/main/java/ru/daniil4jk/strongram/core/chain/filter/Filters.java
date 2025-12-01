@@ -6,6 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.chain.caster.As;
 import ru.daniil4jk.strongram.core.chain.context.Context;
+import ru.daniil4jk.strongram.core.dto.TelegramUUID;
+
+import java.util.Objects;
 
 public class Filters {
     private Filters() {
@@ -350,6 +353,10 @@ public class Filters {
 
     public static @NotNull Filter textEqualsIgnoreCase(String text) {
         return hasText().and(ctx -> str(ctx).equalsIgnoreCase(text));
+    }
+
+    public static @NotNull Filter uuidEquals(TelegramUUID anotherUuid) {
+        return ctx -> Objects.equals(ctx.getUserId(), anotherUuid);
     }
 
     private static Update upd(@NotNull Context ctx) {

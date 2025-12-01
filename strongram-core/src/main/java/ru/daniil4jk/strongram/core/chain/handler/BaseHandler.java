@@ -10,7 +10,7 @@ public abstract class BaseHandler implements Handler {
     private Handler next;
 
     @Override
-    public void accept(Context ctx) {
+    public final void accept(Context ctx) {
         if (getFilter().test(ctx)) {
             process(ctx);
         } else {

@@ -7,7 +7,8 @@ import ru.daniil4jk.strongram.core.chain.caster.As;
 import ru.daniil4jk.strongram.core.chain.context.Context;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.filter.Filters;
-import ru.daniil4jk.strongram.core.chain.filter.WhiteListFilter;
+import ru.daniil4jk.strongram.core.chain.filter.whitelist.CompilingWhiteListFilter;
+import ru.daniil4jk.strongram.core.chain.filter.whitelist.WhiteListFilter;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 
 import java.util.Arrays;
@@ -24,7 +25,7 @@ public class MultiCommandHandler extends BaseHandler {
     private static final String SLASH = "/";
 
     private final Map<String, CommandHandler> commandHandlers = new HashMap<>();
-    private final WhiteListFilter<String> commandListFilter = new WhiteListFilter<>(Filters::textStartWith);
+    private final WhiteListFilter<String> commandListFilter = new CompilingWhiteListFilter<>(Filters::textStartWith);
 
     @SafeVarargs
     public MultiCommandHandler(Pair<String, CommandHandler> @NotNull ... commands) {
