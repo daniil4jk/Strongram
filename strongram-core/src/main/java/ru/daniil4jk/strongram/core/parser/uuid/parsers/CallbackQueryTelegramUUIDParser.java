@@ -1,7 +1,7 @@
 package ru.daniil4jk.strongram.core.parser.uuid.parsers;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.daniil4jk.strongram.core.dto.TelegramUUID;
+import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
 import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
 
 public class CallbackQueryTelegramUUIDParser extends TelegramUUIDParser<CallbackQuery> {

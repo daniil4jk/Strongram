@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import ru.daniil4jk.strongram.core.chain.context.Context;
+import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 
 import java.lang.invoke.MethodHandle;
@@ -15,7 +15,7 @@ import java.util.*;
 @NoArgsConstructor
 public final class AddDefaultKeyboardHandler extends BaseHandler {
     public static final Class<ReplyKeyboard> REPLY_KEYBOARD_CLASS = ReplyKeyboard.class;
-    public static final String DEFAULT_KEYBOARD_CONTEXT_FIELD_NAME = "defaultReplyKeyboard";
+    public static final String DEFAULT_KEYBOARD_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_defaultReplyKeyboard";
 
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
     private static final Map<Class<?>, Methods> methodsByClass = new HashMap<>();
@@ -28,9 +28,9 @@ public final class AddDefaultKeyboardHandler extends BaseHandler {
     }
 
     @Override
-    protected void process(Context ctx) {
+    protected void process(RequestContext ctx) {
         processNext(ctx);
-        updateKeyboardFromContext(ctx);
+        updateKeyboardFromRequestContext(ctx);
 
         for (BotApiMethod<?> msg : ctx.getResponses()) {
             Class<?> key = msg.getClass();
@@ -57,10 +57,10 @@ public final class AddDefaultKeyboardHandler extends BaseHandler {
         }
     }
 
-    private void updateKeyboardFromContext(Context ctx) {
-        ReplyKeyboard fromContextState = ctx.getState().getByName(REPLY_KEYBOARD_CLASS, DEFAULT_KEYBOARD_CONTEXT_FIELD_NAME);
-        if (fromContextState != null) {
-            this.keyboard = fromContextState;
+    private void updateKeyboardFromRequestContext(RequestContext ctx) {
+        ReplyKeyboard fromRequestContextState = ctx.getStorage().get(DEFAULT_KEYBOARD_CONTEXT_FIELD_NAME);
+        if (fromRequestContextState != null) {
+            this.keyboard = fromRequestContextState;
         }
     }
 

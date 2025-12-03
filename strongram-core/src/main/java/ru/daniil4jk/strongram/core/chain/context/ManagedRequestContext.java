@@ -4,73 +4,73 @@ import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.bot.BotCredentials;
 import ru.daniil4jk.strongram.core.chain.caster.Transformer;
-import ru.daniil4jk.strongram.core.dto.TelegramUUID;
+import ru.daniil4jk.strongram.core.state.Storage;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ManagedContext extends ContextImpl {
+public class ManagedRequestContext implements RequestContext {
     private final ActiveMonitor monitor = new ActiveMonitor();
+    private final RequestContext inherit;
 
-    public ManagedContext(Bot bot, Update update) {
-        super(bot, update);
+    public ManagedRequestContext(RequestContext context) {
+        this.inherit = context;
     }
 
     @Override
     public List<BotApiMethod<?>> getResponses() {
         monitor.check();
-        return super.getResponses();
+        return inherit.getResponses();
     }
 
     @Override
     public void respond(BotApiMethod<?> response) {
         monitor.check();
-        super.respond(response);
+        inherit.respond(response);
     }
 
     @Override
     public void respond(String text) {
         monitor.check();
-        super.respond(text);
+        inherit.respond(text);
     }
 
     @Override
     public TelegramUUID getUserId() {
         monitor.check();
-        return super.getUserId();
+        return inherit.getUserId();
     }
 
     @Override
     public Update getRequest() {
         monitor.check();
-        return super.getRequest();
+        return inherit.getRequest();
     }
 
     @Override
     public <T> T getRequest(@NotNull Transformer<T> transformer) {
         monitor.check();
-        return super.getRequest(transformer);
+        return inherit.getRequest(transformer);
     }
 
     @Override
-    public RequestState getState() {
+    public Storage getStorage() {
         monitor.check();
-        return super.getState();
+        return inherit.getStorage();
     }
 
     @Override
     public TelegramClient getClient() {
         monitor.check();
-        return super.getClient();
+        return inherit.getClient();
     }
 
     @Override
     public BotCredentials getCredentials() {
         monitor.check();
-        return super.getCredentials();
+        return inherit.getCredentials();
     }
 
     public void deactivate() {

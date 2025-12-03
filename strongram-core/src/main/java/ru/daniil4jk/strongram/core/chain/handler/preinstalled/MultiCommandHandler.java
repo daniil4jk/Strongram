@@ -4,21 +4,22 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.caster.As;
-import ru.daniil4jk.strongram.core.chain.context.Context;
+import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.filter.Filters;
 import ru.daniil4jk.strongram.core.chain.filter.whitelist.CompilingWhiteListFilter;
 import ru.daniil4jk.strongram.core.chain.filter.whitelist.WhiteListFilter;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
+import ru.daniil4jk.strongram.core.command.CommandHandler;
+import ru.daniil4jk.strongram.core.command.CommandNotFoundException;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 @NoArgsConstructor
-public class MultiCommandHandler extends BaseHandler {
+public final class MultiCommandHandler extends BaseHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
     private static final String DOG = "@";
@@ -47,12 +48,12 @@ public class MultiCommandHandler extends BaseHandler {
     }
 
     @Override
-    protected final @NotNull Filter getFilter() {
+    protected @NotNull Filter getFilter() {
         return Filters.textStartWith(SLASH).and(commandListFilter);
     }
 
     @Override
-    protected final void process(@NotNull Context ctx) {
+    protected void process(@NotNull RequestContext ctx) {
         var username = formatUsername(ctx.getCredentials().getUsername());
         var msg = ctx.getRequest(As.message());
         var text = msg.getText();
@@ -69,23 +70,21 @@ public class MultiCommandHandler extends BaseHandler {
         }
     }
 
-    private void processGroupCommand(Context ctx, @NotNull String text, String username) {
+    private void processGroupCommand(RequestContext ctx, @NotNull String text, String username) {
         String groupText = text.replace(username, EMPTY);
         processCommand(ctx, groupText);
     }
 
-    private void processCommand(Context ctx, @NotNull String text) {
-        parseCommand(text.split(WHITESPACE)[0]).accept(ctx, parseArgs(text));
+    private void processCommand(RequestContext ctx, @NotNull String text) {
+        String[] split = text.split(WHITESPACE);
+        String commandName = split[0];
+        String[] args = Arrays.copyOfRange(split, 1, split.length);
+        parseCommand(commandName).accept(ctx, args);
     }
 
     private CommandHandler parseCommand(String text) {
         return Optional.ofNullable(commandHandlers.get(formatCommand(text)))
                 .orElseThrow(() -> new CommandNotFoundException(text));
-    }
-
-    private static String @NotNull [] parseArgs(@NotNull String text) {
-        String[] args = text.split(WHITESPACE);
-        return Arrays.copyOfRange(args, 1, args.length);
     }
 
     private static @NotNull String formatUsername(String raw) {
@@ -98,13 +97,5 @@ public class MultiCommandHandler extends BaseHandler {
         raw = raw.trim().toLowerCase();
         if (raw.startsWith(SLASH)) return raw;
         return SLASH + raw;
-    }
-
-    public interface CommandHandler extends BiConsumer<Context, String[]> {}
-
-    public static class CommandNotFoundException extends RuntimeException {
-        public CommandNotFoundException(String command) {
-            super("Команда %s не найдена".formatted(command));
-        }
     }
 }

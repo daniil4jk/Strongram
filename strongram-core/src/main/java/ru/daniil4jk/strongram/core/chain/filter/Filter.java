@@ -1,15 +1,15 @@
 package ru.daniil4jk.strongram.core.chain.filter;
 
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.context.Context;
+import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public interface Filter extends Predicate<Context> {
+public interface Filter extends Predicate<RequestContext> {
     @Override
     @NotNull
-    default Filter and(@NotNull Predicate<? super Context> other) {
+    default Filter and(@NotNull Predicate<? super RequestContext> other) {
         return (t) -> test(t) && other.test(t);
     }
 
@@ -21,7 +21,7 @@ public interface Filter extends Predicate<Context> {
 
     @Override
     @NotNull
-    default Filter or(@NotNull Predicate<? super Context> other) {
+    default Filter or(@NotNull Predicate<? super RequestContext> other) {
         return (t) -> test(t) || other.test(t);
     }
 

@@ -8,7 +8,8 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.bot.BotCredentials;
 import ru.daniil4jk.strongram.core.chain.caster.Transformer;
-import ru.daniil4jk.strongram.core.dto.TelegramUUID;
+import ru.daniil4jk.strongram.core.state.Storage;
+import ru.daniil4jk.strongram.core.state.StorageImpl;
 import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
 import ru.daniil4jk.strongram.core.parser.uuid.TelegramUUIDParserService;
 import ru.daniil4jk.strongram.core.util.Lazy;
@@ -18,15 +19,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ContextImpl implements Context {
+public class RequestContextImpl implements RequestContext {
     private final Lazy<List<BotApiMethod<?>>> responses = new Lazy<>(ArrayList::new);
-    private final RequestState state = new RequestStateImpl();
+    private final Storage storage = new StorageImpl();
 
     private final Bot bot;
     private final Update update;
     private final Lazy<TelegramUUID> uuid;
 
-    public ContextImpl(Bot bot, Update update) {
+    public RequestContextImpl(Bot bot, Update update) {
         this.bot = bot;
         this.update = update;
 
@@ -80,8 +81,8 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public RequestState getState() {
-        return state;
+    public Storage getStorage() {
+        return storage;
     }
 
     @Override

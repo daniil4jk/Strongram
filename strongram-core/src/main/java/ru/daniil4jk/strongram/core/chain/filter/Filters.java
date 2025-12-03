@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.chain.caster.As;
-import ru.daniil4jk.strongram.core.chain.context.Context;
-import ru.daniil4jk.strongram.core.dto.TelegramUUID;
+import ru.daniil4jk.strongram.core.chain.context.RequestContext;
+import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
 
 import java.util.Objects;
 
@@ -359,15 +359,15 @@ public class Filters {
         return ctx -> Objects.equals(ctx.getUserId(), anotherUuid);
     }
 
-    private static Update upd(@NotNull Context ctx) {
+    private static Update upd(@NotNull RequestContext ctx) {
         return ctx.getRequest();
     }
 
-    private static Message msg(@NotNull Context ctx) {
+    private static Message msg(@NotNull RequestContext ctx) {
         return ctx.getRequest().getMessage();
     }
 
-    private static String str(Context ctx) {
+    private static String str(RequestContext ctx) {
         return ctx.getRequest(As.text());
     }
 }

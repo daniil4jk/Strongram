@@ -65,15 +65,16 @@ public class WebhookBotWrapper implements TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> consumeUpdate(Update update) {
-        try {
-            List<BotApiMethod<?>> responses = bot.apply(update);
-            BotApiMethod<?> lastMessage = responses.remove(responses.size() - 1);
-            responses.forEach(this::sendResponse);
-            return lastMessage;
-        } catch (Exception e) {
-            log.error(e.getLocalizedMessage(), e);
-        }
-        return null;
+        List<BotApiMethod<?>> responses = bot.apply(update);
+        return switch (responses.size()) {
+            case 0 -> null;
+            case 1 -> responses.get(0);
+            default -> {
+                BotApiMethod<?> lastMessage = responses.remove(responses.size() - 1);
+                responses.forEach(this::sendResponse);
+                yield lastMessage;
+            }
+        };
     }
 
     private void sendResponse(BotApiMethod<?> response) {

@@ -1,7 +1,7 @@
 package ru.daniil4jk.strongram.core.chain.handler;
 
 import lombok.Setter;
-import ru.daniil4jk.strongram.core.chain.context.Context;
+import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.filter.Filters;
 
@@ -10,7 +10,7 @@ public abstract class BaseHandler implements Handler {
     private Handler next;
 
     @Override
-    public final void accept(Context ctx) {
+    public final void accept(RequestContext ctx) {
         if (getFilter().test(ctx)) {
             process(ctx);
         } else {
@@ -22,11 +22,11 @@ public abstract class BaseHandler implements Handler {
         return Filters.acceptAll();
     }
 
-    protected void process(Context ctx) {
+    protected void process(RequestContext ctx) {
         processNext(ctx);
     }
 
-    protected final void processNext(Context ctx) {
+    protected final void processNext(RequestContext ctx) {
         if (next != null) {
             next.accept(ctx);
         }

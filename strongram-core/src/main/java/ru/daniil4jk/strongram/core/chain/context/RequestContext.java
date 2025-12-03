@@ -5,11 +5,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.bot.BotCredentials;
 import ru.daniil4jk.strongram.core.chain.caster.Transformer;
-import ru.daniil4jk.strongram.core.dto.TelegramUUID;
+import ru.daniil4jk.strongram.core.state.Storage;
 
 import java.util.List;
 
-public interface Context {
+public interface RequestContext {
     List<BotApiMethod<?>> getResponses();
     void respond(BotApiMethod<?> response);
     void respond(String text);
@@ -18,7 +18,7 @@ public interface Context {
     Update getRequest();
     <T> T getRequest(Transformer<T> transformer);
 
-    RequestState getState();
+    Storage getStorage();
     TelegramClient getClient();
     BotCredentials getCredentials();
 }

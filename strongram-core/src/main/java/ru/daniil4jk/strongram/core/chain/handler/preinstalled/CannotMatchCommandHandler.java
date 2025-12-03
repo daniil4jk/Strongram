@@ -2,7 +2,7 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import lombok.RequiredArgsConstructor;
 import ru.daniil4jk.strongram.core.chain.caster.As;
-import ru.daniil4jk.strongram.core.chain.context.Context;
+import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 
 @RequiredArgsConstructor
@@ -14,7 +14,7 @@ public final class CannotMatchCommandHandler extends BaseHandler {
     }
 
     @Override
-    protected void process(Context ctx) {
+    protected void process(RequestContext ctx) {
         try {
             if (ctx.getUserId().chat().isUserChat()) {
                 ctx.respond(text);

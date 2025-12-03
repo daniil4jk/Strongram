@@ -1,6 +1,6 @@
 package ru.daniil4jk.strongram.core.chain.filter.whitelist;
 
-import ru.daniil4jk.strongram.core.chain.context.Context;
+import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.filter.Filters;
 
@@ -42,7 +42,7 @@ public class CompilingWhiteListFilter<T> extends WhiteListFilter<T> {
     }
 
     @Override
-    public boolean test(Context ctx) {
+    public boolean test(RequestContext ctx) {
         return inherit.get().test(ctx);
     }
 }
