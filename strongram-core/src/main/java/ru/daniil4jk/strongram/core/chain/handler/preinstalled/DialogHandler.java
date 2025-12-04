@@ -1,12 +1,14 @@
 package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
+import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
-import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
 import ru.daniil4jk.strongram.core.dialog.Dialog;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DialogHandler extends BaseHandler {
     public static final String DIALOGS_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_dialogs";

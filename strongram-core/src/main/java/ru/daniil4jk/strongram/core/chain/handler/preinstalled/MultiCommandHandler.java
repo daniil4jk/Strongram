@@ -1,7 +1,6 @@
 package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.caster.As;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
@@ -28,11 +27,8 @@ public final class MultiCommandHandler extends BaseHandler {
     private final Map<String, CommandHandler> commandHandlers = new HashMap<>();
     private final WhiteListFilter<String> commandListFilter = new CompilingWhiteListFilter<>(Filters::textStartWith);
 
-    @SafeVarargs
-    public MultiCommandHandler(Pair<String, CommandHandler> @NotNull ... commands) {
-        for (Pair<String, CommandHandler> pair : commands) {
-            addCommand(pair.getKey(), pair.getValue());
-        }
+    public MultiCommandHandler(Map<String, CommandHandler> commands) {
+        commandHandlers.putAll(commands);
     }
 
     public void addCommand(String command, CommandHandler handler) {

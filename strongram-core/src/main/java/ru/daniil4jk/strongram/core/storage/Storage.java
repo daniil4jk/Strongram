@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.state;
+package ru.daniil4jk.strongram.core.storage;
 
 import java.util.Collection;
 

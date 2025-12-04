@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.bot.BotCredentials;
 import ru.daniil4jk.strongram.core.chain.caster.Transformer;
-import ru.daniil4jk.strongram.core.state.Storage;
+import ru.daniil4jk.strongram.core.storage.Storage;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;

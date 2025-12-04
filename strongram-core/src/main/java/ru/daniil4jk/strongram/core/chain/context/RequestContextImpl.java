@@ -8,10 +8,10 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.bot.BotCredentials;
 import ru.daniil4jk.strongram.core.chain.caster.Transformer;
-import ru.daniil4jk.strongram.core.state.Storage;
-import ru.daniil4jk.strongram.core.state.StorageImpl;
 import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
 import ru.daniil4jk.strongram.core.parser.uuid.TelegramUUIDParserService;
+import ru.daniil4jk.strongram.core.storage.Storage;
+import ru.daniil4jk.strongram.core.storage.StorageImpl;
 import ru.daniil4jk.strongram.core.util.Lazy;
 import ru.daniil4jk.strongram.core.util.MessageArray;
 
