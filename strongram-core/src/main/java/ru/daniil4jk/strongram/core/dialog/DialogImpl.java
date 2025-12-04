@@ -58,4 +58,10 @@ public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     private DialogPart<ENUM> getCurrentPart() {
         return parts.get(dialogCtx.getState());
     }
+
+    private final Object lock = new Object();
+    @Override
+    public Object getLock() {
+        return lock;
+    }
 }

@@ -1,6 +1,5 @@
 package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
@@ -8,8 +7,6 @@ import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 import ru.daniil4jk.strongram.core.dialog.Dialog;
 
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
 
 public final class DialogHandler extends BaseHandler {
     public static final String DIALOGS_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_dialogs";
@@ -24,7 +21,6 @@ public final class DialogHandler extends BaseHandler {
             processNext(ctx);
         }
 
-
         Collection<Dialog> newDialogs = getNewDialogs(ctx);
         newDialogs.forEach(d -> sendFirstAsk(d, ctx));
         addNewDialogs(newDialogs, uuid);
@@ -36,9 +32,11 @@ public final class DialogHandler extends BaseHandler {
 
         for (Dialog dialog : dialogs) {
             if (dialog.canAccept(ctx)) {
-                dialog.accept(ctx);
-                if (dialog.isStopped()) {
-                    removeDialog(uuid, dialog);
+                synchronized (dialog.getLock()) {
+                    dialog.accept(ctx);
+                    if (dialog.isStopped()) {
+                        removeDialog(uuid, dialog);
+                    }
                 }
                 foundSuitable = true;
             } else {

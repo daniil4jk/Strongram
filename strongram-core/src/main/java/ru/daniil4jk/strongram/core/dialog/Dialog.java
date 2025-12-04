@@ -10,4 +10,5 @@ public interface Dialog extends Consumer<RequestContext> {
     BotApiMethod<?> repeatAsk();
     boolean isStopped();
     boolean canAccept(RequestContext ctx);
+    Object getLock();
 }
