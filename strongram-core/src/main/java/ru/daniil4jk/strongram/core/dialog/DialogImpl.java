@@ -3,6 +3,7 @@ package ru.daniil4jk.strongram.core.dialog;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.dialog.state.DialogContext;
 import ru.daniil4jk.strongram.core.dialog.state.DialogContextImpl;
@@ -30,12 +31,31 @@ public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     }
 
     @Override
-    public void accept(RequestContext ctx) {
-        parts.get(dialogCtx.getState()).accept(ctx, dialogCtx);
+    public synchronized void accept(RequestContext ctx) {
+        getCurrentPart().accept(ctx);
+    }
+
+    @Override
+    public BotApiMethod<?> firstAsk() {
+        return getCurrentPart().firstAsk();
+    }
+
+    @Override
+    public BotApiMethod<?> repeatAsk() {
+        return getCurrentPart().repeatAsk();
     }
 
     @Override
     public boolean isStopped() {
         return dialogCtx.isStopped();
+    }
+
+    @Override
+    public boolean canAccept(RequestContext ctx) {
+        return getCurrentPart().canAccept(ctx);
+    }
+
+    private DialogPart<ENUM> getCurrentPart() {
+        return parts.get(dialogCtx.getState());
     }
 }
