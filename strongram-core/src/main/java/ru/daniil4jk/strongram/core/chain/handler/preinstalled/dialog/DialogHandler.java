@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
+package ru.daniil4jk.strongram.core.chain.handler.preinstalled.dialog;
 
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
@@ -10,7 +10,15 @@ import java.util.*;
 
 public final class DialogHandler extends BaseHandler {
     public static final String DIALOGS_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_dialogs";
-    private final Map<TelegramUUID, List<Dialog>> activeDialogs = new HashMap<>();
+    private final DialogStorage activeDialogs;
+
+    public DialogHandler() {
+        this(new MemoryDialogStorage());
+    }
+
+    public DialogHandler(DialogStorage activeDialogs) {
+        this.activeDialogs = activeDialogs;
+    }
 
     @Override
     protected void process(@NotNull RequestContext ctx) {
@@ -26,7 +34,7 @@ public final class DialogHandler extends BaseHandler {
         addNewDialogs(newDialogs, uuid);
     }
 
-    public boolean processDialogs(RequestContext ctx, List<Dialog> dialogs) {
+    public boolean processDialogs(@NotNull RequestContext ctx, @NotNull List<Dialog> dialogs) {
         TelegramUUID uuid = ctx.getUserId();
         boolean foundSuitable = false;
 
@@ -35,7 +43,7 @@ public final class DialogHandler extends BaseHandler {
                 synchronized (dialog.getLock()) {
                     dialog.accept(ctx);
                     if (dialog.isStopped()) {
-                        removeDialog(uuid, dialog);
+                        activeDialogs.remove(uuid, dialog);
                     }
                 }
                 foundSuitable = true;
@@ -47,33 +55,21 @@ public final class DialogHandler extends BaseHandler {
         return foundSuitable;
     }
 
-    private void removeDialog(TelegramUUID uuid, Dialog dialog) {
-        activeDialogs.compute(uuid,
-                (u, dialogs) -> {
-                    if (dialogs == null) {
-                        throw new IllegalStateException("попытка удалить диалог у пользователя с несуществующим списком диалогов");
-                    }
-                    dialogs.remove(dialog);
-                    if (dialogs.isEmpty()) {
-                        return null;
-                    }
-                    return dialogs;
-                }
-        );
-    }
-
-    private void sendFirstAsk(Dialog dialog, RequestContext ctx) {
+    private void sendFirstAsk(@NotNull Dialog dialog, @NotNull RequestContext ctx) {
         ctx.respond(dialog.firstAsk());
     }
 
-    private void addNewDialogs(Collection<Dialog> newDialogs, TelegramUUID uuid) {
+    private void addNewDialogs(@NotNull Collection<Dialog> newDialogs, TelegramUUID uuid) {
         if (!newDialogs.isEmpty()) {
-            activeDialogs.computeIfAbsent(uuid, u -> new ArrayList<>())
-                    .addAll(newDialogs);
+            if (newDialogs instanceof List<Dialog> list) {
+                activeDialogs.addAll(uuid, list);
+            } else {
+                activeDialogs.addAll(uuid, new ArrayList<>(newDialogs));
+            }
         }
     }
 
-    private Collection<Dialog> getNewDialogs(RequestContext ctx) {
+    private Collection<Dialog> getNewDialogs(@NotNull RequestContext ctx) {
         return ctx.getStorage().getCollection(DIALOGS_CONTEXT_FIELD_NAME);
     }
 }
