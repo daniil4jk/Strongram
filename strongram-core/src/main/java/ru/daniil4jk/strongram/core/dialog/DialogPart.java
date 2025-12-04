@@ -8,4 +8,5 @@ import java.util.function.BiConsumer;
 
 public interface DialogPart<ENUM extends Enum<ENUM>> extends BiConsumer<RequestContext, DialogContext<ENUM>> {
     BotApiMethod<?> ask();
+    //todo добавить реализацию с onException и прочим
 }

@@ -26,7 +26,6 @@ public final class DialogHandler extends BaseHandler {
                 }
             }
         }
-        super.process(ctx);
         addNewDialogs(ctx);
     }
 

@@ -3,6 +3,8 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 
@@ -39,7 +41,7 @@ public final class ExceptionReportHandler extends BaseHandler {
             return assemblyUserMessage(th);
         }
 
-        private String assemblyUserMessage(Throwable th) {
+        private @NotNull String assemblyUserMessage(Throwable th) {
             return "Произошла ошибка: " +
                     (th.getLocalizedMessage() == null || th.getLocalizedMessage().isEmpty() ?
                             "неизвестная ошибка" : th.getLocalizedMessage()) +
@@ -49,13 +51,13 @@ public final class ExceptionReportHandler extends BaseHandler {
 
     private static class DebugFormatter extends InfoFormatter {
         @Override
-        public String apply(Throwable th) {
+        public @NotNull String apply(Throwable th) {
             return super.apply(th) +
                     Strings.repeat(System.lineSeparator(), 2) +
                     assemblyDeveloperMessage(th);
         }
 
-        private String assemblyDeveloperMessage(Throwable th) {
+        private @NotNull String assemblyDeveloperMessage(@NotNull Throwable th) {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             th.printStackTrace(new PrintStream(out));
             String stackTraceInString = out.toString();
@@ -67,11 +69,13 @@ public final class ExceptionReportHandler extends BaseHandler {
     }
 
     public static class Formatters {
-        public static ExceptionFormatter info() {
+        @Contract(value = " -> new", pure = true)
+        public static @NotNull ExceptionFormatter info() {
             return new InfoFormatter();
         }
 
-        public static ExceptionFormatter debug() {
+        @Contract(value = " -> new", pure = true)
+        public static @NotNull ExceptionFormatter debug() {
             return new DebugFormatter();
         }
     }

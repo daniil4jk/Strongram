@@ -6,9 +6,7 @@ import ru.daniil4jk.strongram.core.chain.caster.As;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.filter.Filters;
-import ru.daniil4jk.strongram.core.chain.filter.whitelist.CompilingWhiteListFilter;
-import ru.daniil4jk.strongram.core.chain.filter.whitelist.WhiteListFilter;
-import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
+import ru.daniil4jk.strongram.core.chain.handler.FiteredHandler;
 import ru.daniil4jk.strongram.core.command.CommandHandler;
 import ru.daniil4jk.strongram.core.command.CommandNotFoundException;
 
@@ -18,14 +16,13 @@ import java.util.Map;
 import java.util.Optional;
 
 @NoArgsConstructor
-public final class MultiCommandHandler extends BaseHandler {
+public final class MultiCommandHandler extends FiteredHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
     private static final String DOG = "@";
     private static final String SLASH = "/";
 
     private final Map<String, CommandHandler> commandHandlers = new HashMap<>();
-    private final WhiteListFilter<String> commandListFilter = new CompilingWhiteListFilter<>(Filters::textStartWith);
 
     public MultiCommandHandler(Map<String, CommandHandler> commands) {
         commandHandlers.putAll(commands);
@@ -34,22 +31,24 @@ public final class MultiCommandHandler extends BaseHandler {
     public void addCommand(String command, CommandHandler handler) {
         command = formatCommand(command);
         commandHandlers.put(command, handler);
-        commandListFilter.add(command);
     }
 
     public void removeCommand(String command) {
         command = formatCommand(command);
         commandHandlers.remove(command);
-        commandListFilter.remove(command);
     }
 
     @Override
     protected @NotNull Filter getFilter() {
-        return Filters.textStartWith(SLASH).and(commandListFilter);
+        return Filters.textStartWith(SLASH).and(
+                ctx -> commandHandlers.containsKey(
+                        ctx.getRequest(As.text())
+                )
+        );
     }
 
     @Override
-    protected void process(@NotNull RequestContext ctx) {
+    protected void processFiltered(@NotNull RequestContext ctx) {
         var username = formatUsername(ctx.getCredentials().getUsername());
         var msg = ctx.getRequest(As.message());
         var text = msg.getText();
