@@ -1,6 +1,5 @@
 package ru.daniil4jk.strongram.core.dialog;
 
-import lombok.AllArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.dialog.state.DialogContext;

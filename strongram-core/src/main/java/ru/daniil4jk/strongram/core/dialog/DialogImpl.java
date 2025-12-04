@@ -3,14 +3,12 @@ package ru.daniil4jk.strongram.core.dialog;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.dialog.state.DialogContext;
 import ru.daniil4jk.strongram.core.dialog.state.DialogContextImpl;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     private final Map<ENUM, DialogPart<ENUM>> parts;
@@ -34,5 +32,10 @@ public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     @Override
     public void accept(RequestContext ctx) {
         parts.get(dialogCtx.getState()).accept(ctx, dialogCtx);
+    }
+
+    @Override
+    public boolean isStopped() {
+        return dialogCtx.isStopped();
     }
 }
