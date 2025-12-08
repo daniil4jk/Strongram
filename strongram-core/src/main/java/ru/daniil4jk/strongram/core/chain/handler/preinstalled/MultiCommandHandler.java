@@ -8,7 +8,6 @@ import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.filter.Filters;
 import ru.daniil4jk.strongram.core.chain.handler.FiteredHandler;
 import ru.daniil4jk.strongram.core.command.CommandHandler;
-import ru.daniil4jk.strongram.core.command.CommandNotFoundException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +22,12 @@ public final class MultiCommandHandler extends FiteredHandler {
     private static final String SLASH = "/";
 
     private final Map<String, CommandHandler> commandHandlers = new HashMap<>();
+
+    private final Filter messageIsCommandFilter = Filters.textStartWith(SLASH).and(
+            ctx -> commandHandlers.containsKey(
+                    ctx.getRequest(As.text())
+            )
+    );
 
     public MultiCommandHandler(Map<String, CommandHandler> commands) {
         commandHandlers.putAll(commands);
@@ -39,12 +44,8 @@ public final class MultiCommandHandler extends FiteredHandler {
     }
 
     @Override
-    protected @NotNull Filter getFilter() {
-        return Filters.textStartWith(SLASH).and(
-                ctx -> commandHandlers.containsKey(
-                        ctx.getRequest(As.text())
-                )
-        );
+    protected Filter getFilter() {
+        return messageIsCommandFilter;
     }
 
     @Override
@@ -56,13 +57,15 @@ public final class MultiCommandHandler extends FiteredHandler {
 
         try {
             processCommand(ctx, text);
-        } catch (CommandNotFoundException e) {
-            try {
-                processGroupCommand(ctx, text, username);
-            } catch (CommandNotFoundException ee) {
-                processNext(ctx);
-            }
-        }
+            return;
+        } catch (CommandNotFoundException e) { /* продолжаем выполнение */ }
+
+        try {
+            processGroupCommand(ctx, text, username);
+            return;
+        } catch (CommandNotFoundException ee) { /* продолжаем выполнение */ }
+
+        processNext(ctx);
     }
 
     private void processGroupCommand(RequestContext ctx, @NotNull String text, String username) {
@@ -92,5 +95,11 @@ public final class MultiCommandHandler extends FiteredHandler {
         raw = raw.trim().toLowerCase();
         if (raw.startsWith(SLASH)) return raw;
         return SLASH + raw;
+    }
+
+    private static class CommandNotFoundException extends RuntimeException {
+        public CommandNotFoundException(String command) {
+            super("Команда %s не найдена".formatted(command));
+        }
     }
 }

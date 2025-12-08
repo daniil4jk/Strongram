@@ -6,7 +6,9 @@ import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 import ru.daniil4jk.strongram.core.dialog.Dialog;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public final class DialogHandler extends BaseHandler {
     public static final String DIALOGS_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_dialogs";
