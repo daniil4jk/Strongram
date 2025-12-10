@@ -3,8 +3,7 @@ package ru.daniil4jk.strongram.core.chain.context;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
-import ru.daniil4jk.strongram.core.bot.BotCredentials;
+import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.chain.caster.Transformer;
 import ru.daniil4jk.strongram.core.storage.Storage;
 
@@ -21,7 +20,6 @@ public class ManagedRequestContext implements RequestContext {
 
     @Override
     public List<BotApiMethod<?>> getResponses() {
-        monitor.check();
         return inherit.getResponses();
     }
 
@@ -62,15 +60,9 @@ public class ManagedRequestContext implements RequestContext {
     }
 
     @Override
-    public TelegramClient getClient() {
+    public Bot getBot() {
         monitor.check();
-        return inherit.getClient();
-    }
-
-    @Override
-    public BotCredentials getCredentials() {
-        monitor.check();
-        return inherit.getCredentials();
+        return inherit.getBot();
     }
 
     public void deactivate() {

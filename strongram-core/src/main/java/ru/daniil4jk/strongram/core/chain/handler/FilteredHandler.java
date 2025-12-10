@@ -1,13 +1,12 @@
 package ru.daniil4jk.strongram.core.chain.handler;
 
+import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 
-public abstract class FiteredHandler extends BaseHandler {
-    protected abstract Filter getFilter();
-
+public abstract class FilteredHandler extends BaseHandler {
     @Override
-    protected void process(RequestContext ctx) {
+    protected final void process(RequestContext ctx) {
         if (getFilter().test(ctx)) {
             processFiltered(ctx);
         } else {
@@ -15,7 +14,7 @@ public abstract class FiteredHandler extends BaseHandler {
         }
     }
 
-    protected void processFiltered(RequestContext ctx) {
+    protected abstract @NotNull Filter getFilter();
 
-    }
+    protected abstract void processFiltered(RequestContext ctx);
 }

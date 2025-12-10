@@ -1,5 +1,6 @@
 package ru.daniil4jk.strongram.longpolling;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
@@ -8,17 +9,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.bot.Bot;
-import ru.daniil4jk.strongram.core.bot.BotCredentials;
-import ru.daniil4jk.strongram.core.bot.CredentialsProvider;
 import ru.daniil4jk.strongram.core.bot.TelegramClientProvider;
 
 import java.util.List;
 
 @Slf4j
-public class LongPollingBotWrapper implements LongPollingUpdateConsumer, CredentialsProvider, TelegramClientProvider {
+public class LongPollingBotWrapper implements LongPollingUpdateConsumer, TelegramClientProvider {
+    @Getter
+    private final String token;
     private final Bot bot;
 
-    public LongPollingBotWrapper(Bot bot) {
+    public LongPollingBotWrapper(String token, Bot bot) {
+        this.token = token;
         this.bot = bot;
     }
 
@@ -38,11 +40,6 @@ public class LongPollingBotWrapper implements LongPollingUpdateConsumer, Credent
         } catch (TelegramApiException e) {
             log.warn("Sending response failed", e);
         }
-    }
-
-    @Override
-    public BotCredentials getCredentials() {
-        return bot.getCredentials();
     }
 
     @Override

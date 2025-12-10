@@ -11,21 +11,17 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @ToString
 @EqualsAndHashCode
 public abstract class BaseBot implements Bot {
-    private final BotCredentials credentials;
+    @Getter
+    private final String username;
     private TelegramClient client;
 
-    public BaseBot(BotCredentials credentials) {
-        this.credentials = credentials;
+    public BaseBot(String username) {
+        this.username = username;
     }
 
-    public BaseBot(TelegramClient telegramClient, BotCredentials credentials) {
-        this.credentials = credentials;
+    public BaseBot(TelegramClient telegramClient, String username) {
         this.client = telegramClient;
-    }
-
-    @Override
-    public BotCredentials getCredentials() {
-        return credentials;
+        this.username = username;
     }
 
     @Override

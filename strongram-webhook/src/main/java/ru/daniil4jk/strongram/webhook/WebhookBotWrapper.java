@@ -25,18 +25,18 @@ public class WebhookBotWrapper implements TelegramWebhookBot {
     @Getter
     private final String botPath;
 
-    public WebhookBotWrapper(@NotNull URL botUrl, Bot bot) {
-        this(new SetWebhook(botUrl.toString()), bot);
+    public WebhookBotWrapper(@NotNull URL botUrl, String token, Bot bot) {
+        this(new SetWebhook(botUrl.toString()), token, bot);
     }
 
-    public WebhookBotWrapper(@NotNull SetWebhook setWebhook, @NotNull Bot bot) {
+    public WebhookBotWrapper(@NotNull SetWebhook setWebhook, String token, @NotNull Bot bot) {
         this.setWebhook = setWebhook;
         botPath = URI.create(setWebhook.getUrl()).getPath();
 
         this.bot = bot;
 
         if (!bot.hasClient()) {
-            bot.setClient(createClient(bot.getCredentials().getToken()));
+            bot.setClient(createClient(token));
         }
     }
 

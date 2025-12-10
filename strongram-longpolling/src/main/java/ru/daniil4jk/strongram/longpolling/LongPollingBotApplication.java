@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class LongPollingBotApplication extends TelegramBotsLongPollingApplication {
 
     public BotSession registerBot(LongPollingBotWrapper bot) throws TelegramApiException {
-        String token = bot.getCredentials().getToken();
+        String token = bot.getToken();
         BotSession session = super.registerBot(token, bot);
         if (!bot.hasClient()) {
             bot.setClient(new OkHttpTelegramClient(session.getOkHttpClient(), token));

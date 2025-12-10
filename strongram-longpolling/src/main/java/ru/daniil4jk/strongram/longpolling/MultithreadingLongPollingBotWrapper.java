@@ -11,12 +11,12 @@ import java.util.concurrent.Executors;
 public class MultithreadingLongPollingBotWrapper extends LongPollingBotWrapper {
     private final ExecutorService executor;
 
-    public MultithreadingLongPollingBotWrapper(Bot bot) {
-        this(bot, Executors.newCachedThreadPool());
+    public MultithreadingLongPollingBotWrapper(String token, Bot bot) {
+        this(token, bot, Executors.newCachedThreadPool());
     }
 
-    public MultithreadingLongPollingBotWrapper(Bot bot, ExecutorService executor) {
-        super(bot);
+    public MultithreadingLongPollingBotWrapper(String token, Bot bot, ExecutorService executor) {
+        super(token, bot);
         this.executor = executor;
     }
 

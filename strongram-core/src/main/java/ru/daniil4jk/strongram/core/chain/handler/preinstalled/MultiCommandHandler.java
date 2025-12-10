@@ -6,7 +6,7 @@ import ru.daniil4jk.strongram.core.chain.caster.As;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.filter.Filters;
-import ru.daniil4jk.strongram.core.chain.handler.FiteredHandler;
+import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.command.CommandHandler;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @NoArgsConstructor
-public final class MultiCommandHandler extends FiteredHandler {
+public final class MultiCommandHandler extends FilteredHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
     private static final String DOG = "@";
@@ -50,7 +50,7 @@ public final class MultiCommandHandler extends FiteredHandler {
 
     @Override
     protected void processFiltered(@NotNull RequestContext ctx) {
-        var username = formatUsername(ctx.getCredentials().getUsername());
+        var username = formatUsername(ctx.getBot().getUsername());
         var msg = ctx.getRequest(As.message());
         var text = msg.getText();
 
