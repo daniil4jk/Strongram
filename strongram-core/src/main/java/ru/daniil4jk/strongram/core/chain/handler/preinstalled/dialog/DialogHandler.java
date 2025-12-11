@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class DialogHandler extends BaseHandler {
+public class DialogHandler extends BaseHandler {
     public static final String DIALOGS_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_dialogs";
     private final DialogStorage activeDialogs;
 
@@ -23,7 +23,7 @@ public final class DialogHandler extends BaseHandler {
     }
 
     @Override
-    protected void process(@NotNull RequestContext ctx) {
+    protected final void process(@NotNull RequestContext ctx) {
         boolean foundSuitable = tryProcessExistingDialogs(ctx);
         if (foundSuitable) return;
 
@@ -60,24 +60,20 @@ public final class DialogHandler extends BaseHandler {
     }
 
     private void registerNewDialogs(RequestContext ctx) {
-        Collection<Dialog> dialogs = getNewDialogs(ctx);
+        List<Dialog> dialogs = getNewDialogs(ctx);
         if (!dialogs.isEmpty()) {
             dialogs.forEach(d -> d.sendNotification(ctx));
-            addNewDialogs(dialogs, ctx.getUserId());
+            activeDialogs.addAll(ctx.getUserId(), dialogs);
         }
     }
 
-    private void addNewDialogs(@NotNull Collection<Dialog> newDialogs, TelegramUUID uuid) {
-        if (newDialogs instanceof ArrayList<Dialog> list) {
-            activeDialogs.addAll(uuid, list);
-        } else {
-            activeDialogs.addAll(uuid, new ArrayList<>(newDialogs));
-        }
-    }
-
-    private @NotNull Collection<Dialog> getNewDialogs(@NotNull RequestContext ctx) {
-        Collection<Dialog> dialogs = ctx.getStorage().getCollection(DIALOGS_CONTEXT_FIELD_NAME);
+    private @NotNull List<Dialog> getNewDialogs(@NotNull RequestContext ctx) {
+        ArrayList<Dialog> dialogs = getDialogsFromContext(ctx);
         dialogs.removeIf(Dialog::isStopped);
         return dialogs;
+    }
+
+    private @NotNull ArrayList<Dialog> getDialogsFromContext(@NotNull RequestContext ctx) {
+        return new ArrayList<>(ctx.getStorage().getCollection(DIALOGS_CONTEXT_FIELD_NAME));
     }
 }

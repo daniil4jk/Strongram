@@ -7,4 +7,5 @@ public interface Storage {
     <T> T get(String key);
     <T> T get(Class<T> classOfReturnValue, String key);
     <T> Collection<T> getCollection(String key);
+    <T> Collection<T> getCollection(Class<T> classOfReturnEntryValue, String key);
 }

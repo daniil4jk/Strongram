@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.chain.caster;
+package ru.daniil4jk.strongram.core.chain.transformer;
 
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.*;
@@ -45,7 +45,6 @@ import ru.daniil4jk.strongram.core.parser.text.TextParserService;
 
 import java.util.List;
 
-//todo ctx.getRequest(As.update())
 public class As {
     public static Transformer<Update> update() {
         return update -> update;

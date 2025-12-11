@@ -7,7 +7,7 @@ import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 
 @Slf4j
 @RequiredArgsConstructor
-public final class ExceptionReportHandler extends BaseHandler {
+public class ExceptionReportHandler extends BaseHandler {
     private final ExceptionFormatter formatter;
 
     public ExceptionReportHandler() {
@@ -15,7 +15,7 @@ public final class ExceptionReportHandler extends BaseHandler {
     }
 
     @Override
-    protected void process(RequestContext ctx) {
+    protected final void process(RequestContext ctx) {
         try {
             processNext(ctx);
         } catch (Exception e) {

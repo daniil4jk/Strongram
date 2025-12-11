@@ -51,7 +51,7 @@ public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     }
 
     private void check() {
-        if (!isStopped()) {
+        if (isStopped()) {
             throw new IllegalStateException("dialog is stopped!");
         }
     }

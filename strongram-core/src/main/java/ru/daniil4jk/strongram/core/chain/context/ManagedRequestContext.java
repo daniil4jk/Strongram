@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.bot.Bot;
-import ru.daniil4jk.strongram.core.chain.caster.Transformer;
+import ru.daniil4jk.strongram.core.chain.transformer.Transformer;
 import ru.daniil4jk.strongram.core.storage.Storage;
 
 import java.util.List;

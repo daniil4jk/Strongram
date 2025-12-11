@@ -1,6 +1,6 @@
 package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
@@ -12,25 +12,23 @@ import java.lang.invoke.MethodHandles;
 import java.util.*;
 
 @Slf4j
-@NoArgsConstructor
-public final class AddDefaultKeyboardHandler extends BaseHandler {
+public class AddDefaultKeyboardHandler extends BaseHandler {
     public static final Class<ReplyKeyboard> REPLY_KEYBOARD_CLASS = ReplyKeyboard.class;
-    public static final String DEFAULT_KEYBOARD_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_defaultReplyKeyboard";
 
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
     private static final Map<Class<?>, Methods> methodsByClass = new HashMap<>();
     private static final Set<Class<?>> exclude = new HashSet<>();
 
-    private ReplyKeyboard keyboard;
+    @Setter
+    private ReplyKeyboard defaultKeyboard;
 
-    public AddDefaultKeyboardHandler(ReplyKeyboard keyboard) {
-        this.keyboard = keyboard;
+    public AddDefaultKeyboardHandler(ReplyKeyboard defaultKeyboard) {
+        this.defaultKeyboard = defaultKeyboard;
     }
 
     @Override
-    protected void process(RequestContext ctx) {
+    protected final void process(RequestContext ctx) {
         processNext(ctx);
-        updateKeyboardFromRequestContext(ctx);
 
         for (BotApiMethod<?> msg : ctx.getResponses()) {
             Class<?> key = msg.getClass();
@@ -49,18 +47,11 @@ public final class AddDefaultKeyboardHandler extends BaseHandler {
             Methods methods = methodsByClass.get(key);
             try {
                 if (methods.get.invoke(msg) == null) {
-                    methods.set.invoke(msg, keyboard);
+                    methods.set.invoke(msg, defaultKeyboard);
                 }
             } catch (Throwable e) {
                 log.warn("Cannot set default keyboard", e);
             }
-        }
-    }
-
-    private void updateKeyboardFromRequestContext(RequestContext ctx) {
-        ReplyKeyboard fromRequestContextState = ctx.getStorage().get(DEFAULT_KEYBOARD_CONTEXT_FIELD_NAME);
-        if (fromRequestContextState != null) {
-            this.keyboard = fromRequestContextState;
         }
     }
 

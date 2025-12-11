@@ -2,7 +2,7 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.caster.As;
+import ru.daniil4jk.strongram.core.chain.transformer.As;
 import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.filter.Filter;
 import ru.daniil4jk.strongram.core.chain.filter.Filters;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @NoArgsConstructor
-public final class MultiCommandHandler extends FilteredHandler {
+public class MultiCommandHandler extends FilteredHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
     private static final String DOG = "@";
@@ -44,12 +44,12 @@ public final class MultiCommandHandler extends FilteredHandler {
     }
 
     @Override
-    protected Filter getFilter() {
+    protected final Filter getFilter() {
         return messageIsCommandFilter;
     }
 
     @Override
-    protected void processFiltered(@NotNull RequestContext ctx) {
+    protected final void processFiltered(@NotNull RequestContext ctx) {
         var username = formatUsername(ctx.getBot().getUsername());
         var msg = ctx.getRequest(As.message());
         var text = msg.getText();

@@ -39,6 +39,11 @@ public class StorageImpl implements Storage {
     }
 
     @Override
+    public <T> Collection<T> getCollection(Class<T> classOfReturnEntryValue, String key) {
+        return getCollection(key);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T> Collection<T> getCollection(String key) {
         if (!inherit.isInitialized()) return List.of();
