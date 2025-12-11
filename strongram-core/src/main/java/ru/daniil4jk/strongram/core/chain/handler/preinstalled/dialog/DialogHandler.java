@@ -24,19 +24,20 @@ public final class DialogHandler extends BaseHandler {
 
     @Override
     protected void process(@NotNull RequestContext ctx) {
-        TelegramUUID uuid = ctx.getUserId();
+        boolean foundSuitable = tryProcessExistingDialogs(ctx);
+        if (foundSuitable) return;
 
-        boolean foundSuitable = processDialogs(ctx, activeDialogs.get(uuid));
-        if (!foundSuitable) {
-            processNext(ctx);
-        }
+        processNext(ctx);
 
-        Collection<Dialog> newDialogs = getNewDialogs(ctx);
-        newDialogs.forEach(d -> sendFirstAsk(d, ctx));
-        addNewDialogs(newDialogs, uuid);
+        registerNewDialogs(ctx);
     }
 
-    public boolean processDialogs(@NotNull RequestContext ctx, @NotNull List<Dialog> dialogs) {
+    public boolean tryProcessExistingDialogs(@NotNull RequestContext ctx) {
+        List<Dialog> dialogs = activeDialogs.get(ctx.getUserId());
+        if (dialogs == null || dialogs.isEmpty()) {
+            return false;
+        }
+
         TelegramUUID uuid = ctx.getUserId();
         boolean foundSuitable = false;
 
@@ -49,29 +50,34 @@ public final class DialogHandler extends BaseHandler {
                     }
                 }
                 foundSuitable = true;
-            } else {
-                ctx.respond(dialog.repeatAsk());
+                break;
             }
         }
+
+        dialogs.forEach(d -> d.sendNotification(ctx));
 
         return foundSuitable;
     }
 
-    private void sendFirstAsk(@NotNull Dialog dialog, @NotNull RequestContext ctx) {
-        ctx.respond(dialog.firstAsk());
-    }
-
-    private void addNewDialogs(@NotNull Collection<Dialog> newDialogs, TelegramUUID uuid) {
-        if (!newDialogs.isEmpty()) {
-            if (newDialogs instanceof List<Dialog> list) {
-                activeDialogs.addAll(uuid, list);
-            } else {
-                activeDialogs.addAll(uuid, new ArrayList<>(newDialogs));
-            }
+    private void registerNewDialogs(RequestContext ctx) {
+        Collection<Dialog> dialogs = getNewDialogs(ctx);
+        if (!dialogs.isEmpty()) {
+            dialogs.forEach(d -> d.sendNotification(ctx));
+            addNewDialogs(dialogs, ctx.getUserId());
         }
     }
 
-    private Collection<Dialog> getNewDialogs(@NotNull RequestContext ctx) {
-        return ctx.getStorage().getCollection(DIALOGS_CONTEXT_FIELD_NAME);
+    private void addNewDialogs(@NotNull Collection<Dialog> newDialogs, TelegramUUID uuid) {
+        if (newDialogs instanceof ArrayList<Dialog> list) {
+            activeDialogs.addAll(uuid, list);
+        } else {
+            activeDialogs.addAll(uuid, new ArrayList<>(newDialogs));
+        }
+    }
+
+    private @NotNull Collection<Dialog> getNewDialogs(@NotNull RequestContext ctx) {
+        Collection<Dialog> dialogs = ctx.getStorage().getCollection(DIALOGS_CONTEXT_FIELD_NAME);
+        dialogs.removeIf(Dialog::isStopped);
+        return dialogs;
     }
 }
