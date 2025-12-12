@@ -4,8 +4,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

@@ -1,13 +1,12 @@
 package ru.daniil4jk.strongram.core.chain.handler.preinstalled.dialog;
 
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
-import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 import ru.daniil4jk.strongram.core.dialog.Dialog;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class DialogHandler extends BaseHandler {

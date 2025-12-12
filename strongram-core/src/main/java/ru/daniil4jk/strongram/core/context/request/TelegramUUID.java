@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.chain.context;
+package ru.daniil4jk.strongram.core.context.request;
 
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.User;

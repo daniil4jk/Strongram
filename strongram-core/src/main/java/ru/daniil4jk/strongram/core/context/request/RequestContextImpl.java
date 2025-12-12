@@ -1,15 +1,15 @@
-package ru.daniil4jk.strongram.core.chain.context;
+package ru.daniil4jk.strongram.core.context.request;
 
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.bot.Bot;
-import ru.daniil4jk.strongram.core.chain.transformer.Transformer;
 import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
 import ru.daniil4jk.strongram.core.parser.uuid.TelegramUUIDParserService;
-import ru.daniil4jk.strongram.core.storage.Storage;
-import ru.daniil4jk.strongram.core.storage.StorageImpl;
+import ru.daniil4jk.strongram.core.context.storage.Storage;
+import ru.daniil4jk.strongram.core.context.storage.StorageImpl;
+import ru.daniil4jk.strongram.core.transformer.Transformer;
 import ru.daniil4jk.strongram.core.util.Lazy;
 import ru.daniil4jk.strongram.core.util.MessageArray;
 

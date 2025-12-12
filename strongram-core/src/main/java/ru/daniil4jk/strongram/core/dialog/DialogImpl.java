@@ -3,10 +3,10 @@ package ru.daniil4jk.strongram.core.dialog;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.dialog.part.DialogPart;
-import ru.daniil4jk.strongram.core.dialog.state.DialogContext;
-import ru.daniil4jk.strongram.core.dialog.state.DialogContextImpl;
+import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
+import ru.daniil4jk.strongram.core.context.dialog.DialogContextImpl;
 
 import java.util.EnumMap;
 import java.util.Map;

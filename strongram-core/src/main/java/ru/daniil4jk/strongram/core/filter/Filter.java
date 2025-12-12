@@ -1,7 +1,7 @@
-package ru.daniil4jk.strongram.core.chain.filter;
+package ru.daniil4jk.strongram.core.filter;
 
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
 
 import java.util.Objects;
 import java.util.function.Predicate;

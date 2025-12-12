@@ -2,8 +2,8 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled.exreport;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
 
 @Slf4j
 @RequiredArgsConstructor

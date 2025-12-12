@@ -2,9 +2,9 @@ package ru.daniil4jk.strongram.core.dialog.part;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
-import ru.daniil4jk.strongram.core.chain.filter.Filter;
-import ru.daniil4jk.strongram.core.dialog.state.DialogContext;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
+import ru.daniil4jk.strongram.core.filter.Filter;
 
 public abstract class ExtendableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<ENUM> {
     private final NotificationManager<ENUM> notificationManager = new NotificationManager<>(

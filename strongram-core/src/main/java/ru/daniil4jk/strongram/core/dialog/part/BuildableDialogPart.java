@@ -4,17 +4,13 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
-import ru.daniil4jk.strongram.core.chain.filter.Filter;
-import ru.daniil4jk.strongram.core.chain.filter.Filters;
-import ru.daniil4jk.strongram.core.dialog.state.DialogContext;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
+import ru.daniil4jk.strongram.core.filter.Filter;
+import ru.daniil4jk.strongram.core.filter.Filters;
 
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 @ToString
 @EqualsAndHashCode

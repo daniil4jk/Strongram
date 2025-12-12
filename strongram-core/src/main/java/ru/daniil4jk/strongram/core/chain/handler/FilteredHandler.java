@@ -1,8 +1,8 @@
 package ru.daniil4jk.strongram.core.chain.handler;
 
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
-import ru.daniil4jk.strongram.core.chain.filter.Filter;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.filter.Filter;
 
 public abstract class FilteredHandler extends BaseHandler {
     @Override

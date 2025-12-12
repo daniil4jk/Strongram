@@ -1,7 +1,7 @@
 package ru.daniil4jk.strongram.core.parser.uuid.parsers;
 
 import org.telegram.telegrambots.meta.api.objects.ChatJoinRequest;
-import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
+import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 import ru.daniil4jk.strongram.core.parser.TelegramObjectParseException;
 
 public class ChatJoinRequestTelegramUUIDParser extends TelegramUUIDParser<ChatJoinRequest> {

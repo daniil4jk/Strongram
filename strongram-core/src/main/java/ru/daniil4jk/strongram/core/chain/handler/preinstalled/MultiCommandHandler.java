@@ -2,12 +2,12 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.transformer.As;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
-import ru.daniil4jk.strongram.core.chain.filter.Filter;
-import ru.daniil4jk.strongram.core.chain.filter.Filters;
 import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.command.CommandHandler;
+import ru.daniil4jk.strongram.core.filter.Filter;
+import ru.daniil4jk.strongram.core.filter.Filters;
+import ru.daniil4jk.strongram.core.transformer.As;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class MultiCommandHandler extends FilteredHandler {
     }
 
     @Override
-    protected final Filter getFilter() {
+    protected final @NotNull Filter getFilter() {
         return messageIsCommandFilter;
     }
 

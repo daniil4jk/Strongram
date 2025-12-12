@@ -1,7 +1,7 @@
-package ru.daniil4jk.strongram.core.dialog.state;
+package ru.daniil4jk.strongram.core.context.dialog;
 
-import ru.daniil4jk.strongram.core.storage.Storage;
-import ru.daniil4jk.strongram.core.storage.StorageImpl;
+import ru.daniil4jk.strongram.core.context.storage.Storage;
+import ru.daniil4jk.strongram.core.context.storage.StorageImpl;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;

@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.storage;
+package ru.daniil4jk.strongram.core.context.storage;
 
 import ru.daniil4jk.strongram.core.util.Lazy;
 

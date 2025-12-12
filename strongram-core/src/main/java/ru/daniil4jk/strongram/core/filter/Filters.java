@@ -1,12 +1,12 @@
-package ru.daniil4jk.strongram.core.chain.filter;
+package ru.daniil4jk.strongram.core.filter;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import ru.daniil4jk.strongram.core.chain.transformer.As;
-import ru.daniil4jk.strongram.core.chain.context.RequestContext;
-import ru.daniil4jk.strongram.core.chain.context.TelegramUUID;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
+import ru.daniil4jk.strongram.core.transformer.As;
 
 import java.util.Objects;
 

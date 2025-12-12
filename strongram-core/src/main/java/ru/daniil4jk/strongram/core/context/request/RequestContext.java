@@ -1,10 +1,10 @@
-package ru.daniil4jk.strongram.core.chain.context;
+package ru.daniil4jk.strongram.core.context.request;
 
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.bot.Bot;
-import ru.daniil4jk.strongram.core.chain.transformer.Transformer;
-import ru.daniil4jk.strongram.core.storage.Storage;
+import ru.daniil4jk.strongram.core.context.storage.Storage;
+import ru.daniil4jk.strongram.core.transformer.Transformer;
 
 import java.util.List;
 
