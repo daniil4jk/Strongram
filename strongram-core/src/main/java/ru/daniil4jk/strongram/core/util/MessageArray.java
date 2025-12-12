@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class MessageArray {
-    public static final String SPLIT_SYMBOL = " ";
+    public static final String WORD_SEPARATOR = " ";
     public static final int MAX_MSG_SIZE = 4096;
 
     private final List<String> messages = new ArrayList<>();
@@ -19,7 +19,7 @@ public final class MessageArray {
             return;
         }
 
-        String[] words = originalMessage.split(SPLIT_SYMBOL);
+        String[] words = originalMessage.split(WORD_SEPARATOR);
 
         StringBuilder currentMessage = new StringBuilder();
         for (String word : words) {
@@ -28,7 +28,7 @@ public final class MessageArray {
                 currentMessage = new StringBuilder();
             }
 
-            currentMessage.append(" ").append(word);
+            currentMessage.append(WORD_SEPARATOR).append(word);
         }
         messages.add(currentMessage.toString().trim());
     }
