@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.context.storage.Storage;
-import ru.daniil4jk.strongram.core.transformer.Transformer;
+import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,9 +48,9 @@ public class ManagedRequestContext implements RequestContext {
     }
 
     @Override
-    public <T> T getRequest(@NotNull Transformer<T> transformer) {
+    public <T> T getRequest(@NotNull Unboxer<T> unboxer) {
         monitor.check();
-        return inherit.getRequest(transformer);
+        return inherit.getRequest(unboxer);
     }
 
     @Override

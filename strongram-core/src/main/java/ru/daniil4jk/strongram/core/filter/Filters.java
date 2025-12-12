@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
-import ru.daniil4jk.strongram.core.transformer.As;
+import ru.daniil4jk.strongram.core.unboxer.As;
 
 import java.util.Objects;
 

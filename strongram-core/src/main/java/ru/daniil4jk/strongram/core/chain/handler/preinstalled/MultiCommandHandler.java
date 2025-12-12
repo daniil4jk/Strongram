@@ -7,7 +7,7 @@ import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.command.CommandHandler;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
-import ru.daniil4jk.strongram.core.transformer.As;
+import ru.daniil4jk.strongram.core.unboxer.As;
 
 import java.util.Arrays;
 import java.util.HashMap;
