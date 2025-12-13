@@ -2,6 +2,7 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
@@ -14,10 +15,11 @@ import java.util.*;
 @Slf4j
 public class AddDefaultKeyboardHandler extends BaseHandler {
     public static final Class<ReplyKeyboard> REPLY_KEYBOARD_CLASS = ReplyKeyboard.class;
+    private static final String GET_METHOD_NAME_PART = "get";
+    private static final String SET_METHOD_NAME_PART = "set";
 
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
     private static final Map<Class<?>, Methods> methodsByClass = new HashMap<>();
-    private static final Set<Class<?>> exclude = new HashSet<>();
 
     @Setter
     private ReplyKeyboard defaultKeyboard;
@@ -33,18 +35,16 @@ public class AddDefaultKeyboardHandler extends BaseHandler {
         for (BotApiMethod<?> msg : ctx.getResponses()) {
             Class<?> key = msg.getClass();
 
-            if (exclude.contains(key)) {
-                continue;
-            }
-
             if (!methodsByClass.containsKey(key)) {
                 tryFill(key);
-                if (exclude.contains(key)) {
-                    continue;
-                }
             }
 
             Methods methods = methodsByClass.get(key);
+
+            if (!methods.invokable) {
+                continue;
+            }
+
             try {
                 if (methods.get.invoke(msg) == null) {
                     methods.set.invoke(msg, defaultKeyboard);
@@ -56,21 +56,28 @@ public class AddDefaultKeyboardHandler extends BaseHandler {
     }
 
     private void tryFill(Class<?> key) {
+        Methods methods;
         try {
-            Methods methods = new Methods(
+            methods = new Methods(
+                    true,
                     findGetMethod(key),
                     findSetMethod(key)
             );
-            methodsByClass.put(key, methods);
         } catch (Exception e) {
-            exclude.add(key);
+            methods = new Methods(
+                    false,
+                    null,
+                    null
+            );
         }
+        methodsByClass.put(key, methods);
     }
 
-    private MethodHandle findGetMethod(Class<?> key) {
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    private @NotNull MethodHandle findGetMethod(@NotNull Class<?> key) {
         return Arrays.stream(key.getMethods())
                 .filter(method -> REPLY_KEYBOARD_CLASS.isAssignableFrom(method.getReturnType()))
-                .filter(method -> method.getName().contains("asList"))
+                .filter(method -> method.getName().contains(GET_METHOD_NAME_PART))
                 .map(Optional::of)
                 .map(optional -> {
                     try {
@@ -85,14 +92,15 @@ public class AddDefaultKeyboardHandler extends BaseHandler {
                 .orElseThrow();
     }
 
-    private MethodHandle findSetMethod(Class<?> key) {
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    private @NotNull MethodHandle findSetMethod(@NotNull Class<?> key) {
         return Arrays.stream(key.getMethods())
                 .filter(method -> method.getParameterCount() == 1)
                 .filter(method ->
                         Arrays.stream(method.getParameterTypes())
                                 .anyMatch(REPLY_KEYBOARD_CLASS::isAssignableFrom)
                 )
-                .filter(method -> method.getName().contains("set"))
+                .filter(method -> method.getName().contains(SET_METHOD_NAME_PART))
                 .map(Optional::of)
                 .map(optional -> {
                     try {
@@ -108,6 +116,7 @@ public class AddDefaultKeyboardHandler extends BaseHandler {
     }
 
     private record Methods(
+            boolean invokable, //todo refactor to this
             MethodHandle get,
             MethodHandle set
     ) {}
