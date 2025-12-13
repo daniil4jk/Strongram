@@ -11,7 +11,7 @@ import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.List;
 
-public abstract class ChainedBot extends BaseBot {
+public class ChainedBot extends BaseBot {
     private final Lazy<Handler> chain = new Lazy<>(this::createChain);
     private final ChainFactory creator;
 
