@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
 public record TelegramUUID(Chat chat, User user) {
-    public @NotNull Long getChatId() {
+    public @NotNull Long getReplyChatId() {
         if (chat != null) {
             return chat.getId();
         } else if (user != null) {

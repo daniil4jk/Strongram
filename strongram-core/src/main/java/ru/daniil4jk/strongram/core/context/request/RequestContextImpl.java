@@ -57,14 +57,14 @@ public class RequestContextImpl implements RequestContext {
                 .asList()
                 .forEach(messageText ->
                         respond(SendMessage.builder()
-                                .chatId(getUserId().getChatId())
+                                .chatId(getUUID().getReplyChatId())
                                 .text(messageText)
                                 .build())
                 );
     }
 
     @Override
-    public TelegramUUID getUserId() {
+    public TelegramUUID getUUID() {
         return uuid.initOrGet();
     }
 

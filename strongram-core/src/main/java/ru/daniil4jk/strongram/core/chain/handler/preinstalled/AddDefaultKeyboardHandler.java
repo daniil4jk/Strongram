@@ -13,7 +13,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.*;
 
 @Slf4j
-public class AddDefaultKeyboardHandler extends BaseHandler {
+public abstract class AddDefaultKeyboardHandler extends BaseHandler {
     public static final Class<ReplyKeyboard> REPLY_KEYBOARD_CLASS = ReplyKeyboard.class;
     private static final String GET_METHOD_NAME_PART = "get";
     private static final String SET_METHOD_NAME_PART = "set";
@@ -21,12 +21,7 @@ public class AddDefaultKeyboardHandler extends BaseHandler {
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
     private static final Map<Class<?>, Methods> methodsByClass = new HashMap<>();
 
-    @Setter
-    private ReplyKeyboard defaultKeyboard;
-
-    public AddDefaultKeyboardHandler(ReplyKeyboard defaultKeyboard) {
-        this.defaultKeyboard = defaultKeyboard;
-    }
+    protected abstract ReplyKeyboard getDefaultKeyboard(RequestContext ctx);
 
     @Override
     protected final void process(RequestContext ctx) {
@@ -47,7 +42,7 @@ public class AddDefaultKeyboardHandler extends BaseHandler {
 
             try {
                 if (methods.get.invoke(msg) == null) {
-                    methods.set.invoke(msg, defaultKeyboard);
+                    methods.set.invoke(msg, getDefaultKeyboard(ctx));
                 }
             } catch (Throwable e) {
                 log.warn("Cannot set default keyboard", e);

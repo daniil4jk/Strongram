@@ -324,39 +324,51 @@ public class Filters {
     }
 
     public static @NotNull Filter userIdIs(Long id) {
-        return ctx -> ctx.getUserId().user().getId().equals(id);
+        return ctx -> ctx.getUUID().user().getId().equals(id);
     }
 
     public static @NotNull Filter chatIdIs(Long id) {
-        return ctx -> ctx.getUserId().chat().getId().equals(id);
+        return ctx -> ctx.getUUID().chat().getId().equals(id);
     }
 
     public static @NotNull Filter textStartWith(String text) {
-        return hasText().and(ctx -> str(ctx).startsWith(text));
+        return ctx -> str(ctx).startsWith(text);
     }
 
     public static @NotNull Filter textEndsWith(String text) {
-        return hasText().and(ctx -> str(ctx).endsWith(text));
+        return ctx -> str(ctx).endsWith(text);
     }
 
     public static @NotNull Filter textContains(String text) {
-        return hasText().and(ctx -> str(ctx).contains(text));
+        return ctx -> str(ctx).contains(text);
     }
 
     public static @NotNull Filter textContainsIgnoreCase(String text) {
-        return hasText().and(ctx -> str(ctx).toLowerCase().contains(text.toLowerCase()));
+        return ctx -> str(ctx).toLowerCase().contains(text.toLowerCase());
     }
 
     public static @NotNull Filter textEquals(String text) {
-        return hasText().and(ctx -> str(ctx).equals(text));
+        return ctx -> str(ctx).equals(text);
     }
 
     public static @NotNull Filter textEqualsIgnoreCase(String text) {
-        return hasText().and(ctx -> str(ctx).equalsIgnoreCase(text));
+        return ctx -> str(ctx).equalsIgnoreCase(text);
+    }
+
+    public static @NotNull Filter hasUser() {
+        return ctx -> ctx.getUUID().user() != null;
+    }
+
+    public static @NotNull Filter hasChat() {
+        return ctx -> ctx.getUUID().chat() != null;
+    }
+
+    public static @NotNull Filter hasReplyChatId() {
+        return ctx -> ctx.getUUID().chat() != null;
     }
 
     public static @NotNull Filter uuidEquals(TelegramUUID anotherUuid) {
-        return ctx -> Objects.equals(ctx.getUserId(), anotherUuid);
+        return ctx -> Objects.equals(ctx.getUUID(), anotherUuid);
     }
 
     private static Update upd(@NotNull RequestContext ctx) {

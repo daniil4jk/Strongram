@@ -36,9 +36,9 @@ public class ManagedRequestContext implements RequestContext {
     }
 
     @Override
-    public TelegramUUID getUserId() {
+    public TelegramUUID getUUID() {
         monitor.check();
-        return inherit.getUserId();
+        return inherit.getUUID();
     }
 
     @Override

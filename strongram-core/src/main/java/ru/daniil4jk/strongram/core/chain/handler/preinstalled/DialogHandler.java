@@ -1,10 +1,12 @@
-package ru.daniil4jk.strongram.core.chain.handler.preinstalled.dialog;
+package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 import ru.daniil4jk.strongram.core.dialog.Dialog;
+import ru.daniil4jk.strongram.core.dialog.DialogStorage;
+import ru.daniil4jk.strongram.core.dialog.MemoryDialogStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +34,12 @@ public class DialogHandler extends BaseHandler {
     }
 
     public boolean tryProcessExistingDialogs(@NotNull RequestContext ctx) {
-        List<Dialog> dialogs = activeDialogs.get(ctx.getUserId());
+        List<Dialog> dialogs = activeDialogs.get(ctx.getUUID());
         if (dialogs == null || dialogs.isEmpty()) {
             return false;
         }
 
-        TelegramUUID uuid = ctx.getUserId();
+        TelegramUUID uuid = ctx.getUUID();
         boolean foundSuitable = false;
 
         for (Dialog dialog : dialogs) {
@@ -62,7 +64,7 @@ public class DialogHandler extends BaseHandler {
         List<Dialog> dialogs = getNewDialogs(ctx);
         if (!dialogs.isEmpty()) {
             dialogs.forEach(d -> d.sendNotification(ctx));
-            activeDialogs.addAll(ctx.getUserId(), dialogs);
+            activeDialogs.addAll(ctx.getUUID(), dialogs);
         }
     }
 

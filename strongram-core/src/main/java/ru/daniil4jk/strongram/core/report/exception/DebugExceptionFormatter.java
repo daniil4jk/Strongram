@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.chain.handler.preinstalled.exreport;
+package ru.daniil4jk.strongram.core.report.exception;
 
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;

@@ -16,7 +16,7 @@ public class CannotProcessHandler extends BaseHandler {
     @Override
     protected final void process(RequestContext ctx) {
         try {
-            if (ctx.getUserId().chat().isUserChat()) {
+            if (ctx.getUUID().chat().isUserChat()) {
                 ctx.respond(text);
                 return;
             }

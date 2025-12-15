@@ -13,7 +13,7 @@ public interface RequestContext {
     void respond(BotApiMethod<?> response);
     void respond(String text);
 
-    TelegramUUID getUserId();
+    TelegramUUID getUUID();
     Update getRequest();
     <T> T getRequest(Unboxer<T> unboxer);
 

@@ -15,37 +15,17 @@ import java.util.Map;
 import java.util.Optional;
 
 @NoArgsConstructor
-public class MultiCommandHandler extends FilteredHandler {
+public abstract class MultiCommandHandler extends FilteredHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
     private static final String DOG = "@";
     private static final String SLASH = "/";
 
-    private final Map<String, CommandHandler> commandHandlers = new HashMap<>();
-
-    private final Filter messageIsCommandFilter = Filters.textStartWith(SLASH).and(
-            ctx -> commandHandlers.containsKey(
-                    ctx.getRequest(As.text())
-            )
-    );
-
-    public MultiCommandHandler(Map<String, CommandHandler> commands) {
-        commandHandlers.putAll(commands);
-    }
-
-    public void addCommand(String command, CommandHandler handler) {
-        command = formatCommand(command);
-        commandHandlers.put(command, handler);
-    }
-
-    public void removeCommand(String command) {
-        command = formatCommand(command);
-        commandHandlers.remove(command);
-    }
+    protected abstract Map<String, CommandHandler> getCommands();
 
     @Override
     protected final @NotNull Filter getFilter() {
-        return messageIsCommandFilter;
+        return Filters.isCommand();
     }
 
     @Override
@@ -81,7 +61,7 @@ public class MultiCommandHandler extends FilteredHandler {
     }
 
     private CommandHandler parseCommand(String text) {
-        return Optional.ofNullable(commandHandlers.get(formatCommand(text)))
+        return Optional.ofNullable(getCommands().get(formatCommand(text)))
                 .orElseThrow(() -> new CommandNotFoundException(text));
     }
 
