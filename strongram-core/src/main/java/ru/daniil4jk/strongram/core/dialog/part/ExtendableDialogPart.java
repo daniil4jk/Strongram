@@ -18,6 +18,7 @@ public abstract class ExtendableDialogPart<ENUM extends Enum<ENUM>> implements D
     protected abstract Filter getFilter();
     protected abstract void firstNotification(RequestContext ctx);
     protected abstract void repeatNotification(RequestContext rCtx, DialogContext<ENUM> dCtx);
+    protected abstract void accept(RequestContext rCtx, DialogContext<ENUM> dCtx);
 
     @Getter(AccessLevel.PROTECTED)
     private DialogContext<ENUM> dCtx;
@@ -35,5 +36,10 @@ public abstract class ExtendableDialogPart<ENUM extends Enum<ENUM>> implements D
     @Override
     public void sendNotification(RequestContext ctx) {
         notificationManager.sendNotification(ctx, dCtx);
+    }
+
+    @Override
+    public void accept(RequestContext ctx) {
+        accept(ctx, dCtx);
     }
 }
