@@ -3,14 +3,13 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
-import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.command.CommandHandler;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
 import ru.daniil4jk.strongram.core.unboxer.As;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 

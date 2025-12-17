@@ -1,16 +1,20 @@
 package ru.daniil4jk.strongram.core.dialog;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.context.request.RequestContext;
-import ru.daniil4jk.strongram.core.dialog.part.DialogPart;
 import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
 import ru.daniil4jk.strongram.core.context.dialog.DialogContextImpl;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.dialog.part.DialogPart;
 
 import java.util.EnumMap;
 import java.util.Map;
 
+@ToString
+@EqualsAndHashCode
 public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     private final Map<ENUM, DialogPart<ENUM>> parts;
     @Getter(AccessLevel.PROTECTED)

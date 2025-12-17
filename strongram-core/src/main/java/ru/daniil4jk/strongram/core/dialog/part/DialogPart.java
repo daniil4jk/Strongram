@@ -1,7 +1,7 @@
 package ru.daniil4jk.strongram.core.dialog.part;
 
-import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
+import ru.daniil4jk.strongram.core.context.request.RequestContext;
 
 import java.util.function.Consumer;
 
