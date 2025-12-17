@@ -14,8 +14,6 @@ import java.util.List;
 public abstract class ChainedBot extends BaseBot {
     private final Lazy<Handler> chain = new Lazy<>(this::createChain);
 
-    protected abstract ChainFactory getChain();
-
     public ChainedBot(String username) {
         super(username);
     }
@@ -35,4 +33,6 @@ public abstract class ChainedBot extends BaseBot {
     private Handler createChain() {
         return getChain().get().build();
     }
+
+    protected abstract ChainFactory getChain();
 }
