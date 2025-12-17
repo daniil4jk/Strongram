@@ -11,18 +11,17 @@ import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.List;
 
-public class ChainedBot extends BaseBot {
+public abstract class ChainedBot extends BaseBot {
     private final Lazy<Handler> chain = new Lazy<>(this::createChain);
-    private final ChainFactory creator;
 
-    public ChainedBot(String username, ChainFactory creator) {
+    protected abstract ChainFactory getChain();
+
+    public ChainedBot(String username) {
         super(username);
-        this.creator = creator;
     }
 
-    public ChainedBot(TelegramClient telegramClient, String username, ChainFactory creator) {
+    public ChainedBot(TelegramClient telegramClient, String username) {
         super(telegramClient, username);
-        this.creator = creator;
     }
 
     @Override
@@ -34,6 +33,6 @@ public class ChainedBot extends BaseBot {
     }
 
     private Handler createChain() {
-        return creator.get().build();
+        return getChain().get().build();
     }
 }
