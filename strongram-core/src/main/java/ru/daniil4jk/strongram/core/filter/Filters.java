@@ -2,6 +2,7 @@ package ru.daniil4jk.strongram.core.filter;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
@@ -9,6 +10,8 @@ import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 import ru.daniil4jk.strongram.core.unboxer.As;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Filters {
     private Filters() {
@@ -353,6 +356,31 @@ public class Filters {
 
     public static @NotNull Filter textEqualsIgnoreCase(String text) {
         return ctx -> str(ctx).equalsIgnoreCase(text);
+    }
+
+    @SafeVarargs
+    public static <T> @NotNull Filter iterateOr(Function<T, Filter> filter, T t, @Nullable T... ts) {
+       return iterate(filter, Filter::or, t, ts);
+    }
+
+    @SafeVarargs
+    public static <T> @NotNull Filter iterateAnd(Function<T, Filter> filter, T t, @Nullable T... ts) {
+        return iterate(filter, Filter::and, t, ts);
+    }
+
+    @SafeVarargs
+    private static <T> @NotNull Filter iterate(Function<T, Filter> converter,
+                                                 BiFunction<Filter, Filter, Filter> strategy,
+                                                 T t, @Nullable T... ts) {
+        Filter filter = converter.apply(t);
+        if (ts == null) {
+            return filter;
+        }
+
+        for (T i : ts) {
+            filter = strategy.apply(filter, converter.apply(t));
+        }
+        return filter;
     }
 
     public static @NotNull Filter hasUser() {
