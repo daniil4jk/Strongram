@@ -3,7 +3,6 @@ package ru.daniil4jk.strongram.core.context.dialog;
 import ru.daniil4jk.strongram.core.context.storage.Storage;
 import ru.daniil4jk.strongram.core.context.storage.StorageImpl;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DialogContextImpl<ENUM extends Enum<ENUM>> implements DialogContext<ENUM> {
@@ -18,18 +17,6 @@ public class DialogContextImpl<ENUM extends Enum<ENUM>> implements DialogContext
     @Override
     public Storage getStorage() {
         return storage;
-    }
-
-    @Override
-    public void moveToState(ENUM fromState, ENUM toState) {
-        ENUM expectedFromState = state.compareAndExchange(fromState, toState);
-        boolean successful = Objects.equals(fromState, expectedFromState);
-        if (!successful) {
-            throw new IllegalStateException(
-                    "can`t move dialog from state %s to state %s because dialog currently at state %s"
-                            .formatted(fromState, toState, expectedFromState)
-            );
-        }
     }
 
     @Override

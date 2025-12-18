@@ -8,14 +8,23 @@ public class StorageImpl implements Storage {
     private final Lazy<Map<String, Object>> inherit = new Lazy<>(HashMap::new);
 
     @Override
-    public <T> void set(String newKey, T newValue) {
-        inherit.initOrGet().compute(newKey,
+    public <T> void add(String newKey, T newValue) {
+        inherit.initOrGet().compute(
+                newKey,
                 (existingKey, existingValue) -> {
                     if (existingValue != null) {
                         throwKeyExistException(existingKey, existingValue);
                     }
                     return newValue;
                 }
+        );
+    }
+
+    @Override
+    public <T> void set(String newKey, T newValue) {
+        inherit.initOrGet().compute(
+                newKey,
+                (existingKey, existingValue) -> newValue
         );
     }
 

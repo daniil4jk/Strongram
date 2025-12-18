@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.context.storage.Storage;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
 
@@ -23,8 +24,8 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
 
     public BuildableDialogPart(Class<ENUM> enumClass,
                                Filter filter,
-                               Consumer<RequestContext> firstNotification,
-                               BiConsumer<RequestContext, DialogContext<ENUM>> repeatNotification,
+                               BiConsumer<RequestContext, Storage> firstNotification,
+                               BiConsumer<RequestContext, Storage> repeatNotification,
                                TryProcess<ENUM> handler,
                                Consumer<Exception> onException) {
         this.filter = filter;
@@ -47,7 +48,7 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
 
     @Override
     public void sendNotification(RequestContext ctx) {
-        notificationManager.sendNotification(ctx, dCtx);
+        notificationManager.sendNotification(ctx, dCtx.getStorage());
     }
 
     @Override
@@ -80,8 +81,8 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
         };
 
         private Class<ENUM> enumClass;
-        private Consumer<RequestContext> firstNotification;
-        private BiConsumer<RequestContext, DialogContext<ENUM>> repeatNotification;
+        private BiConsumer<RequestContext, Storage> firstNotification;
+        private BiConsumer<RequestContext, Storage> repeatNotification;
         private Filter filter;
         private TryProcess<ENUM> handler;
         private Consumer<Exception> onException;
@@ -91,13 +92,13 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
             return this;
         }
 
-        public Builder<ENUM> firstNotification(Consumer<RequestContext> function) {
+        public Builder<ENUM> firstNotification(BiConsumer<RequestContext, Storage> function) {
             this.firstNotification = function;
             return this;
         }
 
         public Builder<ENUM> firstNotification(String string) {
-            this.firstNotification = ctx -> ctx.respond(string);
+            this.firstNotification = (rCtx, dCtx) -> rCtx.respond(string);
             return this;
         }
 
@@ -106,7 +107,7 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
             return this;
         }
 
-        public Builder<ENUM> repeatNotification(BiConsumer<RequestContext, DialogContext<ENUM>> function) {
+        public Builder<ENUM> repeatNotification(BiConsumer<RequestContext, Storage> function) {
             this.repeatNotification = function;
             return this;
         }
