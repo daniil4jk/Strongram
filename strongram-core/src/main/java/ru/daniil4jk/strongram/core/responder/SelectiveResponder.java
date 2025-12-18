@@ -7,7 +7,7 @@ import ru.daniil4jk.strongram.core.bot.TelegramClientProvider;
 import java.util.List;
 
 public class SelectiveResponder implements Responder {
-    public static final int MAX_MESSAGES_PER_SECOND = 30;
+
     private final BatchResponder batchResponder;
     private final SimpleResponder simpleResponder;
 
@@ -18,7 +18,7 @@ public class SelectiveResponder implements Responder {
 
     @Override
     public void send(@NotNull List<BotApiMethod<?>> messages) {
-        if (messages.size() >= MAX_MESSAGES_PER_SECOND) {
+        if (batchResponder.batchSendRecommended(messages.size())) {
             batchResponder.send(messages);
         } else {
             simpleResponder.send(messages);
