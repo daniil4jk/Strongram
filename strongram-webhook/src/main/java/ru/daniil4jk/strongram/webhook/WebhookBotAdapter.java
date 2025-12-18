@@ -19,17 +19,17 @@ import java.net.URL;
 import java.util.List;
 
 @Slf4j
-public class WebhookBotWrapper implements TelegramWebhookBot {
+public class WebhookBotAdapter implements TelegramWebhookBot {
     private final SetWebhook setWebhook;
     private final Bot bot;
     @Getter
     private final String botPath;
 
-    public WebhookBotWrapper(@NotNull URL botUrl, String token, Bot bot) {
+    public WebhookBotAdapter(@NotNull URL botUrl, String token, Bot bot) {
         this(new SetWebhook(botUrl.toString()), token, bot);
     }
 
-    public WebhookBotWrapper(@NotNull SetWebhook setWebhook, String token, @NotNull Bot bot) {
+    public WebhookBotAdapter(@NotNull SetWebhook setWebhook, String token, @NotNull Bot bot) {
         this.setWebhook = setWebhook;
         botPath = URI.create(setWebhook.getUrl()).getPath();
 

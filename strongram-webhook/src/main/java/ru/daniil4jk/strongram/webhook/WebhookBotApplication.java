@@ -13,7 +13,7 @@ public class WebhookBotApplication extends TelegramBotsWebhookApplication {
         super(webhookOptions);
     }
 
-    public void registerBot(@NotNull WebhookBotWrapper bot) throws TelegramApiException {
+    public void registerBot(@NotNull WebhookBotAdapter bot) throws TelegramApiException {
         super.registerBot(bot);
     }
 }

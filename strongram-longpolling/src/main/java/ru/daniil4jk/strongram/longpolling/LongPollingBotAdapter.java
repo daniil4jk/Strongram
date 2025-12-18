@@ -14,12 +14,12 @@ import ru.daniil4jk.strongram.core.bot.TelegramClientProvider;
 import java.util.List;
 
 @Slf4j
-public class LongPollingBotWrapper implements LongPollingUpdateConsumer, TelegramClientProvider {
+public class LongPollingBotAdapter implements HasBot {
     @Getter
     private final String token;
     private final Bot bot;
 
-    public LongPollingBotWrapper(String token, Bot bot) {
+    public LongPollingBotAdapter(String token, Bot bot) {
         this.token = token;
         this.bot = bot;
     }
@@ -30,8 +30,12 @@ public class LongPollingBotWrapper implements LongPollingUpdateConsumer, Telegra
     }
 
     public void consumeSingle(Update update) {
-        List<BotApiMethod<?>> responses = bot.apply(update);
-       responses.forEach(this::sendResponse);
+        try {
+            List<BotApiMethod<?>> responses = bot.apply(update);
+            responses.forEach(this::sendResponse);
+        } catch (Exception e) {
+            log.error("Error occurred while bot processing update", e);
+        }
     }
 
     private void sendResponse(BotApiMethod<?> response) {
