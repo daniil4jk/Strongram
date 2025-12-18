@@ -10,7 +10,7 @@ import java.util.List;
 
 @Slf4j
 public class BatchResponder implements Responder {
-    private static final long DELAY = 50L;
+    public static final long DELAY = 50L;
     private final TelegramClientProvider client;
 
     public BatchResponder(TelegramClientProvider client) {
