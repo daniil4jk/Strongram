@@ -1,9 +1,7 @@
 package ru.daniil4jk.strongram.longpolling;
 
-import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-import ru.daniil4jk.strongram.core.bot.Bot;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
