@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.ToString;
 import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.context.storage.Storage;
 import ru.daniil4jk.strongram.core.filter.Filter;
 
 @ToString
@@ -16,8 +17,8 @@ public abstract class ExtendableDialogPart<ENUM extends Enum<ENUM>> implements D
     );
 
     protected abstract Filter getFilter();
-    protected abstract void firstNotification(RequestContext ctx);
-    protected abstract void repeatNotification(RequestContext rCtx, DialogContext<ENUM> dCtx);
+    protected abstract void firstNotification(RequestContext rCtx, Storage storage);
+    protected abstract void repeatNotification(RequestContext rCtx, Storage storage);
     protected abstract void accept(RequestContext rCtx, DialogContext<ENUM> dCtx);
 
     @Getter(AccessLevel.PROTECTED)
@@ -35,7 +36,7 @@ public abstract class ExtendableDialogPart<ENUM extends Enum<ENUM>> implements D
 
     @Override
     public void sendNotification(RequestContext ctx) {
-        notificationManager.sendNotification(ctx, dCtx);
+        notificationManager.sendNotification(ctx, dCtx.getStorage());
     }
 
     @Override

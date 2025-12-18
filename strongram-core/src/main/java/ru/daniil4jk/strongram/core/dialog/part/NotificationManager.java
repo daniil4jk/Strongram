@@ -1,27 +1,26 @@
 package ru.daniil4jk.strongram.core.dialog.part;
 
-import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.context.storage.Storage;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class NotificationManager<ENUM extends Enum<ENUM>> {
-    private final Consumer<RequestContext> firstNotification;
-    private final BiConsumer<RequestContext, DialogContext<ENUM>> repeatNotification;
+    private final BiConsumer<RequestContext, Storage> firstNotification;
+    private final BiConsumer<RequestContext, Storage> repeatNotification;
     private boolean firstNotificationSent;
 
-    public NotificationManager(Consumer<RequestContext> firstNotification,
-                               BiConsumer<RequestContext, DialogContext<ENUM>> repeatNotification) {
+    public NotificationManager(BiConsumer<RequestContext, Storage> firstNotification,
+                               BiConsumer<RequestContext, Storage> repeatNotification) {
         this.firstNotification = firstNotification;
         this.repeatNotification = repeatNotification;
     }
 
-    public void sendNotification(RequestContext rCtx, DialogContext<ENUM> dCtx) {
+    public void sendNotification(RequestContext rCtx, Storage dCtx) {
         if (firstNotificationSent) {
             repeatNotification.accept(rCtx, dCtx);
         } else {
-            firstNotification.accept(rCtx);
+            firstNotification.accept(rCtx, dCtx);
             firstNotificationSent = true;
         }
     }
