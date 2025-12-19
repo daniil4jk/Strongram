@@ -1,6 +1,6 @@
 package ru.daniil4jk.strongram.core.bot;
 
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.chain.factory.ChainFactory;
@@ -23,7 +23,7 @@ public abstract class ChainedBot extends BaseBot {
     }
 
     @Override
-    public final List<BotApiMethod<?>> apply(Update update) {
+    public final List<PartialBotApiMethod<?>> apply(Update update) {
         var ctx = new ManagedRequestContext(new RequestContextImpl(this, update));
         chain.initOrGet().accept(ctx);
         ctx.deactivate();

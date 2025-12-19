@@ -2,7 +2,7 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
@@ -29,7 +29,7 @@ public abstract class AddDefaultKeyboardHandler extends BaseHandler {
     protected final void process(RequestContext ctx) {
         processNext(ctx);
 
-        for (BotApiMethod<?> msg : ctx.getResponses()) {
+        for (PartialBotApiMethod<?> msg : ctx.getResponses()) {
             Class<?> key = msg.getClass();
 
             if (!methodsByClass.containsKey(key)) {

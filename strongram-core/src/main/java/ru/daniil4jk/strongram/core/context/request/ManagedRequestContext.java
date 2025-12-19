@@ -1,12 +1,14 @@
 package ru.daniil4jk.strongram.core.context.request;
 
 import org.jetbrains.annotations.NotNull;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.context.storage.Storage;
 import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -19,12 +21,13 @@ public class ManagedRequestContext implements RequestContext {
     }
 
     @Override
-    public List<BotApiMethod<?>> getResponses() {
+    public List<PartialBotApiMethod<?>> getResponses() {
+        monitor.check();
         return inherit.getResponses();
     }
 
     @Override
-    public void respond(BotApiMethod<?> response) {
+    public void respond(PartialBotApiMethod<?> response) {
         monitor.check();
         inherit.respond(response);
     }
@@ -33,6 +36,18 @@ public class ManagedRequestContext implements RequestContext {
     public void respond(String text) {
         monitor.check();
         inherit.respond(text);
+    }
+
+    @Override
+    public void respond(String text, ReplyKeyboard keyboard) {
+        monitor.check();
+        inherit.respond(text, keyboard);
+    }
+
+    @Override
+    public void respond(String text, File file, MediaType type) {
+        monitor.check();
+        inherit.respond(text, file, type);
     }
 
     @Override

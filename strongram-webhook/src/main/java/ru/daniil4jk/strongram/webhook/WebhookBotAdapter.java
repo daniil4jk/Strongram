@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.telegram.telegrambots.client.jetty.JettyTelegramClient;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updates.DeleteWebhook;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,8 +15,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 import org.telegram.telegrambots.webhook.TelegramWebhookBot;
 import ru.daniil4jk.strongram.core.bot.Bot;
+import ru.daniil4jk.strongram.core.responder.BatchResponder;
 import ru.daniil4jk.strongram.core.responder.Responder;
-import ru.daniil4jk.strongram.core.responder.SelectiveResponder;
+import ru.daniil4jk.strongram.core.responder.SimpleResponder;
 
 import java.net.URI;
 import java.net.URL;
@@ -39,7 +41,7 @@ public class WebhookBotAdapter implements TelegramWebhookBot {
         this.botPath = URI.create(setWebhook.getUrl()).getPath();
 
         this.bot = bot;
-        this.responder = new SelectiveResponder(bot);
+        this.responder = new BatchResponder(new SimpleResponder(bot));
 
         if (!bot.hasClient()) {
             bot.setClient(createClient(token));
@@ -71,11 +73,11 @@ public class WebhookBotAdapter implements TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> consumeUpdate(Update update) {
-        List<BotApiMethod<?>> responses = bot.apply(update);
+        List<PartialBotApiMethod<?>> responses = bot.apply(update);
         return sendResponses(responses);
     }
 
-    private @Nullable BotApiMethod<?> sendResponses(List<BotApiMethod<?>> responses) {
+    private @Nullable BotApiMethod<?> sendResponses(List<PartialBotApiMethod<?>> responses) {
         Objects.requireNonNull(
                 responses,
                 "responses cannot be null, please return Collections.emptyList()"
@@ -83,11 +85,25 @@ public class WebhookBotAdapter implements TelegramWebhookBot {
 
         return switch (responses.size()) {
             case 0 -> null;
-            case 1 -> responses.get(0);
+            case 1 -> {
+                PartialBotApiMethod<?> message = responses.get(0);
+                if (message instanceof BotApiMethod<?> apiMethod) {
+                    yield apiMethod;
+                } else {
+                    responder.send(message);
+                    yield null;
+                }
+            }
             default -> {
-                BotApiMethod<?> lastMessage = responses.remove(responses.size() - 1);
-                responder.send(responses);
-                yield lastMessage;
+                PartialBotApiMethod<?> lastMessage = responses.get(responses.size() - 1);
+                if (lastMessage instanceof BotApiMethod<?> apiMethod) {
+                    responses.remove(responses.size() - 1);
+                    responder.send(responses);
+                    yield apiMethod;
+                } else {
+                    responder.send(responses);
+                    yield null;
+                }
             }
         };
     }
