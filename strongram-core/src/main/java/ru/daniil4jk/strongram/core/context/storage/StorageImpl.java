@@ -75,6 +75,6 @@ public class StorageImpl implements Storage {
             return List.of((T) value);
         } catch (ClassCastException e) { /*continue*/ }
 
-        throw new IllegalStateException("can`t parse field %s in context".formatted(key));
+        throw new IllegalStateException("can`t findIn field %s in context".formatted(key));
     }
 }

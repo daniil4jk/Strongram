@@ -10,8 +10,8 @@ import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.context.storage.Storage;
 import ru.daniil4jk.strongram.core.context.storage.StorageImpl;
 import ru.daniil4jk.strongram.core.unboxer.Unboxer;
-import ru.daniil4jk.strongram.core.unboxer.parser.TelegramObjectParseException;
-import ru.daniil4jk.strongram.core.unboxer.parser.uuid.TelegramUUIDParserService;
+import ru.daniil4jk.strongram.core.unboxer.finder.TelegramObjectFinderException;
+import ru.daniil4jk.strongram.core.unboxer.finder.uuid.TelegramUUIDFinderService;
 import ru.daniil4jk.strongram.core.util.Lazy;
 import ru.daniil4jk.strongram.core.util.MessageArray;
 
@@ -35,8 +35,8 @@ public class RequestContextImpl implements RequestContext {
         uuid = new Lazy<>(
                 () -> {
                     try {
-                        return TelegramUUIDParserService.getInstance().parse(update);
-                    } catch (TelegramObjectParseException e) {
+                        return TelegramUUIDFinderService.getInstance().findIn(update);
+                    } catch (TelegramObjectFinderException e) {
                         return null;
                     }
                 }

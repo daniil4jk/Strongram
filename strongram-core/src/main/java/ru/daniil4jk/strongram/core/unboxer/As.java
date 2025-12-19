@@ -42,7 +42,7 @@ import org.telegram.telegrambots.meta.api.objects.videochat.VideoChatParticipant
 import org.telegram.telegrambots.meta.api.objects.videochat.VideoChatScheduled;
 import org.telegram.telegrambots.meta.api.objects.videochat.VideoChatStarted;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppData;
-import ru.daniil4jk.strongram.core.unboxer.parser.text.TextParserService;
+import ru.daniil4jk.strongram.core.unboxer.finder.text.TextFinderService;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class As {
 
     @Contract(pure = true)
     public static @NotNull Unboxer<String> text() {
-        return update -> TextParserService.getInstance().parse(update);
+        return update -> TextFinderService.getInstance().findIn(update);
     }
 
     public static @NotNull Unboxer<Message> message() {
