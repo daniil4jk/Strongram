@@ -48,6 +48,7 @@ public abstract class TextCommandHandler extends FilteredHandler {
 
     @Contract(pure = true)
     private static @NotNull String formatCommand(@NotNull String raw) {
+        raw = raw.trim();
         if (raw.contains(WHITESPACE)) {
             throw new IllegalArgumentException("Command should not contain whitespace");
         }
