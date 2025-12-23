@@ -24,7 +24,7 @@ public class Chain {
      * Adds a handler to the end of the chain.
      *
      * @param handler the handler to add; must not be null
-     * @return this {@code Chain} instance to allow method chaining
+     * @return this {@link Chain} instance to allow method chaining
      */
     public Chain add(Handler handler) {
         this.chain.add(handler);
@@ -37,7 +37,7 @@ public class Chain {
      *
      * @param beforeWhat the class of the handler before which to insert; must not be null
      * @param toAdd the handler to insert; must not be null
-     * @return this {@code Chain} instance to allow method chaining
+     * @return this {@link Chain} instance to allow method chaining
      */
     public Chain addBefore(Class<? extends Handler> beforeWhat, Handler toAdd) {
         addConditionalInternal(0, beforeWhat, toAdd);
@@ -50,7 +50,7 @@ public class Chain {
      *
      * @param afterWhat the class of the handler after which to insert; must not be null
      * @param toAdd the handler to insert; must not be null
-     * @return this {@code Chain} instance to allow method chaining
+     * @return this {@link Chain} instance to allow method chaining
      */
     public Chain addAfter(Class<? extends Handler> afterWhat, Handler toAdd) {
         addConditionalInternal(1, afterWhat, toAdd);
@@ -73,7 +73,7 @@ public class Chain {
      * After this method is called, the handlers are interconnected via their
      * {@link Handler#setNext(Handler)} method, forming a linked chain.
      *
-     * @return the first handler in the chain, which serves as the entry point
+     * @return the first {@link Handler} in the chain, which serves as the entry point
      *         for processing; or {@code null} if the chain is empty
      */
     public Handler build() {

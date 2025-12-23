@@ -13,7 +13,7 @@ import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 import ru.daniil4jk.strongram.core.unboxer.finder.TelegramObjectFinderException;
 import ru.daniil4jk.strongram.core.unboxer.finder.uuid.TelegramUUIDFinderService;
 import ru.daniil4jk.strongram.core.util.Lazy;
-import ru.daniil4jk.strongram.core.util.MessageArray;
+import ru.daniil4jk.strongram.core.util.LongMessage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,8 +56,8 @@ public class RequestContextImpl implements RequestContext {
 
     @Override
     public void respond(String text) {
-        new MessageArray(text)
-                .asList()
+        new LongMessage(text)
+                .asLegalLengthMessageList()
                 .forEach(messageText ->
                         respond(SendMessage.builder()
                                 .chatId(getUUID().getReplyChatId())
@@ -68,8 +68,8 @@ public class RequestContextImpl implements RequestContext {
 
     @Override
     public void respond(String text, ReplyKeyboard keyboard) {
-        List<? extends SendMessage> messages = new MessageArray(text)
-                .asList().stream()
+        List<? extends SendMessage> messages = new LongMessage(text)
+                .asLegalLengthMessageList().stream()
                 .map(str -> SendMessage.builder()
                                     .chatId(getUUID().getReplyChatId())
                                     .text(str)
@@ -83,7 +83,7 @@ public class RequestContextImpl implements RequestContext {
 
     @Override
     public void respond(String text, File file, MediaType type) {
-        List<String> texts = new MessageArray(text).asList();
+        List<String> texts = new LongMessage(text).asLegalLengthMessageList();
         SendMediaBotMethod<?> media = RespondFactory.toMessage(texts.remove(0), getUUID(), file, type);
         respond(media);
 
