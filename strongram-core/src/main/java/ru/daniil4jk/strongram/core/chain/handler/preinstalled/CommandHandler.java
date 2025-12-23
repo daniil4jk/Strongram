@@ -1,6 +1,8 @@
 package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.command.CommandStrategy;
@@ -10,7 +12,6 @@ import ru.daniil4jk.strongram.core.filter.Filters;
 import ru.daniil4jk.strongram.core.unboxer.As;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
@@ -54,11 +55,11 @@ public abstract class CommandHandler extends FilteredHandler {
         processCommand(ctx, groupText);
     }
 
-    private void processCommand(RequestContext ctx, @NotNull String text) {
-        String[] split = text.split(WHITESPACE);
-        String commandName = split[0];
-        String[] args = Arrays.copyOfRange(split, 1, split.length);
-        parseCommand(commandName).accept(ctx, args);
+    private void processCommand(@NotNull RequestContext ctx, @NotNull String text) {
+        String[] cmdAndArgs = ctx.getRequest(As.text()).split(WHITESPACE, 2);
+        String command = formatCommand(cmdAndArgs[0]);
+        String[] args = cmdAndArgs.length > 1 ? cmdAndArgs[1].split(WHITESPACE) : ArrayUtils.EMPTY_STRING_ARRAY;
+        parseCommand(command).accept(ctx, args);
     }
 
     private CommandStrategy parseCommand(String text) {
@@ -66,13 +67,18 @@ public abstract class CommandHandler extends FilteredHandler {
                 .orElseThrow(() -> new CommandNotFoundException(text));
     }
 
-    private static @NotNull String formatUsername(String raw) {
+    @Contract(pure = true)
+    private static @NotNull String formatUsername(@NotNull String raw) {
         raw = raw.trim().toLowerCase();
         if (raw.startsWith(DOG)) return raw;
         return DOG + raw;
     }
 
-    private static @NotNull String formatCommand(String raw) {
+    @Contract(pure = true)
+    private static @NotNull String formatCommand(@NotNull String raw) {
+        if (raw.contains(WHITESPACE)) {
+            throw new IllegalArgumentException("Command should not contain whitespace");
+        }
         raw = raw.trim().toLowerCase();
         if (raw.startsWith(SLASH)) return raw;
         return SLASH + raw;
