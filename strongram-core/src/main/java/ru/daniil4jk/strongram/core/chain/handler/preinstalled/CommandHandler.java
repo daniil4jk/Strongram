@@ -5,7 +5,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
-import ru.daniil4jk.strongram.core.command.CommandStrategy;
+import ru.daniil4jk.strongram.core.command.EachCommandHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
@@ -22,9 +22,9 @@ public abstract class CommandHandler extends FilteredHandler {
     private static final String DOG = "@";
     private static final String SLASH = "/";
 
-    private final Lazy<Map<String, CommandStrategy>> commands = new Lazy<>(this::getCommands);
+    private final Lazy<Map<String, EachCommandHandler>> commands = new Lazy<>(this::getCommands);
 
-    protected abstract Map<String, CommandStrategy> getCommands();
+    protected abstract Map<String, EachCommandHandler> getCommands();
 
     @Override
     protected final @NotNull Filter getFilter() {
@@ -56,33 +56,34 @@ public abstract class CommandHandler extends FilteredHandler {
     }
 
     private void processCommand(@NotNull RequestContext ctx, @NotNull String text) {
-        String[] cmdAndArgs = ctx.getRequest(As.text()).split(WHITESPACE, 2);
-        String command = formatCommand(cmdAndArgs[0]);
+        String[] cmdAndArgs = text.split(WHITESPACE, 2);
+        String command = cmdAndArgs[0];
         String[] args = cmdAndArgs.length > 1 ? cmdAndArgs[1].split(WHITESPACE) : ArrayUtils.EMPTY_STRING_ARRAY;
         parseCommand(command).accept(ctx, args);
     }
 
-    private CommandStrategy parseCommand(String text) {
-        return Optional.ofNullable(commands.initOrGet().get(formatCommand(text)))
-                .orElseThrow(() -> new CommandNotFoundException(text));
+    private @NotNull EachCommandHandler parseCommand(String rawCommand) {
+        String command = formatCommand(rawCommand);
+        return Optional.ofNullable(commands.get().get(command))
+                .orElseThrow(() -> new CommandNotFoundException(command));
     }
 
     @Contract(pure = true)
-    private static @NotNull String formatUsername(@NotNull String raw) {
-        raw = raw.trim().toLowerCase();
-        if (raw.startsWith(DOG)) return raw;
-        return DOG + raw;
+    private static @NotNull String formatUsername(@NotNull String rawUsername) {
+        rawUsername = rawUsername.trim().toLowerCase();
+        if (rawUsername.startsWith(DOG)) return rawUsername;
+        return DOG + rawUsername;
     }
 
     @Contract(pure = true)
-    private static @NotNull String formatCommand(@NotNull String raw) {
-        raw = raw.trim();
-        if (raw.contains(WHITESPACE)) {
+    private static @NotNull String formatCommand(@NotNull String rawCommand) {
+        rawCommand = rawCommand.trim();
+        if (rawCommand.contains(WHITESPACE)) {
             throw new IllegalArgumentException("Command should not contain whitespace");
         }
-        raw = raw.toLowerCase();
-        if (raw.startsWith(SLASH)) return raw;
-        return SLASH + raw;
+        rawCommand = rawCommand.toLowerCase();
+        if (rawCommand.startsWith(SLASH)) return rawCommand;
+        return SLASH + rawCommand;
     }
 
     private static class CommandNotFoundException extends RuntimeException {

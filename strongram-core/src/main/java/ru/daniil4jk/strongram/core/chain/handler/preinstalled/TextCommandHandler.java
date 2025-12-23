@@ -4,7 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
-import ru.daniil4jk.strongram.core.command.CommandStrategy;
+import ru.daniil4jk.strongram.core.command.EachCommandHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
@@ -18,21 +18,26 @@ public abstract class TextCommandHandler extends FilteredHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
 
-    private final Lazy<Map<String, CommandStrategy>> commands = new Lazy<>(this::getFormattedCommands);
+    private final Lazy<Map<String, EachCommandHandler>> commands = new Lazy<>(this::getFormattedCommands);
 
-    private Map<String, CommandStrategy> getFormattedCommands() {
+    private Map<String, EachCommandHandler> getFormattedCommands() {
         return getCommands().entrySet().stream()
                 .map(entry -> Map.entry(formatCommand(entry.getKey()), entry.getValue()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    protected abstract Map<String, CommandStrategy> getCommands();
+    protected abstract Map<String, EachCommandHandler> getCommands();
 
     @Override
     protected @NotNull Filter getFilter() {
         return Filters.hasMessageText().and(ctx ->
-                commands.initOrGet().containsKey(formatCommand(ctx.getRequest(As.text())))
+                isCommand(ctx.getRequest(As.messageText()))
         );
+    }
+
+    private boolean isCommand(@NotNull String text) {
+        String command = formatCommand(text.split(WHITESPACE, 2)[0]);
+        return commands.initOrGet().containsKey(command);
     }
 
     @Override
@@ -47,11 +52,11 @@ public abstract class TextCommandHandler extends FilteredHandler {
     }
 
     @Contract(pure = true)
-    private static @NotNull String formatCommand(@NotNull String raw) {
-        raw = raw.trim();
-        if (raw.contains(WHITESPACE)) {
+    private static @NotNull String formatCommand(@NotNull String rawCommand) {
+        rawCommand = rawCommand.trim();
+        if (rawCommand.contains(WHITESPACE)) {
             throw new IllegalArgumentException("Command should not contain whitespace");
         }
-        return raw.toLowerCase();
+        return rawCommand.toLowerCase();
     }
 }
