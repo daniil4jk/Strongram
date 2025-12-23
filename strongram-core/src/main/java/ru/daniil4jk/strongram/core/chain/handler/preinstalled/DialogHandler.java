@@ -5,21 +5,21 @@ import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 import ru.daniil4jk.strongram.core.dialog.Dialog;
-import ru.daniil4jk.strongram.core.dialog.DialogStorage;
-import ru.daniil4jk.strongram.core.dialog.MemoryDialogStorage;
+import ru.daniil4jk.strongram.core.dialog.DialogRepository;
+import ru.daniil4jk.strongram.core.dialog.InMemoryDialogRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DialogHandler extends BaseHandler {
     public static final String DIALOGS_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_dialogs";
-    private final DialogStorage activeDialogs;
+    private final DialogRepository activeDialogs;
 
     public DialogHandler() {
-        this(new MemoryDialogStorage());
+        this(new InMemoryDialogRepository());
     }
 
-    public DialogHandler(DialogStorage activeDialogs) {
+    public DialogHandler(DialogRepository activeDialogs) {
         this.activeDialogs = activeDialogs;
     }
 

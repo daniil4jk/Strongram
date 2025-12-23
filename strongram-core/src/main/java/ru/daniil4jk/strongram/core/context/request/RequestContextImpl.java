@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import ru.daniil4jk.strongram.core.bot.Bot;
+import ru.daniil4jk.strongram.core.context.storage.InMemoryStorage;
 import ru.daniil4jk.strongram.core.context.storage.Storage;
-import ru.daniil4jk.strongram.core.context.storage.StorageImpl;
 import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 import ru.daniil4jk.strongram.core.unboxer.finder.TelegramObjectFinderException;
 import ru.daniil4jk.strongram.core.unboxer.finder.uuid.TelegramUUIDFinderService;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class RequestContextImpl implements RequestContext {
     private final Lazy<List<PartialBotApiMethod<?>>> responses = new Lazy<>(ArrayList::new);
-    private final Storage storage = new StorageImpl();
+    private final Storage storage = new InMemoryStorage();
 
     private final Bot bot;
     private final Update update;

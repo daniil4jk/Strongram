@@ -1,17 +1,25 @@
 package ru.daniil4jk.strongram.core.context.dialog;
 
+import ru.daniil4jk.strongram.core.context.storage.InMemoryStorage;
 import ru.daniil4jk.strongram.core.context.storage.Storage;
-import ru.daniil4jk.strongram.core.context.storage.StorageImpl;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 public class DialogContextImpl<ENUM extends Enum<ENUM>> implements DialogContext<ENUM> {
-    private final Storage storage = new StorageImpl();
+    private final Storage storage;
     private final AtomicReference<ENUM> state;
     private volatile boolean stopped = false;
 
     public DialogContextImpl(ENUM initState) {
-        state = new AtomicReference<>(initState);
+        this(initState, null);
+    }
+
+    public DialogContextImpl(ENUM initState, Storage storage) {
+        this.state = new AtomicReference<>(initState);
+        if (storage == null) {
+            storage = new InMemoryStorage();
+        }
+        this.storage = storage;
     }
 
     @Override

@@ -1,29 +1,33 @@
 package ru.daniil4jk.strongram.core.dialog;
 
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
 import ru.daniil4jk.strongram.core.context.dialog.DialogContextImpl;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.context.storage.Storage;
 import ru.daniil4jk.strongram.core.dialog.part.DialogPart;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @ToString
 @EqualsAndHashCode
 public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
-    private final Map<ENUM, DialogPart<ENUM>> parts;
-    @Getter(AccessLevel.PROTECTED)
+    private final EnumMap<ENUM, DialogPart<ENUM>> parts;
     private final DialogContext<ENUM> dialogContext;
 
-    public DialogImpl(@NotNull ENUM initState, Map<ENUM, DialogPart<ENUM>> parts) {
-        this(initState);
+    private DialogImpl(@NotNull Class<ENUM> enumClass,
+                       @NotNull DialogContext<ENUM> ctx,
+                       @NotNull Map<ENUM, DialogPart<ENUM>> parts) {
+        this.dialogContext = ctx;
+
         parts.values().forEach(p -> p.injectDialogContext(dialogContext));
-        this.parts.putAll(parts);
+        this.parts = new EnumMap<>(parts);
     }
 
     public DialogImpl(@NotNull ENUM initState) {
@@ -44,7 +48,7 @@ public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     }
 
     @Override
-    public synchronized void accept(RequestContext ctx) {
+    public synchronized void accept(@NotNull RequestContext ctx) {
         check();
         getCurrentPart().accept(ctx);
     }
@@ -61,7 +65,7 @@ public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     }
 
     @Override
-    public boolean canAccept(RequestContext ctx) {
+    public boolean canAccept(@NotNull RequestContext ctx) {
         return getCurrentPart().canAccept(ctx);
     }
 
@@ -70,9 +74,53 @@ public class DialogImpl<ENUM extends Enum<ENUM>> implements Dialog {
     }
 
     private final Object lock = new Object();
+
     @Override
-    public Object getLock() {
+    public @NotNull Object getLock() {
         check();
         return lock;
+    }
+
+    @Contract(" -> new")
+    public static <ENUM extends Enum<ENUM>> @NotNull Builder<ENUM> builder() {
+        return new Builder<>();
+    }
+
+    @ToString
+    public static class Builder<ENUM extends Enum<ENUM>> {
+        private ENUM initState;
+        private Map<ENUM, DialogPart<ENUM>> parts = new HashMap<>();
+        private Storage storage;
+
+        public Builder<ENUM> initState(@NotNull ENUM initState) {
+            this.initState = initState;
+            return this;
+        }
+
+        public Builder<ENUM> part(ENUM state, DialogPart<ENUM> part) {
+            this.parts.put(state, part);
+            return this;
+        }
+
+        public Builder<ENUM> parts(Map<ENUM, DialogPart<ENUM>> parts) {
+            this.parts = parts;
+            return this;
+        }
+
+        public Builder<ENUM> storage(Storage storage) {
+            this.storage = storage;
+            return this;
+        }
+
+        public DialogImpl<ENUM> build() {
+            Objects.requireNonNull(
+                    initState,
+                    "initState cannot be null, because dialog cannot start without it"
+            );
+
+            DialogContext<ENUM> ctx = new DialogContextImpl<>(initState, storage);
+
+            return new DialogImpl<>(initState.getDeclaringClass(), ctx, parts);
+        }
     }
 }

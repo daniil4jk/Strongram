@@ -1,10 +1,11 @@
 package ru.daniil4jk.strongram.core.context.storage;
 
+import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.*;
 
-public class StorageImpl implements Storage {
+public class InMemoryStorage implements Storage {
     private final Lazy<Map<String, Object>> inherit = new Lazy<>(HashMap::new);
 
     @Override
@@ -48,13 +49,18 @@ public class StorageImpl implements Storage {
     }
 
     @Override
-    public <T> Collection<T> getCollection(Class<T> classOfReturnEntryValue, String key) {
+    public <T> @NotNull Collection<T> getCollection(Class<T> classOfReturnEntryValue, String key) {
         return getCollection(key);
     }
 
     @Override
+    public Map<String, Object> getAll() {
+        return inherit.get();
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
-    public <T> Collection<T> getCollection(String key) {
+    public <T> @NotNull Collection<T> getCollection(String key) {
         if (!inherit.isInitialized()) return List.of();
 
         Object value = inherit.get().get(key);

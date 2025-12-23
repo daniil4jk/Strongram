@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MemoryDialogStorage implements DialogStorage {
+public class InMemoryDialogRepository implements DialogRepository {
     private final Map<TelegramUUID, List<Dialog>> storage = new HashMap<>();
 
     @Override

@@ -25,6 +25,11 @@ public class RespondFactory {
                     .caption(text)
                     .chatId(uuid.getReplyChatId())
                     .build();
+            case Voice -> SendVoice.builder()
+                    .voice(new InputFile(file))
+                    .caption(text)
+                    .chatId(uuid.getReplyChatId())
+                    .build();
             case Document -> SendDocument.builder()
                     .document(new InputFile(file))
                     .caption(text)
