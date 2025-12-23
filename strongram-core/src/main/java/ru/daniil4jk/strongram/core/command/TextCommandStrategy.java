@@ -2,7 +2,7 @@ package ru.daniil4jk.strongram.core.command;
 
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-public interface CommandHandler extends BiConsumer<RequestContext, String[]> {
+public interface TextCommandStrategy extends Consumer<RequestContext> {
 }

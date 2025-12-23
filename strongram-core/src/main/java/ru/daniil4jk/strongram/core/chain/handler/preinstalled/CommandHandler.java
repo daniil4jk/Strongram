@@ -3,24 +3,27 @@ package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
-import ru.daniil4jk.strongram.core.command.CommandHandler;
+import ru.daniil4jk.strongram.core.command.CommandStrategy;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
 import ru.daniil4jk.strongram.core.unboxer.As;
+import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
 @NoArgsConstructor
-public abstract class MultiCommandHandler extends FilteredHandler {
+public abstract class CommandHandler extends FilteredHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
     private static final String DOG = "@";
     private static final String SLASH = "/";
 
-    protected abstract Map<String, CommandHandler> getCommands();
+    private final Lazy<Map<String, CommandStrategy>> commands = new Lazy<>(this::getCommands);
+
+    protected abstract Map<String, CommandStrategy> getCommands();
 
     @Override
     protected final @NotNull Filter getFilter() {
@@ -32,7 +35,6 @@ public abstract class MultiCommandHandler extends FilteredHandler {
         var username = formatUsername(ctx.getBot().getUsername());
         var msg = ctx.getRequest(As.message());
         var text = msg.getText();
-
 
         try {
             processCommand(ctx, text);
@@ -59,8 +61,8 @@ public abstract class MultiCommandHandler extends FilteredHandler {
         parseCommand(commandName).accept(ctx, args);
     }
 
-    private CommandHandler parseCommand(String text) {
-        return Optional.ofNullable(getCommands().get(formatCommand(text)))
+    private CommandStrategy parseCommand(String text) {
+        return Optional.ofNullable(commands.initOrGet().get(formatCommand(text)))
                 .orElseThrow(() -> new CommandNotFoundException(text));
     }
 

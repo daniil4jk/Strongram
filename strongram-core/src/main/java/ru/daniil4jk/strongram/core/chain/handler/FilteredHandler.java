@@ -16,5 +16,5 @@ public abstract class FilteredHandler extends BaseHandler {
 
     protected abstract @NotNull Filter getFilter();
 
-    protected abstract void processFiltered(RequestContext ctx);
+    protected abstract void processFiltered(@NotNull RequestContext ctx);
 }
