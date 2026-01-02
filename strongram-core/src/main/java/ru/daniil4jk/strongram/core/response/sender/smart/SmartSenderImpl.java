@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMe
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
-import ru.daniil4jk.strongram.core.response.entity.Response;
+import ru.daniil4jk.strongram.core.response.dto.Response;
 import ru.daniil4jk.strongram.core.response.sender.accumulating.AccumulatingSender;
 import ru.daniil4jk.strongram.core.util.LongMessage;
 

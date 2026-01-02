@@ -1,24 +1,30 @@
-package ru.daniil4jk.strongram.core.response.entity.forsomething;
+package ru.daniil4jk.strongram.core.response.dto.forsomething;
 
 import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
-import ru.daniil4jk.strongram.core.response.entity.SendFunction;
+import ru.daniil4jk.strongram.core.response.dto.SendFunction;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @ToString
 @EqualsAndHashCode
-@RequiredArgsConstructor
-public class ResponseForObject<Method extends PartialBotApiMethod<Object>, Object extends Serializable>
-        implements ResponseForSomething<Method, Object> {
+public class ResponseForList<Method extends PartialBotApiMethod<ArrayList<Object>>, Object extends Serializable>
+        implements ResponseForSomething<Method, ArrayList<Object>> {
+
     private final Method message;
-    private final SendFunction<Object> send;
-    private final CompletableFuture<Object> future = new CompletableFuture<>();
+    private final SendFunction<List<Object>> send;
+    private final CompletableFuture<ArrayList<Object>> future = new CompletableFuture<>();
+
+    public ResponseForList(Method message, SendFunction<List<Object>> send) {
+        this.message = message;
+        this.send = send;
+    }
 
     @Override
     public Method getEntry() {
@@ -29,6 +35,7 @@ public class ResponseForObject<Method extends PartialBotApiMethod<Object>, Objec
     public void sendUsing(TelegramClient client) {
         try {
             send.apply(client)
+                    .thenApply(ArrayList::new)
                     .thenAccept(future::complete)
                     .exceptionally(e -> {
                         future.completeExceptionally(e);
@@ -40,12 +47,12 @@ public class ResponseForObject<Method extends PartialBotApiMethod<Object>, Objec
     }
 
     @Override
-    public boolean isObjectRequired() {
-        return true;
+    public CompletableFuture<ArrayList<Object>> getObject() {
+        return future;
     }
 
     @Override
-    public CompletableFuture<Object> getObject() {
-        return future;
+    public boolean isObjectRequired() {
+        return true;
     }
 }

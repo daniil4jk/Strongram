@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.response.entity;
+package ru.daniil4jk.strongram.core.response.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

@@ -10,10 +10,10 @@ import org.telegram.telegrambots.meta.api.methods.stickers.*;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMedia;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import ru.daniil4jk.strongram.core.response.entity.ForgetResponse;
-import ru.daniil4jk.strongram.core.response.entity.Response;
-import ru.daniil4jk.strongram.core.response.entity.forsomething.ResponseForList;
-import ru.daniil4jk.strongram.core.response.entity.forsomething.ResponseForObject;
+import ru.daniil4jk.strongram.core.response.dto.ForgetResponse;
+import ru.daniil4jk.strongram.core.response.dto.Response;
+import ru.daniil4jk.strongram.core.response.dto.forsomething.ResponseForList;
+import ru.daniil4jk.strongram.core.response.dto.forsomething.ResponseForObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;

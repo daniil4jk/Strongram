@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.response.entity;
+package ru.daniil4jk.strongram.core.response.dto;
 
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.generics.TelegramClient;

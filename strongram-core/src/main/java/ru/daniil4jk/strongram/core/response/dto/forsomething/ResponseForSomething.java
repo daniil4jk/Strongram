@@ -1,7 +1,7 @@
-package ru.daniil4jk.strongram.core.response.entity.forsomething;
+package ru.daniil4jk.strongram.core.response.dto.forsomething;
 
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
-import ru.daniil4jk.strongram.core.response.entity.Response;
+import ru.daniil4jk.strongram.core.response.dto.Response;
 
 import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
