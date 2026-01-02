@@ -35,7 +35,13 @@ public class ResponseForList<Method extends PartialBotApiMethod<ArrayList<Object
     public void sendUsing(TelegramClient client) {
         try {
             send.apply(client)
-                    .thenApply(ArrayList::new)
+                    .thenApply(list -> {
+                        if (list instanceof ArrayList<Object> array) {
+                            return array;
+                        } else {
+                            return new ArrayList<>(list);
+                        }
+                    })
                     .thenAccept(future::complete)
                     .exceptionally(e -> {
                         future.completeExceptionally(e);
