@@ -23,7 +23,7 @@ public class DialogContextImpl<ENUM extends Enum<ENUM>> implements DialogContext
     }
 
     @Override
-    public Storage getStorage() {
+    public Storage getDialogScopeStorage() {
         return storage;
     }
 

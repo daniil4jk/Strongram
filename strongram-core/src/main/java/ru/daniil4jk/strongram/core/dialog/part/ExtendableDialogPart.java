@@ -36,7 +36,7 @@ public abstract class ExtendableDialogPart<ENUM extends Enum<ENUM>> implements D
 
     @Override
     public void sendNotification(RequestContext ctx) {
-        notificationManager.sendNotification(ctx, dCtx.getStorage());
+        notificationManager.sendNotification(ctx, dCtx.getDialogScopeStorage());
     }
 
     @Override
