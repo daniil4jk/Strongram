@@ -1,5 +1,7 @@
 package ru.daniil4jk.strongram.core.dialog;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 
 import java.util.ArrayList;
@@ -7,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ToString
+@EqualsAndHashCode
 public class InMemoryDialogRepository implements DialogRepository {
     private final Map<TelegramUUID, List<Dialog>> storage = new HashMap<>();
 

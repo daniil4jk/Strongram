@@ -1,9 +1,13 @@
 package ru.daniil4jk.strongram.core.util;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.function.Supplier;
 
+@ToString
+@EqualsAndHashCode
 public class Lazy<T> implements Supplier<T> {
     private final Supplier<T> creator;
     private volatile T value;

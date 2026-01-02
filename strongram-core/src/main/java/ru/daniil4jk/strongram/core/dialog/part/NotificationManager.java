@@ -1,10 +1,14 @@
 package ru.daniil4jk.strongram.core.dialog.part;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.context.storage.Storage;
 
 import java.util.function.BiConsumer;
 
+@ToString
+@EqualsAndHashCode
 public class NotificationManager<ENUM extends Enum<ENUM>> {
     private final BiConsumer<RequestContext, Storage> firstNotification;
     private final BiConsumer<RequestContext, Storage> repeatNotification;

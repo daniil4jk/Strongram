@@ -1,5 +1,7 @@
 package ru.daniil4jk.strongram.core.chain;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.daniil4jk.strongram.core.chain.handler.Handler;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.List;
  * handler in the sequence.
  * </p>
  */
+@ToString
+@EqualsAndHashCode
 public class Chain {
     private final List<Handler> chain = new ArrayList<>();
 

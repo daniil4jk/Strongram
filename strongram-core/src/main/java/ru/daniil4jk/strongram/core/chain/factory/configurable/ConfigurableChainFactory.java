@@ -1,7 +1,7 @@
-package ru.daniil4jk.strongram.core.chain.factory;
+package ru.daniil4jk.strongram.core.chain.factory.configurable;
 
 import ru.daniil4jk.strongram.core.chain.Chain;
-import ru.daniil4jk.strongram.core.chain.factory.configurable.ChainConfigurator;
+import ru.daniil4jk.strongram.core.chain.factory.ChainFactory;
 
 public class ConfigurableChainFactory implements ChainFactory {
     private static final ChainFactory DEFAULT_INTERNAL_FACTORY = Chain::new;

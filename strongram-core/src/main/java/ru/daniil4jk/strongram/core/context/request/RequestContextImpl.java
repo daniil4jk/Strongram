@@ -1,5 +1,7 @@
 package ru.daniil4jk.strongram.core.context.request;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.context.storage.InMemoryStorage;
@@ -10,6 +12,8 @@ import ru.daniil4jk.strongram.core.response.sender.smart.SmartSenderImpl;
 import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 import ru.daniil4jk.strongram.core.unboxer.finder.uuid.TelegramUUIDFinderService;
 
+@ToString
+@EqualsAndHashCode
 public class RequestContextImpl implements RequestContext {
     private final Storage storage = new InMemoryStorage();
     private final Bot bot;

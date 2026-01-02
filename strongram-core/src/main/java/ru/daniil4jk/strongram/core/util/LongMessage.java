@@ -1,10 +1,14 @@
 package ru.daniil4jk.strongram.core.util;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString
+@EqualsAndHashCode
 public class LongMessage {
     public static final String WORD_SEPARATOR = " ";
     public static final int MAX_MSG_SIZE = 4096;

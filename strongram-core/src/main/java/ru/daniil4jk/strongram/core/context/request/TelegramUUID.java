@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 
 /**
- * Immutable container for Telegram chat and user context.
+ * Immutable container for Telegram chat and user.
  * Used to determine the target chat ID for bot replies.
  */
 public record TelegramUUID(Chat chat, User user) {

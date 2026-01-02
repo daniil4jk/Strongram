@@ -1,10 +1,14 @@
 package ru.daniil4jk.strongram.core.context.storage;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.*;
 
+@ToString
+@EqualsAndHashCode
 public class InMemoryStorage implements Storage {
     private final Lazy<Map<String, Object>> inherit = new Lazy<>(HashMap::new);
 
