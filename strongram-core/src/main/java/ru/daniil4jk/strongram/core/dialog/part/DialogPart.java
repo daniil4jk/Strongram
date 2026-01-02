@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 public interface DialogPart<ENUM extends Enum<ENUM>> extends Consumer<RequestContext> {
 
     /**
-     * Called when entering this dialog state to send a prompt or message to the user.
+     * Called when entering this dialog state to sendUsing a prompt or message to the user.
      * For example: asking for input like "Please enter your delivery address".
      *
      * @param ctx The current request context containing info about the incoming update.

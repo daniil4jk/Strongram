@@ -33,7 +33,7 @@ public abstract class CommandHandler extends FilteredHandler {
 
     @Override
     protected final void processFiltered(@NotNull RequestContext ctx) {
-        var username = formatUsername(ctx.getBot().getUsername());
+        var username = formatUsername(ctx.getBotUsername());
         var msg = ctx.getRequest(As.message());
         var text = msg.getText();
 

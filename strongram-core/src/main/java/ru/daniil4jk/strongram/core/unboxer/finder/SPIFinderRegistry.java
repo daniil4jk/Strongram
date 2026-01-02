@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 public class SPIFinderRegistry {
     private static final SPIFinderRegistry me = new SPIFinderRegistry();
+    @SuppressWarnings("rawtypes")
     private static final ServiceLoader<Finder> loader = ServiceLoader.load(Finder.class);
 
     private SPIFinderRegistry() {

@@ -17,13 +17,13 @@ public class CannotProcessHandler extends BaseHandler {
     protected final void process(RequestContext ctx) {
         try {
             if (ctx.getUUID().chat().isUserChat()) {
-                ctx.respond(text);
+                ctx.getSender().send(text);
                 return;
             }
         } catch (Exception e) { /* предназначено не нам, игнорим */ }
         try {
             if (ctx.getRequest(As.messageText()) != null) {
-                ctx.respond(text);
+                ctx.getSender().send(text);
             }
         } catch (Exception e) { /* предназначено не нам, игнорим */ }
     }

@@ -48,7 +48,7 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
 
     @Override
     public void sendNotification(RequestContext ctx) {
-        notificationManager.sendNotification(ctx, dCtx.getStorage());
+        notificationManager.sendNotification(ctx, dCtx.getDialogScopeStorage());
     }
 
     @Override
@@ -97,8 +97,8 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
             return this;
         }
 
-        public Builder<ENUM> firstNotification(String string) {
-            this.firstNotification = (rCtx, dCtx) -> rCtx.respond(string);
+        public Builder<ENUM> firstNotification(String notification) {
+            this.firstNotification = (rCtx, dCtx) -> rCtx.getSender().send(notification);
             return this;
         }
 
@@ -112,8 +112,8 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
             return this;
         }
 
-        public Builder<ENUM> repeatNotification(String string) {
-            this.repeatNotification = (rCtx, dCtx) -> rCtx.respond(string);
+        public Builder<ENUM> repeatNotification(String notification) {
+            this.repeatNotification = (rCtx, dCtx) -> rCtx.getSender().send(notification);
             return this;
         }
 

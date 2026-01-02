@@ -23,7 +23,7 @@ public class ExceptionReportHandler extends BaseHandler {
         } catch (Exception e) {
             log.error("Произошла ошибка внутри цепочки", e);
             try {
-                ctx.respond(formatter.apply(e));
+                ctx.getSender().send(formatter.apply(e));
             } catch (Exception e2) { /* не можем отправить сообщение об ошибке, всё очень плохо */ }
         }
     }

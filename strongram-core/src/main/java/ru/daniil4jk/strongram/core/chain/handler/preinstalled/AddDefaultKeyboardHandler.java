@@ -29,7 +29,8 @@ public abstract class AddDefaultKeyboardHandler extends BaseHandler {
     protected final void process(RequestContext ctx) {
         processNext(ctx);
 
-        for (PartialBotApiMethod<?> msg : ctx.getResponses()) {
+        for (var resp : ctx.getSender().getQueuedMessages()) {
+            PartialBotApiMethod<?> msg = resp.getEntry();
             Class<?> key = msg.getClass();
 
             if (!methodsByClass.containsKey(key)) {

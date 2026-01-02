@@ -75,6 +75,6 @@ public class DialogHandler extends BaseHandler {
     }
 
     private @NotNull ArrayList<Dialog> getDialogsFromContext(@NotNull RequestContext ctx) {
-        return new ArrayList<>(ctx.getStorage().getCollection(DIALOGS_CONTEXT_FIELD_NAME));
+        return new ArrayList<>(ctx.getRequestScopeStorage().getCollection(DIALOGS_CONTEXT_FIELD_NAME));
     }
 }

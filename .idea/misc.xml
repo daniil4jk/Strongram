@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ConnektScriptState">
+    <option name="scriptFileState">
+      <list>
+        <ConnektScriptState>
+          <option name="fileUrl" value="file://$PROJECT_DIR$/strongram-core/src/main/java/ru/daniil4jk/strongram/core/response/entity/var.connekt.kts" />
+        </ConnektScriptState>
+      </list>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
