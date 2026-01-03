@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.response.sender.smart;
+package ru.daniil4jk.strongram.core.response.responder.smart;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 import ru.daniil4jk.strongram.core.response.dto.Response;
-import ru.daniil4jk.strongram.core.response.sender.accumulating.AccumulatingSender;
+import ru.daniil4jk.strongram.core.response.responder.accumulating.AccumulatorResponder;
 import ru.daniil4jk.strongram.core.util.LongMessage;
 
 import java.io.File;
@@ -25,11 +25,11 @@ import java.util.concurrent.CompletableFuture;
 
 @ToString
 @EqualsAndHashCode
-public class SmartSenderImpl implements SmartSender {
+public class SmartResponderImpl implements SmartResponder {
     private final TelegramUUID uuid;
-    private final AccumulatingSender inherit;
+    private final AccumulatorResponder inherit;
 
-    public SmartSenderImpl(TelegramUUID uuid, AccumulatingSender inherit) {
+    public SmartResponderImpl(TelegramUUID uuid, AccumulatorResponder inherit) {
         this.uuid = uuid;
         this.inherit = inherit;
     }

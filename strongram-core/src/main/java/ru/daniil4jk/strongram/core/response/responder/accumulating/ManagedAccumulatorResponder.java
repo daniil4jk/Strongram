@@ -1,10 +1,10 @@
-package ru.daniil4jk.strongram.core.response.sender.accumulating;
+package ru.daniil4jk.strongram.core.response.responder.accumulating;
 
 import ru.daniil4jk.strongram.core.response.dto.Response;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ManagedAccumulatingSender extends AccumulatingSender implements AutoCloseable {
+public class ManagedAccumulatorResponder extends AccumulatorResponder implements AutoCloseable {
     private final AtomicBoolean expired = new AtomicBoolean(false);
 
     @Override

@@ -98,7 +98,7 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
         }
 
         public Builder<ENUM> firstNotification(String notification) {
-            this.firstNotification = (rCtx, dCtx) -> rCtx.getSender().send(notification);
+            this.firstNotification = (rCtx, dCtx) -> rCtx.getResponder().send(notification);
             return this;
         }
 
@@ -113,7 +113,7 @@ public class BuildableDialogPart<ENUM extends Enum<ENUM>> implements DialogPart<
         }
 
         public Builder<ENUM> repeatNotification(String notification) {
-            this.repeatNotification = (rCtx, dCtx) -> rCtx.getSender().send(notification);
+            this.repeatNotification = (rCtx, dCtx) -> rCtx.getResponder().send(notification);
             return this;
         }
 

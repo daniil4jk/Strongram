@@ -28,12 +28,8 @@ public class ResponseForObject<Method extends PartialBotApiMethod<Object>, Objec
     @Override
     public void sendUsing(TelegramClient client) {
         try {
-            send.apply(client)
-                    .thenAccept(future::complete)
-                    .exceptionally(e -> {
-                        future.completeExceptionally(e);
-                        return null;
-                    });
+            Object result = send.apply(client);
+            future.complete(result);
         } catch (TelegramApiException e) {
             future.completeExceptionally(e);
         }

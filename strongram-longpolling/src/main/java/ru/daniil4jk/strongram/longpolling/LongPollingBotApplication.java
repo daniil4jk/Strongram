@@ -5,10 +5,11 @@ import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.BotSession;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.daniil4jk.strongram.longpolling.adapter.interfaces.HasLongPollingBot;
 
 public class LongPollingBotApplication extends TelegramBotsLongPollingApplication {
 
-    public BotSession registerBot(@NotNull HasBot adapter) throws TelegramApiException {
+    public BotSession registerBot(@NotNull HasLongPollingBot adapter) throws TelegramApiException {
         String token = adapter.getToken();
         BotSession session = super.registerBot(token, adapter);
         if (!adapter.hasClient()) {

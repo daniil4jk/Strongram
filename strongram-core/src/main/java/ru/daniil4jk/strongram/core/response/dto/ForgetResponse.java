@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @Slf4j
@@ -27,20 +28,10 @@ public class ForgetResponse<Method extends PartialBotApiMethod<?>> implements Re
     @Override
     public void sendUsing(TelegramClient client) {
         try {
-            var future = send.apply(client);
-            if (future != null) {
-                future.exceptionally(e -> {
-                    exceptionally(e);
-                    return null;
-                });
-            }
-        } catch (Exception e) {
-            exceptionally(e);
+            send.apply(client);
+        } catch (TelegramApiException e) {
+            log.warn("cannot send message", e);
         }
-    }
-
-    private void exceptionally(Throwable e) {
-        log.warn("cannot send message, because", e);
     }
 
     @Override

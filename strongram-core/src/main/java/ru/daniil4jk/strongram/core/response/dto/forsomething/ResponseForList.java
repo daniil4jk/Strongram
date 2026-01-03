@@ -34,19 +34,12 @@ public class ResponseForList<Method extends PartialBotApiMethod<ArrayList<Object
     @Override
     public void sendUsing(TelegramClient client) {
         try {
-            send.apply(client)
-                    .thenApply(list -> {
-                        if (list instanceof ArrayList<Object> array) {
-                            return array;
-                        } else {
-                            return new ArrayList<>(list);
-                        }
-                    })
-                    .thenAccept(future::complete)
-                    .exceptionally(e -> {
-                        future.completeExceptionally(e);
-                        return null;
-                    });
+            List<Object> list = send.apply(client);
+            if (list instanceof ArrayList<Object> arr) {
+                future.complete(arr);
+            } else {
+                future.complete(new ArrayList<>(list));
+            }
         } catch (TelegramApiException e) {
             future.completeExceptionally(e);
         }

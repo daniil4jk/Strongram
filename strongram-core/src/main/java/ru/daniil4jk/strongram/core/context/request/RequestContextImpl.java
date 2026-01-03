@@ -6,9 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.context.storage.InMemoryStorage;
 import ru.daniil4jk.strongram.core.context.storage.Storage;
-import ru.daniil4jk.strongram.core.response.sender.accumulating.AccumulatingSender;
-import ru.daniil4jk.strongram.core.response.sender.smart.SmartSender;
-import ru.daniil4jk.strongram.core.response.sender.smart.SmartSenderImpl;
+import ru.daniil4jk.strongram.core.response.responder.accumulating.AccumulatorResponder;
+import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponder;
+import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponderImpl;
 import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 import ru.daniil4jk.strongram.core.unboxer.finder.uuid.TelegramUUIDFinderService;
 
@@ -19,13 +19,13 @@ public class RequestContextImpl implements RequestContext {
     private final Bot bot;
     private final Update update;
     private final TelegramUUID uuid;
-    private final SmartSender sender;
+    private final SmartResponder sender;
 
-    public RequestContextImpl(Bot bot, Update update, AccumulatingSender baseSender) {
+    public RequestContextImpl(Bot bot, Update update, AccumulatorResponder responder) {
         this.bot = bot;
         this.update = update;
         this.uuid = TelegramUUIDFinderService.getInstance().findIn(update);
-        this.sender = new SmartSenderImpl(uuid, baseSender);
+        this.sender = new SmartResponderImpl(uuid, responder);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class RequestContextImpl implements RequestContext {
     }
 
     @Override
-    public SmartSender getSender() {
+    public SmartResponder getResponder() {
         return sender;
     }
 }

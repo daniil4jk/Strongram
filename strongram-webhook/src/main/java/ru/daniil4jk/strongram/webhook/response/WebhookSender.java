@@ -1,30 +1,32 @@
 package ru.daniil4jk.strongram.webhook.response;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
+import ru.daniil4jk.strongram.core.response.client.provider.TelegramClientProvider;
 import ru.daniil4jk.strongram.core.response.dto.Response;
-import ru.daniil4jk.strongram.core.response.sender.accumulating.ManagedAccumulatingSender;
+import ru.daniil4jk.strongram.core.response.sender.Sender;
 
-public class WebhookSender extends ManagedAccumulatingSender {
-    public BotApiMethod<?> sendAll(TelegramClient client) {
-        if (responseCanBeReturned()) {
-            return (BotApiMethod<?>) getQueuedMessages().get(0);
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+
+public class WebhookSender extends Sender {
+    public WebhookSender(ScheduledExecutorService executor, TelegramClientProvider client) {
+        super(executor, client);
+    }
+
+    public BotApiMethod<?> sendAllWebhook(List<Response<?>> messages) {
+        if (responseCanBeReturned(messages)) {
+            return (BotApiMethod<?>) messages.get(0).getEntry();
         }
-        sendUsingClient(client);
+        sendAllUsingClient(messages);
         return null;
     }
 
-    private boolean responseCanBeReturned() {
-        if (getQueuedMessages().size() != 1) return false;
-        var response = getQueuedMessages().get(0);
+    private static boolean responseCanBeReturned(@NotNull List<Response<?>> list) {
+        if (list.size() != 1) return false;
+        var response = list.get(0);
         return response.getEntry() instanceof BotApiMethod<?> &&
                 !response.isObjectRequired();
-    }
-
-    private void sendUsingClient(TelegramClient client) {
-        for (Response<?> entity : getQueuedMessages()) {
-            entity.sendUsing(client);
-        }
     }
 }
 

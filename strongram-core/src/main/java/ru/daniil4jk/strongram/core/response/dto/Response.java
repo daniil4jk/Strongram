@@ -9,4 +9,6 @@ public interface Response<Method extends PartialBotApiMethod<?>> {
     void sendUsing(TelegramClient client);
 
     boolean isObjectRequired();
+
+    //todo add thenSend
 }

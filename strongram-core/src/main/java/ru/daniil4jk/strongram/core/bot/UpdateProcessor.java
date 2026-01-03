@@ -1,9 +1,10 @@
 package ru.daniil4jk.strongram.core.bot;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.daniil4jk.strongram.core.response.sender.accumulating.AccumulatingSender;
+import ru.daniil4jk.strongram.core.response.dto.Response;
 
-import java.util.function.BiConsumer;
+import java.util.List;
+import java.util.function.Function;
 
-public interface UpdateProcessor extends BiConsumer<Update, AccumulatingSender> {
+public interface UpdateProcessor extends Function<Update, List<Response<?>>> {
 }

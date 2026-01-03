@@ -29,7 +29,7 @@ public abstract class AddDefaultKeyboardHandler extends BaseHandler {
     protected final void process(RequestContext ctx) {
         processNext(ctx);
 
-        for (var resp : ctx.getSender().getQueuedMessages()) {
+        for (var resp : ctx.getResponder().getQueuedMessages()) {
             PartialBotApiMethod<?> msg = resp.getEntry();
             Class<?> key = msg.getClass();
 
@@ -114,7 +114,7 @@ public abstract class AddDefaultKeyboardHandler extends BaseHandler {
     }
 
     private record Methods(
-            boolean invokable, //todo refactor to this
+            boolean invokable,
             MethodHandle get,
             MethodHandle set
     ) {}
