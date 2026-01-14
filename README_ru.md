@@ -1,29 +1,29 @@
 # Strongram
 
-A modern Java framework for developing Telegram bots with support for dialogs, commands, filters, and a flexible message handling system.
+Современный Java-фреймворк для разработки Telegram ботов с поддержкой диалогов, команд, фильтров и гибкой системы обработки сообщений.
 
-## 📖 Description
+## 📖 Описание
 
-Strongram is a powerful and flexible framework for creating Telegram bots in Java. Some of its features:
+Strongram — это мощный и гибкий фреймворк для создания Telegram ботов на Java. Некоторые его возможности:
 
-- **Modular architecture** - connect only the components you need (Long Polling or Webhook)
-- **Handler chains** - Chain of Responsibility pattern for flexible incoming message processing
-- **Command handling** - support for commands in private messages, group chats, and inline mode
-- **Dialog system** - easily create multi-step dialogs with state machines
-- **Filters** - declarative message filtering before they reach your logic
-- **Interactive keyboards** - declare keyboard button logic directly in the buttons
-- **Smart Responder** - send messages in one line, without manually creating telegram-specific DTOs
+- **Модульная архитектура** - подключайте только нужные компоненты (Long Polling или Webhook)
+- **Цепочки обработчиков** - паттерн Chain of Responsibility для гибкой обработки входящих сообщений
+- **Обработка команд** - поддержка команд в личных сообщениях, групповых чатах и inline mode
+- **Система диалогов** - легко создавайте многошаговые диалоги с машиной состояний
+- **Фильтры** - декларативная фильтрация сообщений перед их попаданием в вашу логику
+- **Интерактивные клавиатуры** - объявляйте логику кнопок клавиатуры прямо в кнопках
+- **Smart Responder** - отправка сообщений в одну строку, без ручного создания telegram-специфичных DTO
 
-### 📋 Requirements
+### 📋 Требования
 
-- Java 17 or higher
+- Java 17 или выше
 - Maven 3.6+
 
-### 📦 Installation
+### 📦 Установка
 
-Add the dependency to your `pom.xml`:
+Добавьте зависимость в ваш `pom.xml`:
 
-#### For Long Polling
+#### Для Long Polling
 
 ```xml
 <dependency>
@@ -33,7 +33,7 @@ Add the dependency to your `pom.xml`:
 </dependency>
 ```
 
-#### For Webhook
+#### Для Webhook
 
 ```xml
 <dependency>
@@ -43,11 +43,11 @@ Add the dependency to your `pom.xml`:
 </dependency>
 ```
 
-## 🚀 Usage Examples
+## 🚀 Примеры использования
 
-### 1. Echo Bot — "Hello World" Application
+### 1. Echo Bot — "Hello World" приложение
 
-A simple bot that repeats all text messages from users.
+Простейший бот, который повторяет все текстовые сообщения пользователя.
 
 ```java
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
@@ -86,14 +86,14 @@ public class EchoHandler extends FilteredHandler {
     @Override
     protected void processFiltered(RequestContext ctx) {
         String text = ctx.getRequest(As.messageText());
-        ctx.getResponder().send("You said: " + text);
+        ctx.getResponder().send("Вы сказали: " + text);
     }
 }
 ```
 
-### 2. Bot with Command Handler
+### 2. Бот с обработчиком команд
 
-A bot with several commands to demonstrate basic functionality.
+Бот с несколькими командами для демонстрации базового функционала.
 
 ```java
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
@@ -132,14 +132,14 @@ public class CommandHandler extends TextCommandHandler {
     }
     
     private void handleHello(RequestContext ctx, String[] args) {
-        ctx.getResponder().send("Hello");
+        ctx.getResponder().send("Привет");
     }
 }
 ```
 
-### 3. Error Handling and Unknown Commands
+### 3. Обработка ошибок и неизвестных команд
 
-An example with exception handling and situations when a command is not recognized.
+Пример с обработкой исключений и ситуаций, когда команда не распознана.
 
 ```java
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
@@ -157,13 +157,13 @@ public class RobustBot extends ChainedBot {
     @Override
     protected ChainFactory getChain() {
         return new ConfigurableChainFactory(chain -> {
-            // Built-in exception handler (should be first to catch exceptions via try-catch)
+            // Встроенный обработчик исключений (должен быть первым чтобы через try-catch ловить исключения)
             chain.add(new ExceptionReportHandler(ExceptionFormatters.debug()));
             
-            // Our command handler
+            // Наш обработчик команд
             chain.add(new CommandHandler());
             
-            // Built-in unknown command handler (should be last)
+            // Встроенный обработчик неизвестных команд (должен быть последним)
             chain.add(new MyCannotProcessHandler());
         });
     }
@@ -189,18 +189,18 @@ public class CommandHandler extends TextCommandHandler {
     }
     
     private void handleStart(RequestContext ctx, String[] args) {
-        ctx.getResponder().send("Bot started! Try /error");
+        ctx.getResponder().send("Бот запущен! Попробуйте /error");
     }
     
     private void handleError(RequestContext ctx, String[] args) {
-        throw new RuntimeException("This is a test error to demonstrate exception handling!");
+        throw new RuntimeException("Это тестовая ошибка для демонстрации обработки исключений!");
     }
 }
 ```
 
-### 4. Sending Files
+### 4. Отправка файлов
 
-Example of sending different types of files.
+Пример отправки различных типов файлов.
 
 ```java
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
@@ -246,7 +246,7 @@ public class FileCommandHandler extends TextCommandHandler {
         File file = new File("path/to/photo.jpg");
         
         ctx.getResponder().send(
-            "📷 Here's your photo!",
+            "📷 Вот ваша фотография!",
             file,
             SmartResponder.MediaType.Photo
         );
@@ -256,7 +256,7 @@ public class FileCommandHandler extends TextCommandHandler {
         File file = new File("path/to/document.pdf");
         
         ctx.getResponder().send(
-            "📄 Here's your document!",
+            "📄 Вот ваш документ!",
             file,
             SmartResponder.MediaType.Document
         );
@@ -266,7 +266,7 @@ public class FileCommandHandler extends TextCommandHandler {
         File file = new File("path/to/video.mp4");
         
         ctx.getResponder().send(
-            "🎥 Here's your video!",
+            "🎥 Вот ваше видео!",
             file,
             SmartResponder.MediaType.Video
         );
@@ -274,9 +274,9 @@ public class FileCommandHandler extends TextCommandHandler {
 }
 ```
 
-### 5. Basic Dialog
+### 5. Базовый диалог
 
-A comprehensive example of a multi-step dialog using the Builder pattern.
+Комплексный пример многошагового диалога с использованием Builder паттерна.
 
 ```java
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
@@ -325,10 +325,10 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
             .part(PizzaState.ASK_NAME, BuildableDialogPart.<PizzaState>builder()
                 .filter(Filters.hasMessageText())
                 .firstNotification((context, storage) -> {
-                    context.getResponder().send("Enter pizza name");
+                    context.getResponder().send("Введите название пиццы");
                 })
-                .repeatNotification((context, storage) -> {
-                    context.getResponder().send("You're still in the dialog, enter pizza name");
+                .firstNotification((context, storage) -> {
+                    context.getResponder().send("Вы всё еще в диалоге, введите название пиццы");
                 })
                 .handler((context, dCtx) -> {
                     String pizzaName = context.getRequest(As.messageText());
@@ -339,20 +339,20 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
             .part(PizzaState.ASK_ADDRESS, BuildableDialogPart.<PizzaState>builder()
                 .filter(Filters.hasMessageText())
                 .firstNotification((context, storage) -> {
-                    context.getResponder().send("Now specify the delivery address");
+                    context.getResponder().send("Теперь укажите адрес доставки");
                 })
-                .repeatNotification((context, storage) -> {
-                    context.getResponder().send("You're still in the dialog, specify the delivery address");
+                .firstNotification((context, storage) -> {
+                    context.getResponder().send("Вы всё еще в диалоге, укажите адрес доставки");
                 })
                 .handler((context, dCtx) -> {
                     String address = context.getRequest(As.messageText());
                     String pizzaName = dCtx.getDialogScopeStorage().get("pizzaName");
                     
                     context.getResponder().send("""
-                        Order accepted!
+                        Заказ принят!
                         
-                        Pizza: %s
-                        Address: %s
+                        Пицца: %s
+                        Адрес: %s
                         """.formatted(pizzaName, address));
                     
                     dCtx.stop();
@@ -370,10 +370,10 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
 }
 ```
 
-### 6. Dialog with Complex Logic (ExtendableDialogPart)
+### 6. Dialog со сложной логикой (ExtendableDialogPart)
 
-Extending the previous example with a payment system.
-First, let's copy the `PizzaOrderCommandHandler` class, adding one step: PaymentDialogPart
+Расширяем предыдущий пример системой оплаты.
+Для начала скопируем класс `PizzaOrderCommandHandler`, добавив в него один шаг: PaymentDialogPart
 
 ```java
 import ru.daniil4jk.strongram.core.command.EachCommandHandler;
@@ -400,10 +400,10 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
             .part(PizzaState.ASK_NAME, BuildableDialogPart.<PizzaState>builder()
                 .filter(Filters.hasMessageText())
                 .firstNotification((context, storage) -> {
-                    context.getResponder().send("Enter pizza name");
+                    context.getResponder().send("Введите название пиццы");
                 })
-                .repeatNotification((context, storage) -> {
-                    context.getResponder().send("You're still in the dialog, enter pizza name");
+                .firstNotification((context, storage) -> {
+                    context.getResponder().send("Вы всё еще в диалоге, введите название пиццы");
                 })
                 .handler((context, dCtx) -> {
                     String pizzaName = context.getRequest(As.messageText());
@@ -414,10 +414,10 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
             .part(PizzaState.ASK_ADDRESS, BuildableDialogPart.<PizzaState>builder()
                 .filter(Filters.hasMessageText())
                 .firstNotification((context, storage) -> {
-                    context.getResponder().send("Now specify the delivery address");
+                    context.getResponder().send("Теперь укажите адрес доставки");
                 })
-                .repeatNotification((context, storage) -> {
-                    context.getResponder().send("You're still in the dialog, specify the delivery address");
+                .firstNotification((context, storage) -> {
+                    context.getResponder().send("Вы всё еще в диалоге, укажите адрес доставки");
                 })
                 .handler((context, dCtx) -> {
                     String address = context.getRequest(As.messageText());
@@ -468,13 +468,13 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
         String address = storage.get("address");
         
         ctx.getResponder().send("""
-            Order Confirmation
+            Подтверждение заказа
             
-            Pizza: %s
-            Address: %s
-            Cost: 500 rub.
+            Пицца: %s
+            Адрес: %s
+            Стоимость: 500 руб.
             
-            Send "pay" to confirm the order:
+            Отправьте "оплатить" для подтверждения заказа:
             """.formatted(pizzaName, address));
     }
     
@@ -487,36 +487,37 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
     protected void accept(RequestContext ctx, DialogContext<PizzaState> dCtx) {
         String message = ctx.getRequest(As.messageText()).toLowerCase();
         
-        if (message.contains("cancel")) {
-            ctx.getResponder().send("Order cancelled. Use /order for a new order.");
-            dCtx.stop();
-            return;
-        }
+         if (message.contains("отмена")) {
+             ctx.getResponder().send("Заказ отменен. Используйте /order для нового заказа.");
+             dCtx.stop();
+             return;
+         }
+         if (!message.contains("оплатить")) {
+             ctx.getResponder().send("Отправьте 'оплатить' для подтверждения или 'отмена' для отмены.");
+         }
         
-        if (!message.contains("pay")) {
-            ctx.getResponder().send("Send 'pay' to confirm or 'cancel' to cancel.");
-            return;
-        }
         
-        String pizzaName = dCtx.getDialogScopeStorage().get("pizzaName");
-        String address = dCtx.getDialogScopeStorage().get("address");
-        Long userId = ctx.getUUID().getUserId();
-        
-        // Process payment through service
-        try {
-            paymentService.processPayment(userId, 500);
-            ctx.getResponder().send("""
-                Payment successful!
-                
-                Pizza: %s
-                Address: %s
-                Expect delivery
-                """.formatted(pizzaName, address));
+            String pizzaName = dCtx.getDialogScopeStorage().get("pizzaName");
+            String address = dCtx.getDialogScopeStorage().get("address");
+            Long userId = ctx.getUUID().getUserId();
             
-            dCtx.stop();
-        } catch (PaymentException e) {
-            ctx.getResponder().send("Payment error %s! Try again or write \"cancel\" to cancel the order.".formatted(e.getMessage()));
-        }
+            // Обработка оплаты через сервис
+            boolean paymentSuccess = ;
+            
+            try {
+                paymentService.processPayment(userId, 500);
+                ctx.getResponder().send("""
+                    Оплата прошла успешно!
+                    
+                    Пицца: %s
+                    Адрес: %s
+                    Ожидайте доставку
+                    """.formatted(pizzaName, address));
+                
+                dCtx.stop();
+            } catch (PaymentException e) {
+                ctx.getResponder().send("Ошибка оплаты %s! Попробуйте еще раз или напишите \"отмена\" для отмены заказа.".formatted(e.getMessage()));
+            }
     }
 }
 ```
@@ -525,16 +526,16 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
 public interface PaymentService {
     
     /**
-     * Simulating payment processing
-     * In a real application, this will be an integration with a payment system
+     * Имитация обработки платежа
+     * В реальном приложении здесь будет интеграция с платежной системой
      */
     public void processPayment(Long userId, int amount) throws PaymentException;
 }
 ```
 
-### 7. Registering Bot as Long Polling
+### 7. Регистрация бота как Long Polling
 
-Running a bot using Long Polling to receive updates.
+Запуск бота с использованием Long Polling для получения обновлений.
 
 ```java
 import ru.daniil4jk.strongram.longpolling.LongPollingBotApplication;
@@ -558,7 +559,7 @@ public class Main {
 }
 ```
 
-Example with multiple bots:
+Пример с несколькими ботами:
 
 ```java
 import ru.daniil4jk.strongram.longpolling.LongPollingBotApplication;
@@ -592,9 +593,9 @@ public class Main {
 }
 ```
 
-### 8. Registering Bot as Webhook
+### 8. Регистрация бота как Webhook
 
-Running a bot using Webhook to receive updates.
+Запуск бота с использованием Webhook для получения обновлений.
 
 ```java
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -622,66 +623,60 @@ public class Main {
 }
 ```
 
-## 🤝 Contributing to the Project
+## 🤝 Вклад в проект
 
-We welcome your participation in developing Strongram! Here's how you can help:
+Мы рады вашему участию в развитии Strongram! Вот как вы можете помочь:
 
-### How to Contribute
+### Как внести изменения
 
-1. **Fork the project** - Create your own copy of the repository
-2. **Create a branch** - `git checkout -b feature/AmazingFeature`
-3. **Make changes** - Implement your functionality
-4. **Commit** - `git commit -m 'Add some AmazingFeature'`
-5. **Push to branch** - `git push origin feature/AmazingFeature`
-6. **Open a Pull Request** - Describe your changes
+1. **Fork проекта** - Создайте свою копию репозитория
+2. **Создайте ветку** - `git checkout -b feature/AmazingFeature`
+3. **Внесите изменения** - Реализуйте свою функциональность
+4. **Закоммитьте** - `git commit -m 'Add some AmazingFeature'`
+5. **Push в ветку** - `git push origin feature/AmazingFeature`
+6. **Откройте Pull Request** - Опишите свои изменения
 
-### Contribution Rules
+### Правила участия
 
-- Follow the existing code style
-- Add tests for new functionality
-- Update documentation when necessary
-- Write clear commit messages
-- One Pull Request = one feature/fix
+- Следуйте существующему стилю кода
+- Добавляйте тесты для новой функциональности
+- Обновляйте документацию при необходимости
+- Пишите понятные commit сообщения
+- Один Pull Request = одна функция/исправление
 
-### What Can Be Improved
+### Что можно улучшить
 
-- 📝 Documentation and examples
-- 🐛 Bug fixes
-- ✨ New features
-- 🎨 API improvements
-- 🔧 Performance optimization
-- 🧪 Writing tests
+- 📝 Документация и примеры
+- 🐛 Исправление ошибок
+- ✨ Новые функции
+- 🎨 Улучшение API
+- 🔧 Оптимизация производительности
+- 🧪 Написание тестов
 
-### Bug Reports
+### Сообщения об ошибках
 
-When creating an issue, specify:
-- Strongram version
-- Java version
-- Problem description
-- Steps to reproduce
-- Expected behavior
-- Actual behavior
+При создании issue укажите:
+- Версию Strongram
+- Версию Java
+- Описание проблемы
+- Шаги для воспроизведения
+- Ожидаемое поведение
+- Фактическое поведение
 
-## 📄 License
+## Благодарности:
 
-The project is distributed under the **MIT License**.
+- **[TelegramBots Java Library](https://github.com/rubenlagus/TelegramBots)** - отличная базовая библиотека для работы с Telegram Bot API от [@rubenlagus](https://github.com/rubenlagus)
+- **[Project Lombok](https://projectlombok.org/)** - уменьшение boilerplate кода
+- **[Apache Log4j](https://logging.apache.org/log4j/)** - система логирования
+- Все [контрибьюторы](https://github.com/daniil4jk/strongram/graphs/contributors) проекта
 
-## 🙏 Acknowledgments
-
-Special thanks to the following projects:
-
-- **[TelegramBots Java Library](https://github.com/rubenlagus/TelegramBots)** - excellent base library for working with Telegram Bot API by [@rubenlagus](https://github.com/rubenlagus)
-- **[Project Lombok](https://projectlombok.org/)** - reducing boilerplate code
-- **[Apache Log4j](https://logging.apache.org/log4j/)** - logging system
-- All [contributors](https://github.com/daniil4jk/strongram/graphs/contributors) to the project
-
-Thank you to everyone who uses Strongram and shares feedback!
+Спасибо всем, кто использует Strongram и делится обратной связью!
 
 ---
 
 <div align="center">
 
-⭐ **If you like Strongram, give it a star on GitHub!** ⭐
+⭐ **Если вам нравится Strongram, поставьте звезду на GitHub!** ⭐
 
 Made with ❤️ by [daniil4jk](https://github.com/daniil4jk)
 
