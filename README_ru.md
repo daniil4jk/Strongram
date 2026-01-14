@@ -164,7 +164,7 @@ public class RobustBot extends ChainedBot {
             chain.add(new CommandHandler());
             
             // Встроенный обработчик неизвестных команд (должен быть последним)
-            chain.add(new MyCannotProcessHandler());
+            chain.add(new CannotProcessHandler());
         });
     }
 }

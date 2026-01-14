@@ -164,7 +164,7 @@ public class RobustBot extends ChainedBot {
             chain.add(new CommandHandler());
             
             // Built-in unknown command handler (should be last)
-            chain.add(new MyCannotProcessHandler());
+            chain.add(new CannotProcessHandler());
         });
     }
 }
