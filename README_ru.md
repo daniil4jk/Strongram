@@ -327,7 +327,7 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
                 .firstNotification((context, storage) -> {
                     context.getResponder().send("Введите название пиццы");
                 })
-                .firstNotification((context, storage) -> {
+                .repeatNotification((context, storage) -> {
                     context.getResponder().send("Вы всё еще в диалоге, введите название пиццы");
                 })
                 .handler((context, dCtx) -> {
@@ -341,7 +341,7 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
                 .firstNotification((context, storage) -> {
                     context.getResponder().send("Теперь укажите адрес доставки");
                 })
-                .firstNotification((context, storage) -> {
+                .repeatNotification((context, storage) -> {
                     context.getResponder().send("Вы всё еще в диалоге, укажите адрес доставки");
                 })
                 .handler((context, dCtx) -> {
@@ -402,7 +402,7 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
                 .firstNotification((context, storage) -> {
                     context.getResponder().send("Введите название пиццы");
                 })
-                .firstNotification((context, storage) -> {
+                .repeatNotification((context, storage) -> {
                     context.getResponder().send("Вы всё еще в диалоге, введите название пиццы");
                 })
                 .handler((context, dCtx) -> {
@@ -416,7 +416,7 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
                 .firstNotification((context, storage) -> {
                     context.getResponder().send("Теперь укажите адрес доставки");
                 })
-                .firstNotification((context, storage) -> {
+                .repeatNotification((context, storage) -> {
                     context.getResponder().send("Вы всё еще в диалоге, укажите адрес доставки");
                 })
                 .handler((context, dCtx) -> {
