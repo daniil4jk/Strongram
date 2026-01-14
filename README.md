@@ -93,7 +93,7 @@ public class EchoHandler extends FilteredHandler {
 
 ### 2. Bot with Command Handler
 
-A bot with several commands to demonstrate basic functionality.
+A bot with command '/hello'
 
 ```java
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
@@ -122,12 +122,12 @@ import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
 
 import java.util.Map;
 
-public class CommandHandler extends TextCommandHandler {
+public class CommandHandler extends CommandHandler {
     
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
         return Map.of(
-            "hello", this::handleHello,
+            "hello", this::handleHello
         );
     }
     
@@ -177,7 +177,7 @@ import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
 
 import java.util.Map;
 
-public class CommandHandler extends TextCommandHandler {
+public class CommandHandler extends CommandHandler {
     
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
@@ -231,7 +231,7 @@ import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponder;
 import java.io.File;
 import java.util.Map;
 
-public class FileCommandHandler extends TextCommandHandler {
+public class FileCommandHandler extends CommandHandler {
     
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
@@ -439,6 +439,7 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
 }
 ```
 
+New payment logic:
 ```java
 import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
@@ -469,11 +470,9 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
         
         ctx.getResponder().send("""
             Order Confirmation
-            
             Pizza: %s
             Address: %s
             Cost: 500 rub.
-            
             Send "pay" to confirm the order:
             """.formatted(pizzaName, address));
     }
@@ -502,16 +501,17 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
         String address = dCtx.getDialogScopeStorage().get("address");
         Long userId = ctx.getUUID().getUserId();
         
-        // Process payment through service
         try {
+            // Process payment through service
             paymentService.processPayment(userId, 500);
+            
             ctx.getResponder().send("""
                 Payment successful!
-                
                 Pizza: %s
                 Address: %s
                 Expect delivery
-                """.formatted(pizzaName, address));
+                """.formatted(pizzaName, address)
+            );
             
             dCtx.stop();
         } catch (PaymentException e) {
@@ -528,7 +528,7 @@ public interface PaymentService {
      * Simulating payment processing
      * In a real application, this will be an integration with a payment system
      */
-    public void processPayment(Long userId, int amount) throws PaymentException;
+    void processPayment(Long userId, int amount) throws PaymentException;
 }
 ```
 

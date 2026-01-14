@@ -93,7 +93,7 @@ public class EchoHandler extends FilteredHandler {
 
 ### 2. Бот с обработчиком команд
 
-Бот с несколькими командами для демонстрации базового функционала.
+Бот с командой '/hello'
 
 ```java
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
@@ -122,12 +122,12 @@ import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
 
 import java.util.Map;
 
-public class CommandHandler extends TextCommandHandler {
+public class CommandHandler extends СommandHandler {
     
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
         return Map.of(
-            "hello", this::handleHello,
+            "hello", this::handleHello
         );
     }
     
@@ -177,7 +177,7 @@ import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
 
 import java.util.Map;
 
-public class CommandHandler extends TextCommandHandler {
+public class CommandHandler extends CommandHandler {
     
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
@@ -231,7 +231,7 @@ import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponder;
 import java.io.File;
 import java.util.Map;
 
-public class FileCommandHandler extends TextCommandHandler {
+public class FileCommandHandler extends CommandHandler {
     
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
@@ -439,6 +439,7 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
 }
 ```
 
+А теперь добавим объемную логику оплаты используя DialogPart реализуемый через наследование
 ```java
 import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
@@ -469,11 +470,9 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
         
         ctx.getResponder().send("""
             Подтверждение заказа
-            
             Пицца: %s
             Адрес: %s
             Стоимость: 500 руб.
-            
             Отправьте "оплатить" для подтверждения заказа:
             """.formatted(pizzaName, address));
     }
@@ -486,38 +485,37 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
     @Override
     protected void accept(RequestContext ctx, DialogContext<PizzaState> dCtx) {
         String message = ctx.getRequest(As.messageText()).toLowerCase();
-        
-         if (message.contains("отмена")) {
-             ctx.getResponder().send("Заказ отменен. Используйте /order для нового заказа.");
-             dCtx.stop();
-             return;
-         }
-         if (!message.contains("оплатить")) {
-             ctx.getResponder().send("Отправьте 'оплатить' для подтверждения или 'отмена' для отмены.");
-         }
-        
-        
-            String pizzaName = dCtx.getDialogScopeStorage().get("pizzaName");
-            String address = dCtx.getDialogScopeStorage().get("address");
-            Long userId = ctx.getUUID().getUserId();
-            
+
+        if (message.contains("отмена")) {
+            ctx.getResponder().send("Заказ отменен. Используйте /order для нового заказа.");
+            dCtx.stop();
+            return;
+        }
+        if (!message.contains("оплатить")) {
+            ctx.getResponder().send("Отправьте 'оплатить' для подтверждения или 'отмена' для отмены.");
+        }
+
+
+        String pizzaName = dCtx.getDialogScopeStorage().get("pizzaName");
+        String address = dCtx.getDialogScopeStorage().get("address");
+        Long userId = ctx.getUUID().getUserId();
+
+        try {
             // Обработка оплаты через сервис
-            boolean paymentSuccess = ;
-            
-            try {
-                paymentService.processPayment(userId, 500);
-                ctx.getResponder().send("""
+            paymentService.processPayment(userId, 500);
+
+            ctx.getResponder().send("""
                     Оплата прошла успешно!
-                    
                     Пицца: %s
                     Адрес: %s
                     Ожидайте доставку
-                    """.formatted(pizzaName, address));
-                
-                dCtx.stop();
-            } catch (PaymentException e) {
-                ctx.getResponder().send("Ошибка оплаты %s! Попробуйте еще раз или напишите \"отмена\" для отмены заказа.".formatted(e.getMessage()));
-            }
+                    """.formatted(pizzaName, address)
+            );
+
+            dCtx.stop();
+        } catch (PaymentException e) {
+            ctx.getResponder().send("Ошибка оплаты %s! Попробуйте еще раз или напишите \"отмена\" для отмены заказа.".formatted(e.getMessage()));
+        }
     }
 }
 ```
@@ -529,7 +527,7 @@ public interface PaymentService {
      * Имитация обработки платежа
      * В реальном приложении здесь будет интеграция с платежной системой
      */
-    public void processPayment(Long userId, int amount) throws PaymentException;
+    void processPayment(Long userId, int amount) throws PaymentException;
 }
 ```
 
