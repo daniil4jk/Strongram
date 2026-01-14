@@ -460,7 +460,12 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
     
     @Override
     protected Filter getFilter() {
-        return Filters.hasMessageText();
+        return Filters.hasMessageText().and(
+                Filters.iterateOr(
+                        Filters.equalsIgnoreCase(),
+                        "оплатить", "отмена"
+                )
+        );
     }
     
     @Override
@@ -490,9 +495,6 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
             ctx.getResponder().send("Заказ отменен. Используйте /order для нового заказа.");
             dCtx.stop();
             return;
-        }
-        if (!message.contains("оплатить")) {
-            ctx.getResponder().send("Отправьте 'оплатить' для подтверждения или 'отмена' для отмены.");
         }
 
 

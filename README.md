@@ -460,7 +460,12 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
     
     @Override
     protected Filter getFilter() {
-        return Filters.hasMessageText();
+        return Filters.hasMessageText().and(
+                Filters.iterateOr(
+                        Filters.equalsIgnoreCase(),
+                        "pay", "cancel"
+                )
+        );
     }
     
     @Override
@@ -489,11 +494,6 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
         if (message.contains("cancel")) {
             ctx.getResponder().send("Order cancelled. Use /order for a new order.");
             dCtx.stop();
-            return;
-        }
-        
-        if (!message.contains("pay")) {
-            ctx.getResponder().send("Send 'pay' to confirm or 'cancel' to cancel.");
             return;
         }
         
