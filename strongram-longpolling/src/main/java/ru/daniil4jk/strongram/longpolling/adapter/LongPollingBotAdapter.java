@@ -8,10 +8,10 @@ import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.response.client.provider.MutableTelegramClientProvider;
 import ru.daniil4jk.strongram.core.response.client.provider.TelegramClientProvider;
 import ru.daniil4jk.strongram.core.response.sender.Sender;
+import ru.daniil4jk.strongram.core.util.DefaultExecutor;
 import ru.daniil4jk.strongram.longpolling.adapter.interfaces.HasLongPollingBot;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Slf4j
 public class LongPollingBotAdapter implements HasLongPollingBot {
@@ -21,14 +21,10 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
 
     @Getter
     private final String token;
-
     private final Bot bot;
-    private final Sender sender;
 
     public LongPollingBotAdapter(String token, Bot bot) {
-        this.token = token;
-        this.bot = bot;
-        this.sender = new Sender(Executors.newCachedThreadPool(), this);
+        this(token, DefaultExecutor.initOrGet(), bot);
     }
 
     public LongPollingBotAdapter(
@@ -38,13 +34,18 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
     ) {
         this.token = token;
         this.bot = bot;
-        this.sender = new Sender(sendExecutor, provider);
+
+        setBotCallback(sendExecutor);
+    }
+
+    private void setBotCallback(ExecutorService sendExecutor) {
+        Sender sender = new Sender(sendExecutor, provider);
+        bot.setDefaultCallback(sender::sendAllUsingClient);
     }
 
     public void consumeSingle(Update update) {
         try {
-            var responses = bot.apply(update);
-            sender.sendAllUsingClient(responses);
+            bot.accept(update);
         } catch (Exception e) {
             log.error(
                 "Error occurred while longpolling bot processing update",

@@ -1,7 +1,5 @@
 package ru.daniil4jk.strongram.core.message.streamable;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 

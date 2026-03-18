@@ -12,21 +12,19 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMe
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
-import ru.daniil4jk.strongram.core.response.dto.Response;
-import ru.daniil4jk.strongram.core.response.responder.accumulating.AccumulatorResponder;
+import ru.daniil4jk.strongram.core.response.responder.accumulator.AccumulatorResponder;
 import ru.daniil4jk.strongram.core.util.message.LongMessage;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @ToString
 @EqualsAndHashCode
-public class SmartResponderImpl implements SmartResponder {
+public class SmartResponderImpl implements SmartResponder, AutoCloseable {
     private final TelegramUUID uuid;
     private final AccumulatorResponder inherit;
 
@@ -346,7 +344,7 @@ public class SmartResponderImpl implements SmartResponder {
     }
 
     @Override
-    public List<Response<?>> getQueuedMessages() {
-        return inherit.getQueuedMessages();
+    public void close() {
+        inherit.close();
     }
 }

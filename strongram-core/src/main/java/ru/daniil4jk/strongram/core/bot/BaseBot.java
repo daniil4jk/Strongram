@@ -2,8 +2,11 @@ package ru.daniil4jk.strongram.core.bot;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.daniil4jk.strongram.core.response.sender.ResponseSink;
 
 @Getter
 @Slf4j
@@ -15,6 +18,9 @@ public abstract class BaseBot implements Bot {
 
     @Getter
     private final String username;
+    @Setter
+    @Getter
+    private ResponseSink defaultCallback;
 
     public BaseBot(String username) {
         this.username = formatUsername(username);

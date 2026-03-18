@@ -2,13 +2,12 @@ package ru.daniil4jk.strongram.core.response.responder.smart;
 
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.response.responder.Responder;
-import ru.daniil4jk.strongram.core.response.responder.accumulating.Accumulator;
 
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public interface SmartResponder extends Responder, Accumulator {
+public interface SmartResponder extends Responder, AutoCloseable {
     void send(String text);
 
     void send(String text, File file, MediaType type);
@@ -24,4 +23,7 @@ public interface SmartResponder extends Responder, Accumulator {
         Voice,
         Document
     }
+
+    @Override
+    void close();
 }
