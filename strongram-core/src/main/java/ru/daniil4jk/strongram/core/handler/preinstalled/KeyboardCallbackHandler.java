@@ -1,13 +1,13 @@
-package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
+package ru.daniil4jk.strongram.core.handler.preinstalled;
 
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
+import ru.daniil4jk.strongram.core.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.keyboard.InteractiveKeyboardHolder;
 import ru.daniil4jk.strongram.core.keyboard.button.InteractiveButton;
 import ru.daniil4jk.strongram.core.unboxer.As;

@@ -3,9 +3,9 @@ package ru.daniil4jk.strongram.core.bot;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.chain.factory.ChainFactory;
-import ru.daniil4jk.strongram.core.chain.handler.Handler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContextImpl;
+import ru.daniil4jk.strongram.core.handler.Handler;
 import ru.daniil4jk.strongram.core.response.dto.Response;
 import ru.daniil4jk.strongram.core.response.responder.accumulating.ManagedAccumulatorResponder;
 import ru.daniil4jk.strongram.core.util.Lazy;
@@ -26,6 +26,7 @@ public abstract class ChainedBot extends BaseBot {
         try (var responder = new ManagedAccumulatorResponder()) {
             RequestContext ctx = new RequestContextImpl(this, update, responder);
             chain.initOrGet().accept(ctx);
+            responder.close();
             return responder.getQueuedMessages();
         } catch (Exception e) {
             log.error("Error occurred while chain processing update", e);

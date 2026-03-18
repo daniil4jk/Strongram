@@ -13,9 +13,9 @@ public interface SmartResponder extends Responder, Accumulator {
 
     void send(String text, File file, MediaType type);
 
-    List<CompletableFuture<Message>> sendForObject(String text);
+    CompletableFuture<List<Message>> sendForObject(String text);
 
-    List<CompletableFuture<Message>> sendForObject(String text, File file, MediaType type);
+    CompletableFuture<List<Message>> sendForObject(String text, File file, MediaType type);
 
     enum MediaType {
         Photo,

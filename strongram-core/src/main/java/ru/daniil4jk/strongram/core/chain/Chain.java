@@ -2,7 +2,7 @@ package ru.daniil4jk.strongram.core.chain;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import ru.daniil4jk.strongram.core.chain.handler.Handler;
+import ru.daniil4jk.strongram.core.handler.Handler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,6 +22,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class Chain {
+
     private final List<Handler> chain = new ArrayList<>();
 
     /**
@@ -61,11 +62,19 @@ public class Chain {
         return this;
     }
 
-    private void addConditionalInternal(int padding, Class<? extends Handler> finding, Handler toAdd) {
+    private void addConditionalInternal(
+        int padding,
+        Class<? extends Handler> finding,
+        Handler toAdd
+    ) {
         int i = 0;
-        for (Iterator<Handler> iterator = chain.iterator(); iterator.hasNext(); i++) {
+        for (
+            Iterator<Handler> iterator = chain.iterator();
+            iterator.hasNext();
+            i++
+        ) {
             Handler exist = iterator.next();
-            if (exist.getClass().isInstance(finding)) {
+            if (finding.isInstance(exist)) {
                 chain.add(i + padding, toAdd);
                 break;
             }

@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.chain.handler;
+package ru.daniil4jk.strongram.core.handler;
 
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;

@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 import ru.daniil4jk.strongram.core.response.dto.Response;
 import ru.daniil4jk.strongram.core.response.responder.accumulating.AccumulatorResponder;
-import ru.daniil4jk.strongram.core.util.LongMessage;
+import ru.daniil4jk.strongram.core.util.message.LongMessage;
 
 import java.io.File;
 import java.io.Serializable;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @ToString
 @EqualsAndHashCode
@@ -44,15 +45,15 @@ public class SmartResponderImpl implements SmartResponder {
     }
 
     @Override
-    public List<CompletableFuture<Message>> sendForObject(String text) {
+    public CompletableFuture<List<Message>> sendForObject(String text) {
         List<String> messageTexts = new LongMessage(text).asLegalLengthMessageList();
-        List<CompletableFuture<Message>> responses = new ArrayList<>(messageTexts.size());
 
-        for (String part : messageTexts) {
-            responses.add(sendForObjectSingle(part));
-        }
-
-        return Collections.unmodifiableList(responses);
+        return CompletableFuture.supplyAsync(() ->
+                messageTexts.stream()
+                        .map(this::sendForObjectSingle)
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toList())
+        );
     }
 
     private void sendSingle(String text) {
@@ -84,18 +85,22 @@ public class SmartResponderImpl implements SmartResponder {
     }
 
     @Override
-    public List<CompletableFuture<Message>> sendForObject(String text, File file, MediaType type) {
+    public CompletableFuture<List<Message>> sendForObject(String text, File file, MediaType type) {
         List<String> messageTexts = new LongMessage(text).asLegalLengthMessageList();
         List<CompletableFuture<Message>> responses = new ArrayList<>(messageTexts.size());
 
         var first = sendForObjectSingle(messageTexts.remove(0), file, type);
         responses.add(first);
 
-        for (String part : messageTexts) {
-            responses.add(sendForObjectSingle(part));
-        }
+        messageTexts.stream()
+                .map(this::sendForObjectSingle)
+                .forEach(responses::add);
 
-        return Collections.unmodifiableList(responses);
+        return CompletableFuture.supplyAsync(() ->
+                responses.stream()
+                        .map(CompletableFuture::join)
+                        .collect(Collectors.toList())
+        );
     }
 
     private void sendSingle(String text, File file, MediaType type) {

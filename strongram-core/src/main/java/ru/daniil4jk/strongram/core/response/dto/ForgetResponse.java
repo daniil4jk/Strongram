@@ -10,7 +10,10 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Slf4j
 @ToString
 @EqualsAndHashCode
-public class ForgetResponse<Method extends PartialBotApiMethod<?>> implements Response<Method> {
+public class ForgetResponse<
+    Method extends PartialBotApiMethod<?>
+> implements Response<Method> {
+
     private final Method message;
     private final SendFunction<?> send;
 
@@ -37,5 +40,20 @@ public class ForgetResponse<Method extends PartialBotApiMethod<?>> implements Re
     @Override
     public boolean isObjectRequired() {
         return false;
+    }
+
+    @Override
+    public String getChatId() {
+        try {
+            var method = message.getClass().getMethod("getChatId");
+            var chatId = method.invoke(message);
+            return chatId != null ? chatId.toString() : "unknown";
+        } catch (Exception e) {
+            log.warn(
+                "Cannot extract chatId from message: {}",
+                message.getClass().getSimpleName()
+            );
+            return "unknown";
+        }
     }
 }

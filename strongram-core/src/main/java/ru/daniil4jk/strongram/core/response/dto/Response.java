@@ -10,5 +10,7 @@ public interface Response<Method extends PartialBotApiMethod<?>> {
 
     boolean isObjectRequired();
 
+    String getChatId();
+
     //todo add thenSend
 }

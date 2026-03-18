@@ -1,38 +1,37 @@
-package ru.daniil4jk.strongram.core.util;
+package ru.daniil4jk.strongram.core.util.message;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
-@EqualsAndHashCode
-public class LongMessage {
+@RequiredArgsConstructor
+class Splitter {
     public static final String WORD_SEPARATOR = " ";
     public static final int MAX_MSG_SIZE = 4096;
+    
+    private final String originalMessage;
 
-    private List<String> messages;
-    private StringBuilder currentMessage = new StringBuilder();;
+    @Getter
+    private List<String> splat;
+    private StringBuilder currentMessage = new StringBuilder();
 
-    public LongMessage(String originalMessage) {
-        split(originalMessage);
-    }
-
-    private void split(@NotNull String originalMessage) {
+    public void split() {
         if (originalMessage.length() <= MAX_MSG_SIZE) {
-            messages = List.of(originalMessage);
+            splat = List.of(originalMessage);
             return;
         }
-
-        messages = new ArrayList<>();
+        
         String[] words = originalMessage.split(WORD_SEPARATOR);
 
+        splat = new ArrayList<>();
         for (String word : words) {
             if (word.length() > MAX_MSG_SIZE) {
                 for (int i = 0; i < word.length(); i += MAX_MSG_SIZE) {
-                    exchangeBuilders();
+                    if (!currentMessage.isEmpty()) {
+                        exchangeBuilders();
+                    }
                     currentMessage.append(
                             word,
                             i,
@@ -50,11 +49,7 @@ public class LongMessage {
     }
 
     private void exchangeBuilders() {
-        messages.add(currentMessage.toString().trim());
+        splat.add(currentMessage.toString().trim());
         currentMessage = new StringBuilder();
-    }
-
-    public List<String> asLegalLengthMessageList() {
-        return messages;
     }
 }

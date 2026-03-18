@@ -2,6 +2,7 @@ package ru.daniil4jk.strongram.core.response.dto.forsomething;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -12,14 +13,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @ToString
 @EqualsAndHashCode
-public class ResponseForList<Method extends PartialBotApiMethod<ArrayList<Object>>, Object extends Serializable>
-        implements ResponseForSomething<Method, ArrayList<Object>> {
+public class ResponseForList<
+    Method extends PartialBotApiMethod<ArrayList<Object>>,
+    Object extends Serializable
+> implements ResponseForSomething<Method, ArrayList<Object>> {
 
     private final Method message;
     private final SendFunction<List<Object>> send;
-    private final CompletableFuture<ArrayList<Object>> future = new CompletableFuture<>();
+    private final CompletableFuture<ArrayList<Object>> future =
+        new CompletableFuture<>();
 
     public ResponseForList(Method message, SendFunction<List<Object>> send) {
         this.message = message;
@@ -53,5 +58,20 @@ public class ResponseForList<Method extends PartialBotApiMethod<ArrayList<Object
     @Override
     public boolean isObjectRequired() {
         return true;
+    }
+
+    @Override
+    public String getChatId() {
+        try {
+            var method = message.getClass().getMethod("getChatId");
+            var chatId = method.invoke(message);
+            return chatId != null ? chatId.toString() : "unknown";
+        } catch (Exception e) {
+            log.warn(
+                "Cannot extract chatId from message: {}",
+                message.getClass().getSimpleName()
+            );
+            return "unknown";
+        }
     }
 }

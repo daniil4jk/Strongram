@@ -1,11 +1,11 @@
-package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
+package ru.daniil4jk.strongram.core.handler.preinstalled;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import ru.daniil4jk.strongram.core.chain.handler.BaseHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
+import ru.daniil4jk.strongram.core.handler.BaseHandler;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

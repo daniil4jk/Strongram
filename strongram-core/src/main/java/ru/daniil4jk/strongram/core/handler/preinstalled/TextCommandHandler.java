@@ -1,13 +1,13 @@
-package ru.daniil4jk.strongram.core.chain.handler.preinstalled;
+package ru.daniil4jk.strongram.core.handler.preinstalled;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.command.EachCommandHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
+import ru.daniil4jk.strongram.core.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.unboxer.As;
 import ru.daniil4jk.strongram.core.util.Lazy;
 

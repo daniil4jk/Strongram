@@ -1,9 +1,9 @@
 package ru.daniil4jk.strongram.core.dialog;
 
 import org.jetbrains.annotations.NotNull;
-import ru.daniil4jk.strongram.core.chain.handler.preinstalled.DialogHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.dialog.part.DialogPart;
+import ru.daniil4jk.strongram.core.handler.preinstalled.DialogHandler;
 
 import java.util.function.Consumer;
 
