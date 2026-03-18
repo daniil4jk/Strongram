@@ -22,6 +22,7 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
     @Getter
     private final String token;
     private final Bot bot;
+    private final Sender sender;
 
     public LongPollingBotAdapter(String token, Bot bot) {
         this(token, DefaultExecutor.initOrGet(), bot);
@@ -34,18 +35,18 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
     ) {
         this.token = token;
         this.bot = bot;
+        this.sender = new Sender(sendExecutor, provider);
 
-        setBotCallback(sendExecutor);
+        setBotCallback();
     }
 
-    private void setBotCallback(ExecutorService sendExecutor) {
-        Sender sender = new Sender(sendExecutor, provider);
+    private void setBotCallback() {
         bot.setDefaultCallback(sender::sendAllUsingClient);
     }
 
     public void consumeSingle(Update update) {
         try {
-            bot.accept(update);
+            bot.accept(update, null);
         } catch (Exception e) {
             log.error(
                 "Error occurred while longpolling bot processing update",
