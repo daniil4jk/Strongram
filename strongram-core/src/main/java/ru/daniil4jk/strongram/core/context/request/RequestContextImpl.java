@@ -23,12 +23,14 @@ public class RequestContextImpl implements RequestContext {
     private final Update update;
     private final TelegramUUID uuid;
     private final SmartResponderFactory responderFactory;
+    private final SmartResponder responder;
 
     public RequestContextImpl(Bot bot, Update update, ResponserFactory responserFactory) {
         this.bot = bot;
         this.update = update;
         this.uuid = TelegramUUIDFinderService.getInstance().findIn(update);
         this.responderFactory = new SmartResponderFactoryImpl(responserFactory, uuid);
+        this.responder = this.responderFactory.createSmart();
     }
 
     @Override
@@ -57,19 +59,12 @@ public class RequestContextImpl implements RequestContext {
     }
 
     @Override
-    public void respond(Consumer<SmartResponder> function) {
-        try (var responder = responderFactory.createSmart()) {
-            function.accept(responder);
-        }
-    }
-
-    @Override
     public SmartResponder getResponder() {
-        return responderFactory.createSmart();
+        return responder;
     }
 
     @Override
-    public SmartResponderFactory getResponderFactory() {
+    public SmartResponderFactory getBotResponderFactory() {
         return responderFactory;
     }
 }

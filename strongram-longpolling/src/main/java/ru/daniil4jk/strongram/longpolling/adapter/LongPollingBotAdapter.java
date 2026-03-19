@@ -44,14 +44,14 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
     }
 
     private void setBotCallback() {
-        bot.setDefaultCallback(sender::sendAllUsingClient);
+        bot.setDefaultCallback(sender::sendUsingClient);
     }
 
     public void consumeSingle(Update update) {
         try {
-            List<Response<?>> result = new ArrayList<>();
-            bot.accept(update, result::addAll);
-            sender.sendAllUsingClient(result);
+            List<Response<?>> collector = new ArrayList<>();
+            bot.accept(update, collector::add);
+            sender.sendAllUsingClient(collector);
         } catch (Exception e) {
             log.error(
                 "Error occurred while longpolling bot processing update",

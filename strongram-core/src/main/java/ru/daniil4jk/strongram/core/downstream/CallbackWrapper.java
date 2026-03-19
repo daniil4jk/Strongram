@@ -22,13 +22,11 @@ public class CallbackWrapper {
 
     public ResponseSink wrap(RequestContext ctx, ResponseSink toBot) {
         Optional<RequestContext> ctxOptional = Optional.ofNullable(ctx);
-        return responses -> {
-            for (Response<?> r : responses) {
-                for (DownstreamHandler h : downstreamChain.initOrGet()) {
-                    h.accept(ctxOptional, r.getEntry());
-                }
+        return r -> {
+            for (DownstreamHandler h : downstreamChain.initOrGet()) {
+                h.accept(ctxOptional, r.getEntry());
             }
-            toBot.accept(responses);
+            toBot.accept(r);
         };
     }
 }

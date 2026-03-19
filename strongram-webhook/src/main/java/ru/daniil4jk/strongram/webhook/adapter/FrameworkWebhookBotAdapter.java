@@ -15,6 +15,7 @@ import ru.daniil4jk.strongram.core.response.dto.Response;
 import ru.daniil4jk.strongram.webhook.AddressUtils;
 import ru.daniil4jk.strongram.webhook.WebhookSender;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -72,7 +73,7 @@ public class FrameworkWebhookBotAdapter {
     }
 
     private void setBotCallback() {
-        bot.setDefaultCallback(sender::sendAllUsingClient);
+        bot.setDefaultCallback(sender::sendUsingClient);
     }
 
     public void register() throws TelegramApiException {
@@ -80,9 +81,9 @@ public class FrameworkWebhookBotAdapter {
     }
 
     public BotApiMethod<?> consumeUpdate(Update update) {
-        List<Response<?>>[] holder = new List[1];
-        bot.accept(update, r -> holder[0] = r);
-        return sender.sendAllWebhook(holder[0]);
+        List<Response<?>> collector = new ArrayList<>();
+        bot.accept(update, collector::add);
+        return sender.sendAllWebhook(collector);
     }
 
     public void unregister() throws TelegramApiException {

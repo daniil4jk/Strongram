@@ -19,9 +19,7 @@ public interface RequestContext {
 
     String getBotUsername();
 
-    void respond(Consumer<SmartResponder> function);
-
     SmartResponder getResponder();
 
-    SmartResponderFactory getResponderFactory();
+    SmartResponderFactory getBotResponderFactory();
 }

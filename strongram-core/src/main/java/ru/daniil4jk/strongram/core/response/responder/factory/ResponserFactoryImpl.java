@@ -1,6 +1,6 @@
 package ru.daniil4jk.strongram.core.response.responder.factory;
 
-import ru.daniil4jk.strongram.core.response.responder.accumulator.AccumulatorResponder;
+import ru.daniil4jk.strongram.core.response.responder.sink.SinkResponder;
 import ru.daniil4jk.strongram.core.response.sender.ResponseSink;
 
 public class ResponserFactoryImpl implements ResponserFactory {
@@ -26,7 +26,7 @@ public class ResponserFactoryImpl implements ResponserFactory {
     }
 
     @Override
-    public AccumulatorResponder create() {
-        return new AccumulatorResponder(getCurrentCallback());
+    public SinkResponder create() {
+        return new SinkResponder(getCurrentCallback());
     }
 }

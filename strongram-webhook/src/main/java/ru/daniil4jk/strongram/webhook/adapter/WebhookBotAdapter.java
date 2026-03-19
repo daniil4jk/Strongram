@@ -90,7 +90,7 @@ public class WebhookBotAdapter implements TelegramWebhookBot, TelegramClientProv
     }
 
     private void setBotCallback() {
-        bot.setDefaultCallback(sender::sendAllUsingClient);
+        bot.setDefaultCallback(sender::sendUsingClient);
     }
 
     @Override
@@ -114,9 +114,9 @@ public class WebhookBotAdapter implements TelegramWebhookBot, TelegramClientProv
     @Override
     public BotApiMethod<?> consumeUpdate(Update update) {
         try {
-            List<Response<?>> result = new ArrayList<>();
-            bot.accept(update, result::addAll);
-            return sender.sendAllWebhook(result);
+            List<Response<?>> collector = new ArrayList<>();
+            bot.accept(update, collector::add);
+            return sender.sendAllWebhook(collector);
         } catch (Exception e) {
             log.error("Error occurred while webhook bot processing update", e);
             return null;

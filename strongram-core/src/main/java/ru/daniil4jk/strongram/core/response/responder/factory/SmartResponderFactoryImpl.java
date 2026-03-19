@@ -2,7 +2,7 @@ package ru.daniil4jk.strongram.core.response.responder.factory;
 
 import lombok.RequiredArgsConstructor;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
-import ru.daniil4jk.strongram.core.response.responder.accumulator.AccumulatorResponder;
+import ru.daniil4jk.strongram.core.response.responder.sink.SinkResponder;
 import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponder;
 import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponderImpl;
 import ru.daniil4jk.strongram.core.response.sender.ResponseSink;
@@ -28,7 +28,7 @@ public class SmartResponderFactoryImpl implements SmartResponderFactory {
     }
 
     @Override
-    public AccumulatorResponder create() {
+    public SinkResponder create() {
         return inherit.create();
     }
 

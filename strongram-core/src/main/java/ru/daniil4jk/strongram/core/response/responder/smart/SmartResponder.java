@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public interface SmartResponder extends Responder, AutoCloseable {
+public interface SmartResponder extends Responder {
     void send(String text);
 
     void send(String text, File file, MediaType type);
@@ -31,7 +31,4 @@ public interface SmartResponder extends Responder, AutoCloseable {
         Voice,
         Document
     }
-
-    @Override
-    void close();
 }

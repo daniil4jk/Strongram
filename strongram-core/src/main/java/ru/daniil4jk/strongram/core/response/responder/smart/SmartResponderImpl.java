@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageMe
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
-import ru.daniil4jk.strongram.core.response.responder.accumulator.AccumulatorResponder;
+import ru.daniil4jk.strongram.core.response.responder.sink.SinkResponder;
 import ru.daniil4jk.strongram.core.util.message.LongMessage;
 
 import java.io.File;
@@ -25,11 +25,11 @@ import java.util.stream.Collectors;
 
 @ToString
 @EqualsAndHashCode
-public class SmartResponderImpl implements SmartResponder, AutoCloseable {
+public class SmartResponderImpl implements SmartResponder {
     private final TelegramUUID uuid;
-    private final AccumulatorResponder inherit;
+    private final SinkResponder inherit;
 
-    public SmartResponderImpl(TelegramUUID uuid, AccumulatorResponder inherit) {
+    public SmartResponderImpl(TelegramUUID uuid, SinkResponder inherit) {
         this.uuid = uuid;
         this.inherit = inherit;
     }
@@ -366,10 +366,5 @@ public class SmartResponderImpl implements SmartResponder, AutoCloseable {
     @Override
     public CompletableFuture<Serializable> sendForObject(EditMessageMedia response) {
         return inherit.sendForObject(response);
-    }
-
-    @Override
-    public void close() {
-        inherit.close();
     }
 }

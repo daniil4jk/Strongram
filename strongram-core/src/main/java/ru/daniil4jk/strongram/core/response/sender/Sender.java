@@ -19,6 +19,10 @@ public class Sender {
         this.client = client;
     }
 
+    public void sendUsingClient(@NotNull Response<?> message) {
+        executor.execute(() -> sendSingleMessage(message, 1, 1));
+    }
+
     public void sendAllUsingClient(@NotNull List<Response<?>> messages) {
         if (messages.isEmpty()) {
             return;
