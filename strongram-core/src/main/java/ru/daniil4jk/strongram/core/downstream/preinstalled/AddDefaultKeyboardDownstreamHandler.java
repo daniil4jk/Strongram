@@ -1,5 +1,6 @@
 package ru.daniil4jk.strongram.core.downstream.preinstalled;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod;
@@ -13,9 +14,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Slf4j
-public abstract class AddDefaultKeyboardDownstreamHandler extends BaseDownstreamHandler {
+@RequiredArgsConstructor
+public class AddDefaultKeyboardDownstreamHandler extends BaseDownstreamHandler {
     public static final Class<ReplyKeyboard> REPLY_KEYBOARD_CLASS = ReplyKeyboard.class;
     private static final String GET_METHOD_NAME_PART = "get";
     private static final String SET_METHOD_NAME_PART = "set";
@@ -23,7 +26,11 @@ public abstract class AddDefaultKeyboardDownstreamHandler extends BaseDownstream
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
     private static final Map<Class<?>, Methods> methodsByClass = new HashMap<>();
 
-    protected abstract ReplyKeyboard getDefaultKeyboard(Optional<RequestContext> ctx);
+    private final Function<Optional<RequestContext>, ReplyKeyboard> getDefaultKeyboardFunction;
+
+    public AddDefaultKeyboardDownstreamHandler(ReplyKeyboard defaultKeyboard) {
+        this(notUsedContext -> defaultKeyboard);
+    }
 
     @Override
     protected void process(Optional<RequestContext> ctx, PartialBotApiMethod<?> msg) {
@@ -41,7 +48,7 @@ public abstract class AddDefaultKeyboardDownstreamHandler extends BaseDownstream
 
         try {
             if (methods.get.invoke(msg) == null) {
-                methods.set.invoke(msg, getDefaultKeyboard(ctx));
+                methods.set.invoke(msg, getDefaultKeyboardFunction.apply(ctx));
             }
         } catch (Throwable e) {
             log.warn("Cannot set default keyboard", e);

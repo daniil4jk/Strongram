@@ -1,6 +1,7 @@
 package ru.daniil4jk.strongram.core.bot;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.chain.factory.ChainFactory;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
@@ -23,7 +24,7 @@ public abstract class ChainedBot extends BaseBot {
     private final CallbackWrapper downstreamWrapper = new CallbackWrapper(this::getDownstreamChain);
     private final ResponserFactory responserFactory = new ResponserFactoryImpl();
 
-    public ChainedBot(String username) {
+    public ChainedBot(@Nullable String username) {
         super(username);
     }
 
@@ -52,5 +53,5 @@ public abstract class ChainedBot extends BaseBot {
     }
     protected abstract ChainFactory<UpstreamHandler> getUpstreamChain();
 
-    protected abstract List<DownstreamHandler> getDownstreamChain();
+    protected abstract DownstreamHandler[] getDownstreamChain();
 }

@@ -10,9 +10,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class CallbackWrapper {
-    private final Lazy<List<DownstreamHandler>> downstreamChain;
+    private final Lazy<DownstreamHandler[]> downstreamChain;
 
-    public CallbackWrapper(Supplier<List<DownstreamHandler>> downstreamCreateMethod) {
+    public CallbackWrapper(Supplier<DownstreamHandler[]> downstreamCreateMethod) {
         downstreamChain = new Lazy<>(downstreamCreateMethod);
     }
 
@@ -28,6 +28,7 @@ public class CallbackWrapper {
                     h.accept(ctxOptional, r.getEntry());
                 }
             }
+            toBot.accept(responses);
         };
     }
 }

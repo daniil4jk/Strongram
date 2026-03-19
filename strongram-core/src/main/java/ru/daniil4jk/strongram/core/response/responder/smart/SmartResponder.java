@@ -16,6 +16,14 @@ public interface SmartResponder extends Responder, AutoCloseable {
 
     CompletableFuture<List<Message>> sendForObject(String text, File file, MediaType type);
 
+    void send(Long id, String text);
+
+    void send(Long id, String text, File file, MediaType type);
+
+    CompletableFuture<List<Message>> sendForObject(Long id, String text);
+
+    CompletableFuture<List<Message>> sendForObject(Long id, String text, File file, MediaType type);
+
     enum MediaType {
         Photo,
         Video,

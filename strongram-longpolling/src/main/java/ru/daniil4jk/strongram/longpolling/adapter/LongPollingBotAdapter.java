@@ -28,13 +28,13 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
     private final Sender sender;
 
     public LongPollingBotAdapter(String token, Bot bot) {
-        this(token, DefaultExecutor.initOrGet(), bot);
+        this(token, bot, DefaultExecutor.initOrGet(LongPollingBotAdapter.class.getName()));
     }
 
     public LongPollingBotAdapter(
         String token,
-        ExecutorService sendExecutor,
-        Bot bot
+        Bot bot,
+        ExecutorService sendExecutor
     ) {
         this.token = token;
         this.bot = bot;

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.daniil4jk.strongram.core.response.sender.ResponseSink;
 
 @Getter
@@ -21,11 +23,11 @@ public abstract class BaseBot implements Bot {
     @Getter
     private ResponseSink defaultCallback;
 
-    public BaseBot(String username) {
-        this.username = formatUsername(username);
+    public BaseBot(@Nullable String username) {
+        this.username = username != null ? formatUsername(username) : null;
     }
 
-    private static String formatUsername(String raw) {
+    private static @NotNull String formatUsername(@NotNull String raw) {
         raw = raw.trim().toLowerCase();
         if (raw.split(WHITESPACE).length > 1) {
             throw new IllegalArgumentException(

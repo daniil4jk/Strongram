@@ -44,7 +44,7 @@ public class WebhookBotAdapter implements TelegramWebhookBot, TelegramClientProv
                 fullUrl,
                 token,
                 bot,
-                DefaultExecutor.initOrGet()
+                DefaultExecutor.initOrGet(WebhookBotAdapter.class.getName())
         );
     }
 
@@ -72,7 +72,7 @@ public class WebhookBotAdapter implements TelegramWebhookBot, TelegramClientProv
                 path,
                 token,
                 bot,
-                DefaultExecutor.initOrGet()
+                DefaultExecutor.initOrGet(WebhookBotAdapter.class.getName())
         );
     }
 
@@ -85,7 +85,7 @@ public class WebhookBotAdapter implements TelegramWebhookBot, TelegramClientProv
         this.token = token;
         this.path = Optional.ofNullable(path).orElse("/");
         this.bot = bot;
-        this.sender = new WebhookSender(DefaultExecutor.initOrGet(), provider);
+        this.sender = new WebhookSender(sendExecutor, provider);
         setBotCallback();
     }
 

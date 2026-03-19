@@ -14,7 +14,7 @@ public class MultithreadingAdapter extends LongPollingBotAdapter {
         this(
                 token,
                 bot,
-                DefaultExecutor.initOrGet()
+                DefaultExecutor.initOrGet(MultithreadingAdapter.class.getName())
         );
     }
 
@@ -31,7 +31,7 @@ public class MultithreadingAdapter extends LongPollingBotAdapter {
                                  Bot bot,
                                  ExecutorService mainExecutor,
                                  ScheduledExecutorService sendExecutor) {
-        super(token, sendExecutor, bot);
+        super(token, bot, sendExecutor);
         this.executor = mainExecutor;
     }
 

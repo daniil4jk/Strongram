@@ -19,19 +19,16 @@ public class DefaultExecutor {
         return exec;
     }
 
-    public static ScheduledExecutorService initOrGet() {
+    public static ScheduledExecutorService initOrGet(String callerName) {
         if (!isInitialized()) {
-            log.info("Creating ru.daniil4jk.strongram.core.util.DefaultExecutor thread pool. " +
-                    "It is used when no explicit Executor is specified in some of Strongram components");
+            log.info("Creating DefaultExecutor thread pool. " +
+                    "It is used when no explicit Executor is specified in some of Strongram components. " +
+                    "Now DefaultExecutor called by {}", callerName);
         }
         return DEFAULT_EXECUTOR.initOrGet();
     }
 
     public static boolean isInitialized() {
         return DEFAULT_EXECUTOR.isInitialized();
-    }
-
-    public static ScheduledExecutorService get() {
-        return DEFAULT_EXECUTOR.get();
     }
 }

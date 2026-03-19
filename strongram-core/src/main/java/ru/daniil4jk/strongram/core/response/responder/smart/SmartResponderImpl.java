@@ -2,6 +2,7 @@ package ru.daniil4jk.strongram.core.response.responder.smart;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.business.SetBusinessAccountProfilePhoto;
 import org.telegram.telegrambots.meta.api.methods.groupadministration.SetChatPhoto;
@@ -35,63 +36,69 @@ public class SmartResponderImpl implements SmartResponder, AutoCloseable {
 
     @Override
     public void send(String text) {
-        List<String> messageTexts = new LongMessage(text).asLegalLengthMessageList();
-
-        for (String part : messageTexts) {
-            sendSingle(part);
-        }
+        send(getId(), text);
     }
 
     @Override
     public CompletableFuture<List<Message>> sendForObject(String text) {
+        return sendForObject(getId(), text);
+    }
+
+    @Override
+    public void send(String text, File file, MediaType type) {
+        send(getId(), text, file, type);
+    }
+
+    @Override
+    public CompletableFuture<List<Message>> sendForObject(String text, File file, MediaType type) {
+        return sendForObject(getId(), text, file, type);
+    }
+
+    private @NotNull Long getId() {
+        return uuid.getReplyChatId();
+    }
+
+    @Override
+    public void send(Long id, String text) {
+        List<String> messageTexts = new LongMessage(text).asLegalLengthMessageList();
+
+        for (String part : messageTexts) {
+            sendSingle(id, part);
+        }
+    }
+
+    @Override
+    public void send(Long id, String text, File file, MediaType type) {
+        List<String> messageTexts = new LongMessage(text).asLegalLengthMessageList();
+
+        sendSingle(id, messageTexts.remove(0), file, type);
+        for (String part : messageTexts) {
+            sendSingle(id, part);
+        }
+    }
+
+    @Override
+    public CompletableFuture<List<Message>> sendForObject(Long id, String text) {
         List<String> messageTexts = new LongMessage(text).asLegalLengthMessageList();
 
         return CompletableFuture.supplyAsync(() ->
                 messageTexts.stream()
-                        .map(this::sendForObjectSingle)
+                        .map(s -> sendForObjectSingle(id, s))
                         .map(CompletableFuture::join)
                         .collect(Collectors.toList())
         );
     }
 
-    private void sendSingle(String text) {
-        send(
-                SendMessage.builder()
-                        .text(text)
-                        .chatId(uuid.getReplyChatId())
-                        .build()
-        );
-    }
-
-    private CompletableFuture<Message> sendForObjectSingle(String text) {
-        return sendForObject(
-                SendMessage.builder()
-                        .text(text)
-                        .chatId(uuid.getReplyChatId())
-                        .build()
-        );
-    }
-
     @Override
-    public void send(String text, File file, MediaType type) {
-        List<String> messageTexts = new LongMessage(text).asLegalLengthMessageList();
-
-        sendSingle(messageTexts.remove(0), file, type);
-        for (String part : messageTexts) {
-            sendSingle(part);
-        }
-    }
-
-    @Override
-    public CompletableFuture<List<Message>> sendForObject(String text, File file, MediaType type) {
+    public CompletableFuture<List<Message>> sendForObject(Long id, String text, File file, MediaType type) {
         List<String> messageTexts = new LongMessage(text).asLegalLengthMessageList();
         List<CompletableFuture<Message>> responses = new ArrayList<>(messageTexts.size());
 
-        var first = sendForObjectSingle(messageTexts.remove(0), file, type);
+        var first = sendForObjectSingle(id, messageTexts.remove(0), file, type);
         responses.add(first);
 
         messageTexts.stream()
-                .map(this::sendForObjectSingle)
+                .map(s -> sendForObjectSingle(id, s))
                 .forEach(responses::add);
 
         return CompletableFuture.supplyAsync(() ->
@@ -101,8 +108,26 @@ public class SmartResponderImpl implements SmartResponder, AutoCloseable {
         );
     }
 
-    private void sendSingle(String text, File file, MediaType type) {
-        SendMediaBotMethod<Message> method = createMethod(text, file, type);
+    private void sendSingle(Long id, String text) {
+        send(
+                SendMessage.builder()
+                        .text(text)
+                        .chatId(id)
+                        .build()
+        );
+    }
+
+    private CompletableFuture<Message> sendForObjectSingle(Long id, String text) {
+        return sendForObject(
+                SendMessage.builder()
+                        .text(text)
+                        .chatId(id)
+                        .build()
+        );
+    }
+
+    private void sendSingle(Long id, String text, File file, MediaType type) {
+        SendMediaBotMethod<Message> method = createMethod(id, text, file, type);
         switch (type) {
             case Photo -> inherit.send((SendPhoto) method);
             case Video -> inherit.send((SendVideo) method);
@@ -112,8 +137,8 @@ public class SmartResponderImpl implements SmartResponder, AutoCloseable {
         }
     }
 
-    private CompletableFuture<Message> sendForObjectSingle(String text, File file, MediaType type) {
-        SendMediaBotMethod<Message> method = createMethod(text, file, type);
+    private CompletableFuture<Message> sendForObjectSingle(Long id, String text, File file, MediaType type) {
+        SendMediaBotMethod<Message> method = createMethod(id, text, file, type);
         return switch (type) {
             case Photo -> inherit.sendForObject((SendPhoto) method);
             case Video -> inherit.sendForObject((SendVideo) method);
@@ -123,32 +148,32 @@ public class SmartResponderImpl implements SmartResponder, AutoCloseable {
         };
     }
 
-    private SendMediaBotMethod<Message> createMethod(String text, File file, MediaType type) {
+    private SendMediaBotMethod<Message> createMethod(Long id, String text, File file, MediaType type) {
         return switch (type) {
             case Photo -> SendPhoto.builder()
                     .photo(new InputFile(file))
                     .caption(text)
-                    .chatId(uuid.getReplyChatId())
+                    .chatId(id)
                     .build();
             case Video -> SendVideo.builder()
                     .video(new InputFile(file))
                     .caption(text)
-                    .chatId(uuid.getReplyChatId())
+                    .chatId(id)
                     .build();
             case Audio -> SendAudio.builder()
                     .audio(new InputFile(file))
                     .caption(text)
-                    .chatId(uuid.getReplyChatId())
+                    .chatId(id)
                     .build();
             case Voice -> SendVoice.builder()
                     .voice(new InputFile(file))
                     .caption(text)
-                    .chatId(uuid.getReplyChatId())
+                    .chatId(id)
                     .build();
             case Document -> SendDocument.builder()
                     .document(new InputFile(file))
                     .caption(text)
-                    .chatId(uuid.getReplyChatId())
+                    .chatId(id)
                     .build();
         };
     }

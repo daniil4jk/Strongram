@@ -19,7 +19,7 @@ public interface RequestContext {
 
     String getBotUsername();
 
-    void send(Consumer<SmartResponder> function);
+    void respond(Consumer<SmartResponder> function);
 
     SmartResponder getResponder();
 

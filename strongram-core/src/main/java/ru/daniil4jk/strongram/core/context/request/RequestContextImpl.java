@@ -57,7 +57,7 @@ public class RequestContextImpl implements RequestContext {
     }
 
     @Override
-    public void send(Consumer<SmartResponder> function) {
+    public void respond(Consumer<SmartResponder> function) {
         try (var responder = responderFactory.createSmart()) {
             function.accept(responder);
         }
