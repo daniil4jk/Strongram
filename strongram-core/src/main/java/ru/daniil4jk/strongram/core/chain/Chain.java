@@ -31,7 +31,7 @@ public class Chain<T extends NextConsumer<T>> {
      * @param handler the handler to add; must not be null
      * @return this {@link Chain} instance to allow method chaining
      */
-    public Chain add(T handler) {
+    public Chain<T> add(T handler) {
         this.chain.add(handler);
         return this;
     }
@@ -44,7 +44,7 @@ public class Chain<T extends NextConsumer<T>> {
      * @param toAdd the handler to insert; must not be null
      * @return this {@link Chain} instance to allow method chaining
      */
-    public Chain addBefore(Class<? extends T> beforeWhat, T toAdd) {
+    public Chain<T> addBefore(Class<? extends T> beforeWhat, T toAdd) {
         addConditionalInternal(0, beforeWhat, toAdd);
         return this;
     }
@@ -57,7 +57,7 @@ public class Chain<T extends NextConsumer<T>> {
      * @param toAdd the handler to insert; must not be null
      * @return this {@link Chain} instance to allow method chaining
      */
-    public Chain addAfter(Class<? extends T> afterWhat, T toAdd) {
+    public Chain<T> addAfter(Class<? extends T> afterWhat, T toAdd) {
         addConditionalInternal(1, afterWhat, toAdd);
         return this;
     }
@@ -73,7 +73,7 @@ public class Chain<T extends NextConsumer<T>> {
                 iterator.hasNext();
                 i++
         ) {
-            UpstreamHandler exist = iterator.next();
+            T exist = iterator.next();
             if (finding.isInstance(exist)) {
                 chain.add(i + padding, toAdd);
                 break;

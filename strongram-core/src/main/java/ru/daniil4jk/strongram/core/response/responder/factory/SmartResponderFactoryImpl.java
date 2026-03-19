@@ -18,6 +18,11 @@ public class SmartResponderFactoryImpl implements SmartResponderFactory {
     }
 
     @Override
+    public void resetTempCallback() {
+        inherit.resetTempCallback();
+    }
+
+    @Override
     public void setPermanentCallback(ResponseSink callback) {
         inherit.setPermanentCallback(callback);
     }
