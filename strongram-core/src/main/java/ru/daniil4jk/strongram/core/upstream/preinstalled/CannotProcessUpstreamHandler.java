@@ -1,15 +1,15 @@
-package ru.daniil4jk.strongram.core.handler.preinstalled;
+package ru.daniil4jk.strongram.core.upstream.preinstalled;
 
 import lombok.RequiredArgsConstructor;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
-import ru.daniil4jk.strongram.core.handler.BaseHandler;
 import ru.daniil4jk.strongram.core.unboxer.As;
+import ru.daniil4jk.strongram.core.upstream.BaseUpstreamHandler;
 
 @RequiredArgsConstructor
-public class CannotProcessHandler extends BaseHandler {
+public class CannotProcessUpstreamHandler extends BaseUpstreamHandler {
     private final String text;
 
-    public CannotProcessHandler() {
+    public CannotProcessUpstreamHandler() {
         this.text = "Я не понимаю ваш запрос\uD83D\uDE14 / I cat`t explain this request\uD83D\uDE14";
     }
 

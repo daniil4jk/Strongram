@@ -7,10 +7,13 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 import ru.daniil4jk.strongram.core.bot.Bot;
 import ru.daniil4jk.strongram.core.response.client.provider.MutableTelegramClientProvider;
 import ru.daniil4jk.strongram.core.response.client.provider.TelegramClientProvider;
+import ru.daniil4jk.strongram.core.response.dto.Response;
 import ru.daniil4jk.strongram.core.response.sender.Sender;
 import ru.daniil4jk.strongram.core.util.DefaultExecutor;
 import ru.daniil4jk.strongram.longpolling.adapter.interfaces.HasLongPollingBot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 @Slf4j
@@ -46,7 +49,9 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
 
     public void consumeSingle(Update update) {
         try {
-            bot.accept(update, null);
+            List<Response<?>> result = new ArrayList<>();
+            bot.accept(update, result::addAll);
+            sender.sendAllUsingClient(result);
         } catch (Exception e) {
             log.error(
                 "Error occurred while longpolling bot processing update",

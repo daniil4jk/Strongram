@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.handler.preinstalled;
+package ru.daniil4jk.strongram.core.upstream.preinstalled;
 
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
@@ -6,20 +6,20 @@ import ru.daniil4jk.strongram.core.context.request.TelegramUUID;
 import ru.daniil4jk.strongram.core.dialog.Dialog;
 import ru.daniil4jk.strongram.core.dialog.DialogRepository;
 import ru.daniil4jk.strongram.core.dialog.InMemoryDialogRepository;
-import ru.daniil4jk.strongram.core.handler.BaseHandler;
+import ru.daniil4jk.strongram.core.upstream.BaseUpstreamHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DialogHandler extends BaseHandler {
+public class DialogUpstreamHandler extends BaseUpstreamHandler {
     public static final String DIALOGS_CONTEXT_FIELD_NAME = "ru.daniil4jk.strongram_dialogs";
     private final DialogRepository activeDialogs;
 
-    public DialogHandler() {
+    public DialogUpstreamHandler() {
         this(new InMemoryDialogRepository());
     }
 
-    public DialogHandler(DialogRepository activeDialogs) {
+    public DialogUpstreamHandler(DialogRepository activeDialogs) {
         this.activeDialogs = activeDialogs;
     }
 

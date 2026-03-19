@@ -1,12 +1,13 @@
-package ru.daniil4jk.strongram.core.handler;
+package ru.daniil4jk.strongram.core.upstream;
 
 import lombok.Setter;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 
-public abstract class BaseHandler implements Handler{
+public abstract class BaseUpstreamHandler implements UpstreamHandler {
     @Setter
-    private Handler next;
+    private UpstreamHandler next;
 
+    @Override
     public void accept(RequestContext ctx) {
         process(ctx);
     }

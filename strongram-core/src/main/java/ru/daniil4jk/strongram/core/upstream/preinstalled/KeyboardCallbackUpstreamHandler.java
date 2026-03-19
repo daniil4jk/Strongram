@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.handler.preinstalled;
+package ru.daniil4jk.strongram.core.upstream.preinstalled;
 
 import org.jetbrains.annotations.NotNull;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -7,10 +7,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
-import ru.daniil4jk.strongram.core.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.keyboard.InteractiveKeyboardHolder;
 import ru.daniil4jk.strongram.core.keyboard.button.InteractiveButton;
 import ru.daniil4jk.strongram.core.unboxer.As;
+import ru.daniil4jk.strongram.core.upstream.FilteredUpstreamHandler;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.Collection;
@@ -20,7 +20,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class KeyboardCallbackHandler extends FilteredHandler {
+public abstract class KeyboardCallbackUpstreamHandler extends FilteredUpstreamHandler {
     private final Lazy<Map<String, InteractiveButton>> buttons = new Lazy<>(this::parseKeyboard);
 
     protected abstract InteractiveKeyboardHolder getKeyboard();

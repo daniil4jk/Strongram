@@ -21,6 +21,7 @@ import ru.daniil4jk.strongram.webhook.AddressUtils;
 import ru.daniil4jk.strongram.webhook.WebhookSender;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
@@ -113,9 +114,9 @@ public class WebhookBotAdapter implements TelegramWebhookBot, TelegramClientProv
     @Override
     public BotApiMethod<?> consumeUpdate(Update update) {
         try {
-            List<Response<?>>[] holder = new List[1];
-            bot.accept(update, r -> holder[0] = r);
-            return sender.sendAllWebhook(holder[0]);
+            List<Response<?>> result = new ArrayList<>();
+            bot.accept(update, result::addAll);
+            return sender.sendAllWebhook(result);
         } catch (Exception e) {
             log.error("Error occurred while webhook bot processing update", e);
             return null;

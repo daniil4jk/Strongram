@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.handler.preinstalled;
+package ru.daniil4jk.strongram.core.upstream.preinstalled;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
@@ -7,14 +7,14 @@ import ru.daniil4jk.strongram.core.command.EachCommandHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
-import ru.daniil4jk.strongram.core.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.unboxer.As;
+import ru.daniil4jk.strongram.core.upstream.FilteredUpstreamHandler;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class TextCommandHandler extends FilteredHandler {
+public abstract class TextCommandUpstreamHandler extends FilteredUpstreamHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
 

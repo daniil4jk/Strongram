@@ -5,20 +5,14 @@ import ru.daniil4jk.strongram.core.response.sender.ResponseSink;
 
 public class ResponserFactoryImpl implements ResponserFactory {
     private final ThreadLocal<ResponseSink> tempCallback = new ThreadLocal<>();
-    private boolean isTempCallbackUsed = false;
     private ResponseSink permanentCallback;
 
     public void setTempCallback(ResponseSink callback) {
-        if (callback != null) {
-            isTempCallbackUsed = true;
-            tempCallback.set(callback);
-        }
+        tempCallback.set(callback);
     }
 
     public void resetTempCallback() {
-        if (isTempCallbackUsed) {
-            tempCallback.remove();
-        }
+        tempCallback.remove();
     }
 
     @Override

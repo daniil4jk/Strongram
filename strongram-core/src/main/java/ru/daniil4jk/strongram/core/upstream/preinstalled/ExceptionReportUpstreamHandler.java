@@ -1,18 +1,18 @@
-package ru.daniil4jk.strongram.core.handler.preinstalled;
+package ru.daniil4jk.strongram.core.upstream.preinstalled;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
-import ru.daniil4jk.strongram.core.handler.BaseHandler;
 import ru.daniil4jk.strongram.core.report.exception.ExceptionFormatter;
 import ru.daniil4jk.strongram.core.report.exception.ExceptionFormatters;
+import ru.daniil4jk.strongram.core.upstream.BaseUpstreamHandler;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ExceptionReportHandler extends BaseHandler {
+public class ExceptionReportUpstreamHandler extends BaseUpstreamHandler {
     private final ExceptionFormatter formatter;
 
-    public ExceptionReportHandler() {
+    public ExceptionReportUpstreamHandler() {
         formatter = ExceptionFormatters.info();
     }
 

@@ -1,4 +1,4 @@
-package ru.daniil4jk.strongram.core.handler.preinstalled;
+package ru.daniil4jk.strongram.core.upstream.preinstalled;
 
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
@@ -8,15 +8,15 @@ import ru.daniil4jk.strongram.core.command.EachCommandHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
-import ru.daniil4jk.strongram.core.handler.FilteredHandler;
 import ru.daniil4jk.strongram.core.unboxer.As;
+import ru.daniil4jk.strongram.core.upstream.FilteredUpstreamHandler;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.Map;
 import java.util.Optional;
 
 @NoArgsConstructor
-public abstract class CommandHandler extends FilteredHandler {
+public abstract class CommandUpstreamHandler extends FilteredUpstreamHandler {
     private static final String EMPTY = "";
     private static final String WHITESPACE = " ";
     private static final String DOG = "@";

@@ -73,16 +73,16 @@ public class EchoBot extends ChainedBot {
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
-import ru.daniil4jk.strongram.core.handler.FilteredHandler;
+import ru.daniil4jk.strongram.core.upstream.FilteredUpstreamHandler;
 import ru.daniil4jk.strongram.core.unboxer.As;
 
 public class EchoHandler extends FilteredHandler {
-    
+
     @Override
     protected Filter getFilter() {
         return Filters.hasMessageText();
     }
-    
+
     @Override
     protected void processFiltered(RequestContext ctx) {
         String text = ctx.getRequest(As.messageText());
@@ -118,19 +118,19 @@ public class CommandBot extends ChainedBot {
 ```java
 import ru.daniil4jk.strongram.core.command.EachCommandHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
-import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.TextCommandUpstreamHandler;
 
 import java.util.Map;
 
 public class CommandHandler extends СommandHandler {
-    
+
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
         return Map.of(
-            "hello", this::handleHello
+                "hello", this::handleHello
         );
     }
-    
+
     private void handleHello(RequestContext ctx, String[] args) {
         ctx.getResponder().send("Привет");
     }
@@ -145,24 +145,24 @@ public class CommandHandler extends СommandHandler {
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
 import ru.daniil4jk.strongram.core.chain.factory.ChainFactory;
 import ru.daniil4jk.strongram.core.chain.factory.configurable.ConfigurableChainFactory;
-import ru.daniil4jk.strongram.core.handler.preinstalled.ExceptionReportHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.ExceptionReportUpstreamHandler;
 import ru.daniil4jk.strongram.core.report.exception.ExceptionFormatters;
 
 public class RobustBot extends ChainedBot {
-    
+
     public RobustBot(String botToken) {
         super(botToken);
     }
-    
+
     @Override
     protected ChainFactory getChain() {
         return new ConfigurableChainFactory(chain -> {
             // Встроенный обработчик исключений (должен быть первым чтобы через try-catch ловить исключения)
             chain.add(new ExceptionReportHandler(ExceptionFormatters.debug()));
-            
+
             // Наш обработчик команд
             chain.add(new CommandHandler());
-            
+
             // Встроенный обработчик неизвестных команд (должен быть последним)
             chain.add(new CannotProcessHandler());
         });
@@ -173,25 +173,25 @@ public class RobustBot extends ChainedBot {
 ```java
 import ru.daniil4jk.strongram.core.command.EachCommandHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
-import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.TextCommandUpstreamHandler;
 
 import java.util.Map;
 
 public class CommandHandler extends CommandHandler {
-    
+
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
         return Map.of(
-            "start", this::handleStart,
-            "error", this::handleError,
-            "divide", this::handleDivide
+                "start", this::handleStart,
+                "error", this::handleError,
+                "divide", this::handleDivide
         );
     }
-    
+
     private void handleStart(RequestContext ctx, String[] args) {
         ctx.getResponder().send("Бот запущен! Попробуйте /error");
     }
-    
+
     private void handleError(RequestContext ctx, String[] args) {
         throw new RuntimeException("Это тестовая ошибка для демонстрации обработки исключений!");
     }
@@ -225,50 +225,50 @@ public class FileBot extends ChainedBot {
 ```java
 import ru.daniil4jk.strongram.core.command.EachCommandHandler;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
-import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.TextCommandUpstreamHandler;
 import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponder;
 
 import java.io.File;
 import java.util.Map;
 
 public class FileCommandHandler extends CommandHandler {
-    
+
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
         return Map.of(
-            "photo", this::sendPhoto,
-            "document", this::sendDocument,
-            "video", this::sendVideo
+                "photo", this::sendPhoto,
+                "document", this::sendDocument,
+                "video", this::sendVideo
         );
     }
-    
+
     private void sendPhoto(RequestContext ctx, String[] args) {
         File file = new File("path/to/photo.jpg");
-        
+
         ctx.getResponder().send(
-            "📷 Вот ваша фотография!",
-            file,
-            SmartResponder.MediaType.Photo
+                "📷 Вот ваша фотография!",
+                file,
+                SmartResponder.MediaType.Photo
         );
     }
-    
+
     private void sendDocument(RequestContext ctx, String[] args) {
         File file = new File("path/to/document.pdf");
-        
+
         ctx.getResponder().send(
-            "📄 Вот ваш документ!",
-            file,
-            SmartResponder.MediaType.Document
+                "📄 Вот ваш документ!",
+                file,
+                SmartResponder.MediaType.Document
         );
     }
-    
+
     private void sendVideo(RequestContext ctx, String[] args) {
         File file = new File("path/to/video.mp4");
-        
+
         ctx.getResponder().send(
-            "🎥 Вот ваше видео!",
-            file,
-            SmartResponder.MediaType.Video
+                "🎥 Вот ваше видео!",
+                file,
+                SmartResponder.MediaType.Video
         );
     }
 }
@@ -282,14 +282,14 @@ public class FileCommandHandler extends CommandHandler {
 import ru.daniil4jk.strongram.core.bot.ChainedBot;
 import ru.daniil4jk.strongram.core.chain.factory.ChainFactory;
 import ru.daniil4jk.strongram.core.chain.factory.configurable.ConfigurableChainFactory;
-import ru.daniil4jk.strongram.core.handler.preinstalled.DialogHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.DialogUpstreamHandler;
 
 public class PizzaBot extends ChainedBot {
-    
+
     public PizzaBot(String botToken) {
         super(botToken);
     }
-    
+
     @Override
     protected ChainFactory getChain() {
         return new ConfigurableChainFactory(chain -> {
@@ -306,63 +306,63 @@ import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.dialog.DialogImpl;
 import ru.daniil4jk.strongram.core.dialog.part.BuildableDialogPart;
 import ru.daniil4jk.strongram.core.filter.Filters;
-import ru.daniil4jk.strongram.core.handler.preinstalled.DialogHandler;
-import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.DialogUpstreamHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.TextCommandUpstreamHandler;
 import ru.daniil4jk.strongram.core.unboxer.As;
 
 import java.util.Map;
 
 public class PizzaOrderCommandHandler extends TextCommandHandler {
-    
+
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
         return Map.of("order", this::startOrder);
     }
-    
+
     private void startOrder(RequestContext ctx, String[] args) {
         DialogImpl<PizzaState> dialog = DialogImpl.<PizzaState>builder()
-            .initState(PizzaState.ASK_NAME)
-            .part(PizzaState.ASK_NAME, BuildableDialogPart.<PizzaState>builder()
-                .filter(Filters.hasMessageText())
-                .firstNotification((context, storage) -> {
-                    context.getResponder().send("Введите название пиццы");
-                })
-                .repeatNotification((context, storage) -> {
-                    context.getResponder().send("Вы всё еще в диалоге, введите название пиццы");
-                })
-                .handler((context, dCtx) -> {
-                    String pizzaName = context.getRequest(As.messageText());
-                    dCtx.getDialogScopeStorage().set("pizzaName", pizzaName);
-                    dCtx.setState(PizzaState.ASK_ADDRESS);
-                })
-                .build())
-            .part(PizzaState.ASK_ADDRESS, BuildableDialogPart.<PizzaState>builder()
-                .filter(Filters.hasMessageText())
-                .firstNotification((context, storage) -> {
-                    context.getResponder().send("Теперь укажите адрес доставки");
-                })
-                .repeatNotification((context, storage) -> {
-                    context.getResponder().send("Вы всё еще в диалоге, укажите адрес доставки");
-                })
-                .handler((context, dCtx) -> {
-                    String address = context.getRequest(As.messageText());
-                    String pizzaName = dCtx.getDialogScopeStorage().get("pizzaName");
-                    
-                    context.getResponder().send("""
-                        Заказ принят!
-                        
-                        Пицца: %s
-                        Адрес: %s
-                        """.formatted(pizzaName, address));
-                    
-                    dCtx.stop();
-                })
-                .build())
-            .build();
-        
+                .initState(PizzaState.ASK_NAME)
+                .part(PizzaState.ASK_NAME, BuildableDialogPart.<PizzaState>builder()
+                        .filter(Filters.hasMessageText())
+                        .firstNotification((context, storage) -> {
+                            context.getResponder().send("Введите название пиццы");
+                        })
+                        .repeatNotification((context, storage) -> {
+                            context.getResponder().send("Вы всё еще в диалоге, введите название пиццы");
+                        })
+                        .handler((context, dCtx) -> {
+                            String pizzaName = context.getRequest(As.messageText());
+                            dCtx.getDialogScopeStorage().set("pizzaName", pizzaName);
+                            dCtx.setState(PizzaState.ASK_ADDRESS);
+                        })
+                        .build())
+                .part(PizzaState.ASK_ADDRESS, BuildableDialogPart.<PizzaState>builder()
+                        .filter(Filters.hasMessageText())
+                        .firstNotification((context, storage) -> {
+                            context.getResponder().send("Теперь укажите адрес доставки");
+                        })
+                        .repeatNotification((context, storage) -> {
+                            context.getResponder().send("Вы всё еще в диалоге, укажите адрес доставки");
+                        })
+                        .handler((context, dCtx) -> {
+                            String address = context.getRequest(As.messageText());
+                            String pizzaName = dCtx.getDialogScopeStorage().get("pizzaName");
+
+                            context.getResponder().send("""
+                                    Заказ принят!
+                                    
+                                    Пицца: %s
+                                    Адрес: %s
+                                    """.formatted(pizzaName, address));
+
+                            dCtx.stop();
+                        })
+                        .build())
+                .build();
+
         ctx.getRequestScopeStorage().add(DialogHandler.DIALOGS_CONTEXT_FIELD_NAME, dialog);
     }
-    
+
     public enum PizzaState {
         ASK_NAME,
         ASK_ADDRESS
@@ -381,56 +381,56 @@ import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.dialog.DialogImpl;
 import ru.daniil4jk.strongram.core.dialog.part.BuildableDialogPart;
 import ru.daniil4jk.strongram.core.filter.Filters;
-import ru.daniil4jk.strongram.core.handler.preinstalled.DialogHandler;
-import ru.daniil4jk.strongram.core.handler.preinstalled.TextCommandHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.DialogUpstreamHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.TextCommandUpstreamHandler;
 import ru.daniil4jk.strongram.core.unboxer.As;
 
 import java.util.Map;
 
 public class PizzaOrderCommandHandler extends TextCommandHandler {
-    
+
     @Override
     protected Map<String, EachCommandHandler> getCommands() {
         return Map.of("order", this::startOrder);
     }
-    
+
     private void startOrder(RequestContext ctx, String[] args) {
         DialogImpl<PizzaState> dialog = DialogImpl.<PizzaState>builder()
-            .initState(PizzaState.ASK_NAME)
-            .part(PizzaState.ASK_NAME, BuildableDialogPart.<PizzaState>builder()
-                .filter(Filters.hasMessageText())
-                .firstNotification((context, storage) -> {
-                    context.getResponder().send("Введите название пиццы");
-                })
-                .repeatNotification((context, storage) -> {
-                    context.getResponder().send("Вы всё еще в диалоге, введите название пиццы");
-                })
-                .handler((context, dCtx) -> {
-                    String pizzaName = context.getRequest(As.messageText());
-                    dCtx.getDialogScopeStorage().set("pizzaName", pizzaName);
-                    dCtx.setState(PizzaState.ASK_ADDRESS);
-                })
-                .build())
-            .part(PizzaState.ASK_ADDRESS, BuildableDialogPart.<PizzaState>builder()
-                .filter(Filters.hasMessageText())
-                .firstNotification((context, storage) -> {
-                    context.getResponder().send("Теперь укажите адрес доставки");
-                })
-                .repeatNotification((context, storage) -> {
-                    context.getResponder().send("Вы всё еще в диалоге, укажите адрес доставки");
-                })
-                .handler((context, dCtx) -> {
-                    String address = context.getRequest(As.messageText());
-                    dCtx.getDialogScopeStorage().set("address", address);
-                    dCtx.setState(PizzaState.PAYMENT);
-                })
-                .build())
-            .part(PizzaState.PAYMENT, new PaymentDialogPart())
-            .build();
-        
+                .initState(PizzaState.ASK_NAME)
+                .part(PizzaState.ASK_NAME, BuildableDialogPart.<PizzaState>builder()
+                        .filter(Filters.hasMessageText())
+                        .firstNotification((context, storage) -> {
+                            context.getResponder().send("Введите название пиццы");
+                        })
+                        .repeatNotification((context, storage) -> {
+                            context.getResponder().send("Вы всё еще в диалоге, введите название пиццы");
+                        })
+                        .handler((context, dCtx) -> {
+                            String pizzaName = context.getRequest(As.messageText());
+                            dCtx.getDialogScopeStorage().set("pizzaName", pizzaName);
+                            dCtx.setState(PizzaState.ASK_ADDRESS);
+                        })
+                        .build())
+                .part(PizzaState.ASK_ADDRESS, BuildableDialogPart.<PizzaState>builder()
+                        .filter(Filters.hasMessageText())
+                        .firstNotification((context, storage) -> {
+                            context.getResponder().send("Теперь укажите адрес доставки");
+                        })
+                        .repeatNotification((context, storage) -> {
+                            context.getResponder().send("Вы всё еще в диалоге, укажите адрес доставки");
+                        })
+                        .handler((context, dCtx) -> {
+                            String address = context.getRequest(As.messageText());
+                            dCtx.getDialogScopeStorage().set("address", address);
+                            dCtx.setState(PizzaState.PAYMENT);
+                        })
+                        .build())
+                .part(PizzaState.PAYMENT, new PaymentDialogPart())
+                .build();
+
         ctx.getRequestScopeStorage().add(DialogHandler.DIALOGS_CONTEXT_FIELD_NAME, dialog);
     }
-    
+
     public enum PizzaState {
         ASK_NAME,
         ASK_ADDRESS,
@@ -440,6 +440,7 @@ public class PizzaOrderCommandHandler extends TextCommandHandler {
 ```
 
 А теперь добавим объемную логику оплаты используя DialogPart реализуемый через наследование
+
 ```java
 import ru.daniil4jk.strongram.core.context.dialog.DialogContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
@@ -448,16 +449,16 @@ import ru.daniil4jk.strongram.core.dialog.part.ExtendableDialogPart;
 import ru.daniil4jk.strongram.core.filter.Filter;
 import ru.daniil4jk.strongram.core.filter.Filters;
 import ru.daniil4jk.strongram.core.unboxer.As;
-import ru.daniil4jk.strongram.core.handler.preinstalled.PizzaOrderWithPaymentCommandHandler.PizzaState;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.PizzaOrderWithPaymentCommandHandler.PizzaState;
 
 public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
-    
+
     private final PaymentService paymentService;
-    
+
     public PaymentDialogPart() {
         this.paymentService = new PaymentService();
     }
-    
+
     @Override
     protected Filter getFilter() {
         return Filters.hasMessageText().and(
@@ -467,26 +468,26 @@ public class PaymentDialogPart extends ExtendableDialogPart<PizzaState> {
                 )
         );
     }
-    
+
     @Override
     protected void firstNotification(RequestContext ctx, Storage storage) {
         String pizzaName = storage.get("pizzaName");
         String address = storage.get("address");
-        
+
         ctx.getResponder().send("""
-            Подтверждение заказа
-            Пицца: %s
-            Адрес: %s
-            Стоимость: 500 руб.
-            Отправьте "оплатить" для подтверждения заказа:
-            """.formatted(pizzaName, address));
+                Подтверждение заказа
+                Пицца: %s
+                Адрес: %s
+                Стоимость: 500 руб.
+                Отправьте "оплатить" для подтверждения заказа:
+                """.formatted(pizzaName, address));
     }
-    
+
     @Override
     protected void repeatNotification(RequestContext ctx, Storage storage) {
         firstNotification(ctx, storage);
     }
-    
+
     @Override
     protected void accept(RequestContext ctx, DialogContext<PizzaState> dCtx) {
         String message = ctx.getRequest(As.messageText()).toLowerCase();

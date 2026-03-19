@@ -3,7 +3,7 @@ package ru.daniil4jk.strongram.core.dialog;
 import org.jetbrains.annotations.NotNull;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.dialog.part.DialogPart;
-import ru.daniil4jk.strongram.core.handler.preinstalled.DialogHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.DialogUpstreamHandler;
 
 import java.util.function.Consumer;
 
@@ -47,7 +47,7 @@ public interface Dialog extends Consumer<RequestContext> {
     /**
      * Determines whether this dialog can accept and process the given request context.
      * <p>
-     * This method is used by the {@link DialogHandler} to route incoming updates to the appropriate dialog.
+     * This method is used by the {@link DialogUpstreamHandler} to route incoming updates to the appropriate dialog.
      * Delegates to current DialogPart`s {@link DialogPart#canAccept(RequestContext)}
      * </p>
      *
