@@ -6,10 +6,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.filter.Filter;
-import ru.daniil4jk.strongram.core.filter.Filters;
 import ru.daniil4jk.strongram.core.keyboard.InteractiveKeyboardHolder;
 import ru.daniil4jk.strongram.core.keyboard.button.InteractiveButton;
 import ru.daniil4jk.strongram.core.unboxer.As;
+import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 import ru.daniil4jk.strongram.core.upstream.FilteredUpstreamHandler;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
@@ -18,39 +18,44 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public abstract class KeyboardCallbackUpstreamHandler extends FilteredUpstreamHandler {
+public abstract class InteractiveKeyboardUpstreamHandler extends FilteredUpstreamHandler {
     private final Lazy<Map<String, InteractiveButton>> buttons = new Lazy<>(this::parseKeyboard);
 
-    protected abstract InteractiveKeyboardHolder getKeyboard();
+    protected abstract InteractiveKeyboardHolder getKeyboardHolder();
 
     @Override
     protected @NotNull Filter getFilter() {
-        return Filters.hasText().and(
-                ctx -> buttons.initOrGet().containsKey(
-                        ctx.getRequest(As.text())
-                )
-        );
+        return ctx -> buttons.initOrGet()
+                .containsKey(ctx.getRequest(asCompatibleText()));
     }
 
     @Override
     protected void processFiltered(@NotNull RequestContext ctx) {
-        buttons.initOrGet().get(ctx.getRequest(As.text())).accept(ctx);
+        buttons.initOrGet()
+                .get(ctx.getRequest(asCompatibleText()))
+                .accept(ctx);
     }
 
-    protected Map<String, InteractiveButton> parseKeyboard() {
-        InteractiveKeyboardHolder holder = getKeyboard();
-        ReplyKeyboard keyboard = holder.getKeyboard();
-
-        return switch (holder.getType()) {
-            case Reply -> collectButtons(((ReplyKeyboardMarkup) keyboard).getKeyboard().stream());
-            case Inline -> collectButtons(((InlineKeyboardMarkup) keyboard).getKeyboard().stream());
+    private Unboxer<String> asCompatibleText() {
+        return switch (getKeyboardHolder().getType()) {
+            case Reply -> As.messageText();
+            case Inline -> As.callbackQueryData();
         };
     }
 
-    private static Map<String, InteractiveButton> collectButtons(Stream<? extends List<?>> stream) {
-        Map<String, InteractiveButton> map = stream
+    protected Map<String, InteractiveButton> parseKeyboard() {
+        InteractiveKeyboardHolder holder = getKeyboardHolder();
+        ReplyKeyboard keyboard = holder.getKeyboard();
+
+        return switch (holder.getType()) {
+            case Reply -> collectButtons(((ReplyKeyboardMarkup) keyboard).getKeyboard());
+            case Inline -> collectButtons(((InlineKeyboardMarkup) keyboard).getKeyboard());
+        };
+    }
+
+    private static Map<String, InteractiveButton> collectButtons(List<? extends List<?>> keyboard) {
+        Map<String, InteractiveButton> map = keyboard.stream()
                 .flatMap(Collection::stream)
                 .filter(InteractiveButton::isInstance)
                 .map(InteractiveButton::cast)

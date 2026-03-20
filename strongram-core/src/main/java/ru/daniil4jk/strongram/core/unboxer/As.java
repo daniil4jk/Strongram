@@ -413,6 +413,10 @@ public class As {
         return Update::getCallbackQuery;
     }
 
+    public static @NotNull Unboxer<String> callbackQueryData() {
+        return callbackQuery().andThen(CallbackQuery::getData);
+    }
+
     public static @NotNull Unboxer<Message> editedMessage() {
         return Update::getEditedMessage;
     }
