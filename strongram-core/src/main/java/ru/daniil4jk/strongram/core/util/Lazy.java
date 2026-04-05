@@ -11,8 +11,6 @@ import java.util.function.Supplier;
 public class Lazy<T> implements Supplier<T> {
     private final Supplier<T> creator;
     private volatile T value;
-    @Getter
-    private volatile boolean initialized;
 
     public Lazy(Supplier<T> creator) {
         this.creator = creator;
@@ -22,11 +20,14 @@ public class Lazy<T> implements Supplier<T> {
         if (!isInitialized()) {
             synchronized (this) {
                 if (!isInitialized()) {
-                    initialized = true;
                     value = creator.get();
                 }
             }
         }
+    }
+
+    public boolean isInitialized() {
+        return value != null;
     }
 
     @Override
