@@ -1,8 +1,7 @@
-package ru.daniil4jk.strongram.core.chain.configurable;
+package ru.daniil4jk.strongram.core.chain.configurator;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import ru.daniil4jk.strongram.core.chain.ChainListCreator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,22 +10,22 @@ import java.util.List;
 
 @ToString
 @EqualsAndHashCode
-public class ChainConfigurator<T> implements ChainListCreator<T> {
+public class OrderConfigurator<T> {
     private final List<T> chain = new ArrayList<>();
 
-    public ChainConfigurator<T> add(T handler) {
+    public OrderConfigurator<T> add(T handler) {
         this.chain.add(handler);
         return this;
     }
 
 
-    public ChainConfigurator<T> addBefore(Class<? extends T> beforeWhat, T toAdd) {
+    public OrderConfigurator<T> addBefore(Class<? extends T> beforeWhat, T toAdd) {
         addConditionalInternal(0, beforeWhat, toAdd);
         return this;
     }
 
 
-    public ChainConfigurator<T> addAfter(Class<? extends T> afterWhat, T toAdd) {
+    public OrderConfigurator<T> addAfter(Class<? extends T> afterWhat, T toAdd) {
         addConditionalInternal(1, afterWhat, toAdd);
         return this;
     }
@@ -50,7 +49,7 @@ public class ChainConfigurator<T> implements ChainListCreator<T> {
         }
     }
 
-    public List<T> getResultAsList() {
+    public List<T> asList() {
         return chain;
     }
 }

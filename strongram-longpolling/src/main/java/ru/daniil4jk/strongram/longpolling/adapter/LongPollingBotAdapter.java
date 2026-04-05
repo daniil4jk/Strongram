@@ -9,7 +9,6 @@ import ru.daniil4jk.strongram.core.response.client.provider.MutableTelegramClien
 import ru.daniil4jk.strongram.core.response.client.provider.TelegramClientProvider;
 import ru.daniil4jk.strongram.core.response.dto.Response;
 import ru.daniil4jk.strongram.core.response.sender.Sender;
-import ru.daniil4jk.strongram.core.util.DefaultExecutor;
 import ru.daniil4jk.strongram.longpolling.adapter.interfaces.HasLongPollingBot;
 
 import java.util.ArrayList;

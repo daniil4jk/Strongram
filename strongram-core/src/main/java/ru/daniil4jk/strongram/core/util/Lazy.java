@@ -1,7 +1,6 @@
 package ru.daniil4jk.strongram.core.util;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,9 +35,11 @@ public class Lazy<T> implements Supplier<T> {
         return value != null;
     }
 
+    //Раньше get тупо возвращал value, но это сильно путало, поэтому теперь он работает так.
+    //Нужно для совместимости с Supplier<>. Нахуя? В душе не ебу. Возможно когда-нибудь уберу.
     @Override
     public T get() {
-        return value;
+        return initOrGet();
     }
 
     public T initOrGet() {

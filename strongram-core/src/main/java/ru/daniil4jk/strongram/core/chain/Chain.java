@@ -1,12 +1,14 @@
 package ru.daniil4jk.strongram.core.chain;
 
+import ru.daniil4jk.strongram.core.chain.configurator.TunedOrderConfiguratorFactory;
+
 import java.util.List;
 
 public class Chain<T extends NextConsumer<T>> {
     private final List<T> chainList;
 
-    public Chain(ChainListCreator<T> chainListCreator) {
-        this(chainListCreator.getResultAsList());
+    public Chain(TunedOrderConfiguratorFactory<T> listableFactory) {
+        this.chainList = listableFactory.get().asList();
     }
 
     public Chain(List<T> chainList) {

@@ -4,9 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.daniil4jk.strongram.core.chain.Chain;
-import ru.daniil4jk.strongram.core.chain.configurable.ChainConfigurator;
-import ru.daniil4jk.strongram.core.chain.ChainFactory;
-import ru.daniil4jk.strongram.core.chain.configurable.ConfigurableChainFactory;
+import ru.daniil4jk.strongram.core.chain.configurator.OrderConfigurator;
+import ru.daniil4jk.strongram.core.chain.configurator.TunedOrderConfiguratorFactory;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContextImpl;
 import ru.daniil4jk.strongram.core.downstream.CallbackWrapper;
@@ -22,8 +21,8 @@ import java.util.List;
 
 @Slf4j
 public abstract class ChainedBot extends BaseBot {
-    private final Lazy<UpstreamHandler> upstreamChain = new Lazy<>(this::createUpstreamChain);
-    private final Lazy<List<DownstreamHandler>> downstreamList = new Lazy<>(this::createDownstreamList);
+    private final Lazy<UpstreamHandler> upstreamChain = new Lazy<>(this::getUpstreamFirstHandler);
+    private final Lazy<List<DownstreamHandler>> downstreamList = new Lazy<>(this::getDownstreamList);
     private final CallbackWrapper downstreamWrapper = new CallbackWrapper(downstreamList);
     private final ResponserFactory responserFactory = new ResponserFactoryImpl();
 
@@ -51,27 +50,26 @@ public abstract class ChainedBot extends BaseBot {
         responserFactory.setPermanentCallback(defaultCallback);
     }
 
-    private UpstreamHandler createUpstreamChain() {
-        return new Chain<>(getUpstreamFactory().call()).build();
+    private UpstreamHandler getUpstreamFirstHandler() {
+        return getUpstreamChain().build();
     }
-
-    protected ChainFactory<UpstreamHandler> getUpstreamFactory() {
-        return new ConfigurableChainFactory<>(this::configureUpstream);
+    protected Chain<UpstreamHandler> getUpstreamChain() {
+        return new Chain<>(getUpstreamFactory());
     }
-
-    protected void configureUpstream(ChainConfigurator<UpstreamHandler> chain) {
+    private TunedOrderConfiguratorFactory<UpstreamHandler> getUpstreamFactory() {
+        return new TunedOrderConfiguratorFactory<>(this::configureUpstream);
+    }
+    protected void configureUpstream(OrderConfigurator<UpstreamHandler> chain) {
         chain.add(new CannotProcessUpstreamHandler());
     }
 
-    private List<DownstreamHandler> createDownstreamList() {
-        return getDownstreamFactory().call().getResultAsList();
+    protected List<DownstreamHandler> getDownstreamList() {
+        return getDownstreamFactory().get().asList();
     }
-
-    protected ChainFactory<DownstreamHandler> getDownstreamFactory() {
-        return new ConfigurableChainFactory<>(this::configureDownstream);
+    private TunedOrderConfiguratorFactory<DownstreamHandler> getDownstreamFactory() {
+        return new TunedOrderConfiguratorFactory<>(this::configureDownstream);
     }
-
-    protected void configureDownstream(ChainConfigurator<DownstreamHandler> chain) {
+    protected void configureDownstream(OrderConfigurator<DownstreamHandler> chain) {
 
     }
 }

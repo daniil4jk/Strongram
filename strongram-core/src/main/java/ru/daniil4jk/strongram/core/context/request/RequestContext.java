@@ -6,8 +6,6 @@ import ru.daniil4jk.strongram.core.response.responder.factory.SmartResponderFact
 import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponder;
 import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 
-import java.util.function.Consumer;
-
 public interface RequestContext {
     TelegramUUID getUUID();
 

@@ -13,8 +13,6 @@ import ru.daniil4jk.strongram.core.response.responder.smart.SmartResponder;
 import ru.daniil4jk.strongram.core.unboxer.Unboxer;
 import ru.daniil4jk.strongram.core.unboxer.finder.uuid.TelegramUUIDFinderService;
 
-import java.util.function.Consumer;
-
 @ToString
 @EqualsAndHashCode
 public class RequestContextImpl implements RequestContext {

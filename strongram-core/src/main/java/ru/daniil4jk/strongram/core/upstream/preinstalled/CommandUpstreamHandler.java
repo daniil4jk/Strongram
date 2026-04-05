@@ -64,7 +64,7 @@ public abstract class CommandUpstreamHandler extends FilteredUpstreamHandler {
 
     private @NotNull EachCommandHandler parseCommand(String rawCommand) {
         String command = formatCommand(rawCommand);
-        return Optional.ofNullable(commands.get().get(command))
+        return Optional.ofNullable(commands.initOrGet().get(command))
                 .orElseThrow(() -> new CommandNotFoundException(command));
     }
 
