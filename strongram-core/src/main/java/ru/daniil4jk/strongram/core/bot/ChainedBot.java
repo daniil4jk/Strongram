@@ -3,25 +3,28 @@ package ru.daniil4jk.strongram.core.bot;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.daniil4jk.strongram.core.chain.factory.ChainFactory;
+import ru.daniil4jk.strongram.core.chain.Chain;
+import ru.daniil4jk.strongram.core.chain.configurable.ChainConfigurator;
+import ru.daniil4jk.strongram.core.chain.ChainFactory;
+import ru.daniil4jk.strongram.core.chain.configurable.ConfigurableChainFactory;
 import ru.daniil4jk.strongram.core.context.request.RequestContext;
 import ru.daniil4jk.strongram.core.context.request.RequestContextImpl;
 import ru.daniil4jk.strongram.core.downstream.CallbackWrapper;
 import ru.daniil4jk.strongram.core.downstream.DownstreamHandler;
-import ru.daniil4jk.strongram.core.response.dto.Response;
 import ru.daniil4jk.strongram.core.response.responder.factory.ResponserFactory;
 import ru.daniil4jk.strongram.core.response.responder.factory.ResponserFactoryImpl;
 import ru.daniil4jk.strongram.core.response.sender.ResponseSink;
 import ru.daniil4jk.strongram.core.upstream.UpstreamHandler;
+import ru.daniil4jk.strongram.core.upstream.preinstalled.CannotProcessUpstreamHandler;
 import ru.daniil4jk.strongram.core.util.Lazy;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 public abstract class ChainedBot extends BaseBot {
     private final Lazy<UpstreamHandler> upstreamChain = new Lazy<>(this::createUpstreamChain);
-    private final CallbackWrapper downstreamWrapper = new CallbackWrapper(this::getDownstreamChain);
+    private final Lazy<List<DownstreamHandler>> downstreamList = new Lazy<>(this::createDownstreamList);
+    private final CallbackWrapper downstreamWrapper = new CallbackWrapper(downstreamList);
     private final ResponserFactory responserFactory = new ResponserFactoryImpl();
 
     public ChainedBot(@Nullable String username) {
@@ -49,9 +52,26 @@ public abstract class ChainedBot extends BaseBot {
     }
 
     private UpstreamHandler createUpstreamChain() {
-        return getUpstreamChain().get().build();
+        return new Chain<>(getUpstreamFactory().call()).build();
     }
-    protected abstract ChainFactory<UpstreamHandler> getUpstreamChain();
 
-    protected abstract DownstreamHandler[] getDownstreamChain();
+    protected ChainFactory<UpstreamHandler> getUpstreamFactory() {
+        return new ConfigurableChainFactory<>(this::configureUpstream);
+    }
+
+    protected void configureUpstream(ChainConfigurator<UpstreamHandler> chain) {
+        chain.add(new CannotProcessUpstreamHandler());
+    }
+
+    private List<DownstreamHandler> createDownstreamList() {
+        return getDownstreamFactory().call().getResultAsList();
+    }
+
+    protected ChainFactory<DownstreamHandler> getDownstreamFactory() {
+        return new ConfigurableChainFactory<>(this::configureDownstream);
+    }
+
+    protected void configureDownstream(ChainConfigurator<DownstreamHandler> chain) {
+
+    }
 }

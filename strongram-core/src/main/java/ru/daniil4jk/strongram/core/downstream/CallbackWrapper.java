@@ -10,10 +10,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class CallbackWrapper {
-    private final Lazy<DownstreamHandler[]> downstreamChain;
+    private final Lazy<List<DownstreamHandler>> downstreamChain;
 
-    public CallbackWrapper(Supplier<DownstreamHandler[]> downstreamCreateMethod) {
-        downstreamChain = new Lazy<>(downstreamCreateMethod);
+    public CallbackWrapper(Lazy<List<DownstreamHandler>> downstreamChain) {
+        this.downstreamChain = downstreamChain;
     }
 
     public ResponseSink wrap(ResponseSink toBot) {

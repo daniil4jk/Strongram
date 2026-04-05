@@ -20,7 +20,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class AddDefaultKeyboardDownstreamHandler extends BaseDownstreamHandler {
     public static final Class<ReplyKeyboard> REPLY_KEYBOARD_CLASS = ReplyKeyboard.class;
-    private static final String GET_METHOD_NAME_PART = "get";
+    private static final String GET_METHOD_NAME_PART = "call";
     private static final String SET_METHOD_NAME_PART = "set";
 
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();

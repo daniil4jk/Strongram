@@ -10,7 +10,7 @@ public class CannotProcessUpstreamHandler extends BaseUpstreamHandler {
     private final String text;
 
     public CannotProcessUpstreamHandler() {
-        this.text = "Я не понимаю ваш запрос\uD83D\uDE14 / I cat`t explain this request\uD83D\uDE14";
+        this.text = "I cat`t explain this request\uD83D\uDE14";
     }
 
     @Override
@@ -20,11 +20,11 @@ public class CannotProcessUpstreamHandler extends BaseUpstreamHandler {
                 ctx.getResponder().send(text);
                 return;
             }
-        } catch (Exception e) { /* предназначено не нам, игнорим */ }
+        } catch (Exception e) { /* сообщение предназначено не этому боту, игнорим */ }
         try {
             if (ctx.getRequest(As.messageText()) != null) {
                 ctx.getResponder().send(text);
             }
-        } catch (Exception e) { /* предназначено не нам, игнорим */ }
+        } catch (Exception e) { /* на этот тип сообщений не нужно отвечать, игнорим */ }
     }
 }
