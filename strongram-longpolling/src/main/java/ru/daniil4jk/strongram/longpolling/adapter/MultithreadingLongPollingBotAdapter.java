@@ -7,18 +7,18 @@ import ru.daniil4jk.strongram.core.util.DefaultExecutor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class MultithreadingAdapter extends LongPollingBotAdapter {
+public class MultithreadingLongPollingBotAdapter extends LongPollingBotAdapter {
     private final ExecutorService executor;
 
-    public MultithreadingAdapter(String token, Bot bot) {
+    public MultithreadingLongPollingBotAdapter(String token, Bot bot) {
         this(
                 token,
                 bot,
-                DefaultExecutor.initOrGet(MultithreadingAdapter.class.getName())
+                DefaultExecutor.initOrGet(MultithreadingLongPollingBotAdapter.class.getName())
         );
     }
 
-    public MultithreadingAdapter(String token, Bot bot, ScheduledExecutorService executor) {
+    public MultithreadingLongPollingBotAdapter(String token, Bot bot, ScheduledExecutorService executor) {
         this(
                 token,
                 bot,
@@ -27,10 +27,10 @@ public class MultithreadingAdapter extends LongPollingBotAdapter {
         );
     }
 
-    public MultithreadingAdapter(String token,
-                                 Bot bot,
-                                 ExecutorService mainExecutor,
-                                 ScheduledExecutorService sendExecutor) {
+    public MultithreadingLongPollingBotAdapter(String token,
+                                               Bot bot,
+                                               ExecutorService mainExecutor,
+                                               ScheduledExecutorService sendExecutor) {
         super(token, bot, sendExecutor);
         this.executor = mainExecutor;
     }

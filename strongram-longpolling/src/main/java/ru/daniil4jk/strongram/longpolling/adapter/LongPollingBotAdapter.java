@@ -15,9 +15,11 @@ import ru.daniil4jk.strongram.longpolling.adapter.interfaces.HasLongPollingBot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Slf4j
 public class LongPollingBotAdapter implements HasLongPollingBot {
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private final TelegramClientProvider provider =
         new MutableTelegramClientProvider();
@@ -28,7 +30,7 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
     private final Sender sender;
 
     public LongPollingBotAdapter(String token, Bot bot) {
-        this(token, bot, DefaultExecutor.initOrGet(LongPollingBotAdapter.class.getName()));
+        this(token, bot, Executors.newSingleThreadScheduledExecutor());
     }
 
     public LongPollingBotAdapter(
@@ -48,14 +50,18 @@ public class LongPollingBotAdapter implements HasLongPollingBot {
     }
 
     public void consumeSingle(Update update) {
+        executor.execute(() -> consumeSingleInOtherThread(update));
+    }
+
+    private void consumeSingleInOtherThread(Update update) {
         try {
             List<Response<?>> collector = new ArrayList<>();
             bot.accept(update, collector::add);
             sender.sendAllUsingClient(collector);
         } catch (Exception e) {
             log.error(
-                "Error occurred while longpolling bot processing update",
-                e
+                    "Error occurred while longpolling bot processing update",
+                    e
             );
         }
     }
