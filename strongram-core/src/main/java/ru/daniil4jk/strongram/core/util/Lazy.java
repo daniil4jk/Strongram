@@ -3,9 +3,11 @@ package ru.daniil4jk.strongram.core.util;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.function.Supplier;
 
+@Slf4j
 @ToString
 @EqualsAndHashCode
 public class Lazy<T> implements Supplier<T> {
@@ -20,7 +22,11 @@ public class Lazy<T> implements Supplier<T> {
         if (!isInitialized()) {
             synchronized (this) {
                 if (!isInitialized()) {
-                    value = creator.get();
+                    try {
+                        value = creator.get();
+                    } catch (Exception e) {
+                        log.error("Lazy initialization throws exception", e);
+                    }
                 }
             }
         }
