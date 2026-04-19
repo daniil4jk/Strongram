@@ -24,7 +24,6 @@ public abstract class ChainedBot extends BaseBot {
     private final Lazy<UpstreamHandler> upstreamChain = new Lazy<>(this::getUpstreamFirstHandler);
     private final Lazy<List<DownstreamHandler>> downstreamList = new Lazy<>(this::getDownstreamList);
     private final CallbackWrapper downstreamWrapper = new CallbackWrapper(downstreamList);
-    private final ResponserFactory responserFactory = new ResponserFactoryImpl();
 
     public ChainedBot(@Nullable String username) {
         super(username);
@@ -32,14 +31,15 @@ public abstract class ChainedBot extends BaseBot {
 
     @Override
     public void accept(Update update, ResponseSink tempCallback) {
+        ResponserFactory resp = getResponserFactory();
         try {
-            RequestContext ctx = new RequestContextImpl(this, update, responserFactory);
-            responserFactory.setTempCallback(downstreamWrapper.wrap(ctx, tempCallback));
+            RequestContext ctx = new RequestContextImpl(this, update, resp);
+            resp.setTempCallback(downstreamWrapper.wrap(ctx, tempCallback));
             upstreamChain.initOrGet().accept(ctx);
         } catch (Exception e) {
             log.error("Error occurred while chain processing update", e);
         } finally {
-            responserFactory.resetTempCallback();
+            resp.resetTempCallback();
         }
     }
 
@@ -47,7 +47,7 @@ public abstract class ChainedBot extends BaseBot {
     public void setDefaultCallback(ResponseSink defaultCallback) {
         defaultCallback = downstreamWrapper.wrap(defaultCallback);
         super.setDefaultCallback(defaultCallback);
-        responserFactory.setPermanentCallback(defaultCallback);
+        getResponderFactory().setPermanentCallback(defaultCallback);
     }
 
     private UpstreamHandler getUpstreamFirstHandler() {

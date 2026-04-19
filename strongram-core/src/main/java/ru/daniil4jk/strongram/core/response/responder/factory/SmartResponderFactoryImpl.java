@@ -10,7 +10,6 @@ import ru.daniil4jk.strongram.core.response.sender.ResponseSink;
 @RequiredArgsConstructor
 public class SmartResponderFactoryImpl implements SmartResponderFactory {
     private final ResponserFactory inherit;
-    private final TelegramUUID uuid;
 
     @Override
     public void setTempCallback(ResponseSink callback) {
@@ -33,7 +32,7 @@ public class SmartResponderFactoryImpl implements SmartResponderFactory {
     }
 
     @Override
-    public SmartResponder createSmart() {
+    public SmartResponder createSmart(TelegramUUID uuid) {
         return new SmartResponderImpl(uuid, create());
     }
 }

@@ -26,36 +26,37 @@ import java.util.stream.Collectors;
 @ToString
 @EqualsAndHashCode
 public class SmartResponderImpl implements SmartResponder {
-    private final TelegramUUID uuid;
+    private final Long id;
     private final SinkResponder inherit;
 
+    public SmartResponderImpl(Long id, SinkResponder inherit) {
+        this.id = id;
+        this.inherit = inherit;
+    }
+
     public SmartResponderImpl(TelegramUUID uuid, SinkResponder inherit) {
-        this.uuid = uuid;
+        this.id = uuid.getReplyChatId();
         this.inherit = inherit;
     }
 
     @Override
     public void send(String text) {
-        send(getId(), text);
+        send(id, text);
     }
 
     @Override
     public CompletableFuture<List<Message>> sendForObject(String text) {
-        return sendForObject(getId(), text);
+        return sendForObject(id, text);
     }
 
     @Override
     public void send(String text, File file, MediaType type) {
-        send(getId(), text, file, type);
+        send(id, text, file, type);
     }
 
     @Override
     public CompletableFuture<List<Message>> sendForObject(String text, File file, MediaType type) {
-        return sendForObject(getId(), text, file, type);
-    }
-
-    private @NotNull Long getId() {
-        return uuid.getReplyChatId();
+        return sendForObject(id, text, file, type);
     }
 
     @Override

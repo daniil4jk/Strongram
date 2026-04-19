@@ -27,8 +27,8 @@ public class RequestContextImpl implements RequestContext {
         this.bot = bot;
         this.update = update;
         this.uuid = TelegramUUIDFinderService.getInstance().findIn(update);
-        this.responderFactory = new SmartResponderFactoryImpl(responserFactory, uuid);
-        this.responder = this.responderFactory.createSmart();
+        this.responderFactory = new SmartResponderFactoryImpl(responserFactory);
+        this.responder = this.responderFactory.createSmart(uuid);
     }
 
     @Override
